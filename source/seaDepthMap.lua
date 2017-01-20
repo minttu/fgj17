@@ -1,5 +1,5 @@
 
-DepthMap = {}
+local DepthMap = {}
 
 -- How sharp changes in depth
 DepthMap.Sharpiness = 0.01
@@ -41,3 +41,4 @@ function DepthMap:debugDraw()
     end
 end
 
+return DepthMap
