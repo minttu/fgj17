@@ -1,3 +1,5 @@
+gauge = require "rendering.gauge"
+
 sandbox = {}
 
 light = require "rendering.light"
@@ -7,7 +9,7 @@ local lights = {}
 
 local colorCanvas
 
-local ambientLight = { 0, 0, 0}
+local ambientLight = { 128, 128, 128}
 
 local lightShader
 local lightFragmentCode = [[
@@ -35,13 +37,14 @@ local lightVertexCode = [[
     }
 ]]
 
+local gauge0 = gauge(1);
 
 function sandbox.init()
-    image = love.graphics.newImage("assets/images/testbg.png")
+    image = love.graphics.newImage("assets/graphics/testbg.png")
     colorCanvas = love.graphics.newCanvas()
     lightShader = love.graphics.newShader(lightFragmentCode, lightVertexCode)
 
-    table.insert(lights, light({100, 100, -10}, {255, 255, 255}, 400))
+    table.insert(lights, light({100, 100, -10}, {255, 255, 255}, 200))
 end
 
 function sandbox.draw()
