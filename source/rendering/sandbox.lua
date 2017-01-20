@@ -44,7 +44,12 @@ function sandbox.init()
     colorCanvas = love.graphics.newCanvas()
     lightShader = love.graphics.newShader(lightFragmentCode, lightVertexCode)
 
-    table.insert(lights, light({100, 100, -10}, {255, 255, 255}, 200))
+    table.insert(lights, light({400, 100, -10}, {0, 255, 0}, 200))
+end
+
+function sandbox.update()
+    gauge0:update()
+    gauge0.val = math.abs(math.sin(0.5 * love.timer.getTime()))
 end
 
 function sandbox.draw()
@@ -54,6 +59,7 @@ function sandbox.draw()
     love.graphics.setShader()
     love.graphics.setColor(ambientLight[1], ambientLight[2], ambientLight[3])
     love.graphics.draw(image)
+    gauge0:draw()
 
     local light = lights[1]
     love.graphics.setShader(lightShader)
@@ -62,6 +68,7 @@ function sandbox.draw()
     lightShader:send("light_pos", light.pos)
     lightShader:send("intensity", light.intensity)
     love.graphics.draw(image)
+    gauge0:draw()
 
     love.graphics.setShader()
     love.graphics.setColor(255, 255, 255)
