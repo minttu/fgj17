@@ -1,3 +1,7 @@
-function love.draw()
-    love.graphics.print("Hello World", 400, 300)
+gamestate = require "hump.gamestate"
+helloWorld = require "helloworld"
+
+function love.load()
+    gamestate.registerEvents()
+    gamestate.switch(helloWorld)
 end
