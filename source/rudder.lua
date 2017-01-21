@@ -2,6 +2,8 @@ require "util"
 vector = require "hump.vector"
 Class = require 'hump.class'
 
+Sounds = require "sounds"
+
 Rudder = Class
     { imageScale = 0.45
     , screenPos = vector(0,0) -- Center of the rudder
@@ -18,8 +20,9 @@ Rudder = Class
     , maxangle = math.pi*6
 }
 
-function Rudder:init(pos)
-    self.screenPos = pos
+function Rudder:init(pos, imageScale)
+    self.screenPos = pos or self.screenPos
+    self.imageScale = imageScale or self.imageScale
     self.image = love.graphics.newImage("assets/graphics/wheel.png")
     -- assume that rudder is stationary in screen coords
     self.originOffset = vector(self.image:getWidth()/2, self.image:getHeight()/2)
@@ -101,6 +104,12 @@ function Rudder:update(dt)
             self.angle = -self.maxangle
             self.w = 0
         end
+    end
+
+    if math.abs(self.w) > 0.1 then
+        Sounds.ui:startRudderRotation()
+    else
+        Sounds.ui:endRudderRotation()
     end
 
 end

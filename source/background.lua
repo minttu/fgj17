@@ -15,7 +15,7 @@ function background:update(drawWidth, drawHeight)
         self.canvas:setFilter("linear")
     end
     love.graphics.setCanvas(self.canvas)
-    love.graphics.clear(0, 0, 60)
+    love.graphics.clear(0, 0, 20)
     while #self.raindrops < background.dropcount do
         local x1 = math.random(-self.rain_maxlen/2,2*drawWidth)
         local y1 = -50
@@ -45,9 +45,8 @@ end
 
 function background:draw(x, y)
     local o_r, o_g, o_b = love.graphics.getColor()
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(255, 255, 255, 100)
     love.graphics.draw(self.canvas, x, y)
-    love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
     love.graphics.setColor(o_r, o_g, o_b)
 end
 
