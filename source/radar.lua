@@ -30,7 +30,7 @@ function Radar.update(self, ship, dt)
         y = objects[2*i]
         dx = x - ship.location.x
         dy = y - ship.location.y
-        angle = math.atan2(dy, dx)
+        angle = math.atan2(dy, dx) % (2*math.pi)
         if angle >= self.previousangle and angle <= self.angle  then
             table.insert(self.seenobjects, {dx/4 + self.x, dy/4 + self.y, 255})
             Sounds.ui:play("radar")
