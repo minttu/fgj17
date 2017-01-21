@@ -46,7 +46,8 @@ local windowtranslation = {0, 0}
 local consoletranslation = {0, 0}
 local roll = 0
 
-local mainCanvas = love.graphics.newCanvas(1920*Rendering.factor, 1080*Rendering.factor)
+local desktop_w, desktop_h = love.window.getDesktopDimensions()
+local mainCanvas = love.graphics.newCanvas(desktop_w*Rendering.factor, desktop_h*Rendering.factor)
 
 local checkpoints = Checkpoints(vec2toVector(ship.location))
 
@@ -126,8 +127,8 @@ function debugMapState.draw()
 
     love.graphics.setCanvas()
 
-    rendering.scalePost()
-
+    local brightness = 255
+    love.graphics.setColor(brightness,brightness,brightness)
     love.graphics.draw(mainCanvas)
 end
 
@@ -155,7 +156,7 @@ function debugMapState.update(self, dt)
         draws = 0
     end
 
-    rollGauge.val = ship:getRoll()/(2*math.pi) + 0.5
+    rollGauge.val = -ship:getRoll()/(2*math.pi) + 0.5
     pitchGauge.val = ship:getPitch()/(2*math.pi) + 0.5
 
     rollGauge:update(dt)
@@ -188,7 +189,7 @@ function debugMapState.update(self, dt)
     compass.markers[1].rotation = -ang + math.pi
     if checkpoints:checkCollision(playerLoc) then
         checkpoints:createCheckpoint(playerLoc)
-        ship.fuel = ship.fuel + ship.fuelConsumptionMultiplier*ship.velocity*45
+        ship.fuel = ship.fuel + ship.fuelConsumptionMultiplier*ship.velocity*2500
         local c = {{255,0,255},{255,255,0}}
         compass.markers[1].color = c[checkpoints.counter % 2 + 1]
     end

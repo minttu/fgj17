@@ -121,6 +121,9 @@ function Ship:checkProblems()
     if DepthMap:isRockAt(self.location.x, self.location.y) then
         gameover:shipCrashed()
     end
+    if self.fuel < 0 then
+        gameover:noFuel()
+    end
 end
 
 function Ship:update(dt)
