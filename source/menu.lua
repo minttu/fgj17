@@ -33,11 +33,39 @@ function menu:enter()
     }
 
     love.graphics.setFont(fonts.menu)
+
+    self:initLogo()
+end
+
+logo = {}
+
+function menu:initLogo()
+    name = "Tyrsky"
+    for i = 1,#name do
+        local c = name:sub(i,i)
+        table.insert(logo, {c, 80+20*i, 100})
+    end
+end
+
+accumulator = 0
+
+function menu:updateLogo(dt)
+    accumulator = accumulator + dt
+    for i = 1,#logo do
+        logo[i][3] = 200 + 20*math.sin(accumulator + i)
+    end
+end
+
+function menu:drawLogo()
+    for i = 1,#logo do
+        love.graphics.print(logo[i][1], logo[i][2], logo[i][3])
+    end
 end
 
 function menu:draw()
     love.graphics.push()
     Rendering.scale()
+    self:drawLogo()
     if creditsOpen then
         for i = 1,#self.makers do
             name = self.makers[i][1]
@@ -55,6 +83,10 @@ function menu:draw()
         end
     end
     love.graphics.pop()
+end
+
+function menu:update(dt)
+    self:updateLogo(dt)
 end
 
 function menu:keyreleased(key)
