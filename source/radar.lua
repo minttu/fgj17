@@ -49,9 +49,17 @@ function Radar.prerender(self)
             -- love.graphics.line(self.x, self.y, x, y)
         end
     end
+    for i = #self.seenobjects,1,-1 do
+        self.seenobjects[i][3] = self.seenobjects[i][3] - 5.2
+        if self.seenobjects[i][3] < 0 then
+            table.remove(self.seenobjects, i)
+        end
+    end
 
     local xx = self.size + self.size * math.cos(self.angle) -- - y * math.sin(self.angle)
     local yy = self.size + self.size * math.sin(self.angle) -- + y * math.cos(self.angle)
+    local oxx = self.size + self.size * math.cos(self.previousangle) -- - y * math.sin(self.angle)
+    local oyy = self.size + self.size * math.sin(self.previousangle) -- + y * math.cos(self.angle)
 
     love.graphics.setColor(0, 200, 0)
     love.graphics.circle("line", self.size, self.size, self.size)
@@ -61,7 +69,7 @@ function Radar.prerender(self)
     -- for obj in seenobjects, draw obj --
 
     love.graphics.setColor(0, 255, 0)
-    love.graphics.line(self.size, self.size, xx, yy)
+    love.graphics.polygon("fill", self.size, self.size, oxx, oyy, xx, yy)
 
     love.graphics.setColor(255, 255, 255)
 
@@ -78,15 +86,23 @@ function Radar.update(self, dt, ship)
     self.angle = (self.angle + self.speed*dt) % (2*math.pi)
 
     for i = 1, (#self.objects)/2 do
-        x = self.objects[2*i-1]
-        y = self.objects[2*i]
+        xx = self.objects[2*i-1]
+        yy = self.objects[2*i]
+        sa = -ship:angle() - math.pi/2
+        sin = math.sin(sa)
+        cos = math.cos(sa)
+        x = (xx - ship.location.x) * cos - (yy - ship.location.y) * sin + ship.location.x
+        y = (xx - ship.location.x) * sin + (yy - ship.location.y) * cos + ship.location.y
         dx = x - ship.location.x
         dy = y - ship.location.y
         angle = math.atan2(dy, dx) % (2*math.pi)
         if (self.angle > self.previousangle and angle >= self.previousangle and angle <= self.angle) or
             (self.angle < self.previousangle and (angle >= self.previousangle or angle <= self.angle)) then
-            table.insert(self.seenobjects, {dx, dy, 255})
-            Sounds.ui:play("radar")
+            len = math.sqrt(dx*dx + dy*dy)/3
+            if len < self.size/1.05 then
+                table.insert(self.seenobjects, {dx, dy, 255})
+                Sounds.ui:play("radar")
+            end
         end
     end
 end
@@ -105,12 +121,6 @@ function Radar.draw(self)
 
     love.graphics.draw(self.prevCanvas, self.x-self.size, self.y-self.size)
 
-    for i = #self.seenobjects,1,-1 do
-        self.seenobjects[i][3] = self.seenobjects[i][3] - 1.2
-        if self.seenobjects[i][3] < 0 then
-            table.remove(self.seenobjects, i)
-        end
-    end
 
     love.graphics.setColor(255, 255, 255)
 
