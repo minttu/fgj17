@@ -1,3 +1,4 @@
+require "util"
 vector = require "hump.vector"
 Class = require 'hump.class'
 
@@ -45,9 +46,7 @@ function Rudder:mouseReleased(x,y)
     local dRot = - refPosition:angleTo(lastPos)
     -- Problems when x negative and y changes sign
     -- fix:
-    if dRot > math.pi then dRot = dRot - 2*math.pi
-    elseif dRot < -math.pi then dRot = dRot + 2*math.pi
-    end
+    dRot = fixAtan2Angle(dRot)
 
     self.w = dRot / dt
 
@@ -75,7 +74,7 @@ function Rudder:update(dt)
         oldMousePos = self:getLastMousePos() or newMousePos
 
         moveAngle = oldMousePos:angleTo(newMousePos)
-        self.angle = self.angle - moveAngle
+        self.angle = self.angle - fixAtan2Angle(moveAngle)
 
         self.lastMousePos = newMousePos
         -- RRD Array
