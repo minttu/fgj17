@@ -43,7 +43,7 @@ MiscPlayer = Class{
         self:generateNextPlayTime()
     end,
     generateNextPlayTime = function(self)
-        self.nextPlayTime = 5 + math.random(15)
+        self.nextPlayTime = 3--5 + math.random(15)
     end,
     playRandom = function(self)
         local played = self.soundDefinitions[math.random(#self.soundDefinitions)].name

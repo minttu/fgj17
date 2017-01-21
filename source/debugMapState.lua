@@ -46,7 +46,8 @@ local windowtranslation = {0, 0}
 local consoletranslation = {0, 0}
 local roll = 0
 
-local mainCanvas = love.graphics.newCanvas(1920*Rendering.factor, 1080*Rendering.factor)
+local desktop_w, desktop_h = love.window.getDesktopDimensions()
+local mainCanvas = love.graphics.newCanvas(desktop_w*Rendering.factor, desktop_h*Rendering.factor)
 
 local checkpoints = Checkpoints(vec2toVector(ship.location))
 
@@ -128,6 +129,8 @@ function debugMapState.draw()
 
     rendering.scalePost()
 
+    local brightness = 255
+    love.graphics.setColor(brightness,brightness,brightness)
     love.graphics.draw(mainCanvas)
 end
 
