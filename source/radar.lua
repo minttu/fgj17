@@ -2,6 +2,7 @@ cpml = require "cpml"
 rendering = require "rendering.rendering"
 
 Sounds = require "sounds"
+DepthMap = require "seaDepthMap"
 
 local Radar = {}
 Radar.__index = Radar
@@ -9,12 +10,11 @@ Radar.__index = Radar
 Radar.angle = 0
 Radar.previousangle = 0
 Radar.speed = 2
-Radar.size = 300
+Radar.size = 200
 Radar.x = 1500
-Radar.y = 700
+Radar.y = 800
+Radar.range = 100
 Radar.seenobjects = {}
-Radar.objects = {500, 200, 400, 100, 100, 1000, 50, 1000, 50, 900, 50, 800, 50, 700, 50, 600, 50, 500, 50, 400, 50, 300,
-1000, 1000, 500, 1000, 1000, 0}
 
 function Radar.new()
     local self = setmetatable({}, Radar)
@@ -42,10 +42,11 @@ function Radar.prerender(self)
         x = obj[1]/3
         y = obj[2]/3
         len = math.sqrt(x*x + y*y)
-        if len < self.size/1.05 then
+        if len < self.range/1.05 then
             a = obj[3]
             love.graphics.setColor(255, 255, 255, a)
-            love.graphics.circle("fill", x + self.size, y + self.size, 10)
+            scale = self.size / self.range
+            love.graphics.circle("fill", scale * x + self.size, scale * y + self.size, 10)
             -- love.graphics.line(self.x, self.y, x, y)
         end
     end
@@ -66,8 +67,6 @@ function Radar.prerender(self)
     love.graphics.circle("line", self.size, self.size, self.size/1.5)
     love.graphics.circle("line", self.size, self.size, self.size/3)
 
-    -- for obj in seenobjects, draw obj --
-
     love.graphics.setColor(0, 255, 0)
     love.graphics.polygon("fill", self.size, self.size, oxx, oyy, xx, yy)
 
@@ -85,9 +84,10 @@ function Radar.update(self, dt, ship)
     self.previousangle = self.angle
     self.angle = (self.angle + self.speed*dt) % (2*math.pi)
 
-    for i = 1, (#self.objects)/2 do
-        xx = self.objects[2*i-1]
-        yy = self.objects[2*i]
+    for i = 1, (#DepthMap.objects) do
+        obj = DepthMap.objects[i]
+        xx = obj[1]
+        yy = obj[2]
         sa = -ship:angle() - math.pi/2
         sin = math.sin(sa)
         cos = math.cos(sa)
@@ -105,14 +105,28 @@ function Radar.update(self, dt, ship)
             end
         end
     end
+
+    for i = #self.seenobjects,1,-1 do
+        self.seenobjects[i][3] = self.seenobjects[i][3] - 3
+        if self.seenobjects[i][3] < 0 then
+            table.remove(self.seenobjects, i)
+        end
+    end
 end
 
 function Radar.draw(self)
-    for i = 1, (#self.objects)/2 do
-        x = self.objects[2*i-1]
-        y = self.objects[2*i]
-        love.graphics.circle("fill", x, y, 10)
-    end
+    love.graphics.setColor(0, 20, 0)
+    love.graphics.circle("fill", self.x, self.y, self.size)
+
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.draw(self.prevCanvas, self.x-self.size, self.y-self.size)
+
+    -- for i = 1, (#DepthMap.objects) do
+    --     obj = DepthMap.objects[i]
+    --     x = obj[1]
+    --     y = obj[2]
+    --     love.graphics.circle("fill", x, y, 10)
+    -- end
 
     love.graphics.setColor(0, 20, 0)
     love.graphics.circle("fill", self.x, self.y, self.size)
@@ -120,7 +134,6 @@ function Radar.draw(self)
     love.graphics.setColor(255, 255, 255)
 
     love.graphics.draw(self.prevCanvas, self.x-self.size, self.y-self.size)
-
 
     love.graphics.setColor(255, 255, 255)
 

@@ -11,7 +11,7 @@ local gauge = class{
         self.radius = radius or 100
         self.offset = 0
         self.actual = 0
-        self.speed = 1
+        self.speed = 1 
         self.pos = pos or Vector(0, 150)
     end,
     update = function(self, dt)
@@ -24,11 +24,11 @@ local gauge = class{
     end,
     draw = function(self)
         local scale = self.radius*2 / bg:getHeight()
-        love.graphics.draw(bg, self.pos.x+0, self.pos.y+0, 0, scale, scale)
+        love.graphics.draw(bg, self.pos.x+0, self.pos.y+0, 0, scale, scale, bg:getWidth()/2, bg:getHeight()/2)
 
         local r = -2.1 + 4.2 * self.actual + self.offset;
 
-        love.graphics.draw(arm, self.pos.x+self.radius, self.pos.y+self.radius, r, scale, scale, arm:getWidth()/2, 380 )
+        love.graphics.draw(arm, self.pos.x, self.pos.y, r, scale, scale, arm:getWidth()/2, 380 )
     end
 }
 
