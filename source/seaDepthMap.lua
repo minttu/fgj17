@@ -5,13 +5,18 @@ DepthMap.canvas = nil
 
 -- How sharp changes in depth
 DepthMap.Sharpiness = 0.005
+DepthMap.SharpinessSmooth = 0.002
 
 -- What depth and below is considered as rock/land, in range [0,1]
-DepthMap.RockDepth = 0.05
+DepthMap.RockDepth = 0.03
 
 -- Returns depth from range [0, 1]
 function DepthMap:getDepth(x, y)
-    return love.math.noise(x*DepthMap.Sharpiness, y*DepthMap.Sharpiness)
+    local layerSharp = love.math.noise(x*DepthMap.Sharpiness, y*DepthMap.Sharpiness)
+    --local layerSmooth = love.math.noise(x*DepthMap.SharpinessSmooth, y*DepthMap.SharpinessSmooth)
+    --return (layerSmooth + layerSharp) / 2
+    --return (layerSharp-0.5) * (layerSmooth) * 2 + 0.5
+    return layerSharp
 end
 
 -- Returns boolean

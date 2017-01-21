@@ -1,5 +1,4 @@
 vector = require "hump.vector"
-
 DepthMap = require "seaDepthMap"
 Rudder = require "rudder"
 Ship = require "ship"
@@ -13,13 +12,17 @@ local debugMapState = {}
 
 ship = Ship.new()
 radar = Radar.new()
-local rudderGauge = Gauge(vector(1920 - 200, 0), 100, 0.5)
+local rudderGauge = Gauge(vector(1920 - 200, 100), 100, 0.5)
+local rollGauge = Gauge(vector(0, 300), 150)
+local pitchGauge = Gauge(vector(0, 200), 100)
 local rudder = Rudder(0,0)
 
 function debugMapState:enter()
     Sounds.ambient:play()
     DepthMap:debugDrawUpdate(0, 0, canvas_w, canvas_h)
     rudder:init(canvas_w/2, canvas_h*0.82)
+    pitchGauge.pos = vector(canvas_w/8, canvas_h*0.82)
+    rollGauge.pos = vector(canvas_w*2/8, canvas_h*0.82)
 end
 
 function debugMapState.draw()
@@ -38,6 +41,8 @@ function debugMapState.draw()
     -- draw the radar
     radar:draw()
     rudderGauge:draw()
+    rollGauge:draw()
+    pitchGauge:draw()
     rudder:draw()
 
     -- draw Goal location
@@ -49,6 +54,12 @@ function debugMapState.update(self, dt)
     rudder:update(dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
+    
+    rollGauge.val = ship:getRoll()
+    pitchGauge.val = ship:getPitch()
+
+    rollGauge:update(dt)
+    pitchGauge:update(dt)
 
     rudderGauge.val = (ship.turnspeed * 5) + 0.5
     rudderGauge:update(dt)
