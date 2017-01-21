@@ -1,17 +1,24 @@
 
 local DepthMap = {}
 
+DepthMap.objects = {}
+
 DepthMap.canvas = nil
 
 -- How sharp changes in depth
 DepthMap.Sharpiness = 0.005
+DepthMap.SharpinessSmooth = 0.002
 
 -- What depth and below is considered as rock/land, in range [0,1]
-DepthMap.RockDepth = 0.05
+DepthMap.RockDepth = 0.03
 
 -- Returns depth from range [0, 1]
 function DepthMap:getDepth(x, y)
-    return love.math.noise(x*DepthMap.Sharpiness, y*DepthMap.Sharpiness)
+    local layerSharp = love.math.noise(x*DepthMap.Sharpiness, y*DepthMap.Sharpiness)
+    --local layerSmooth = love.math.noise(x*DepthMap.SharpinessSmooth, y*DepthMap.SharpinessSmooth)
+    --return (layerSmooth + layerSharp) / 2
+    --return (layerSharp-0.5) * (layerSmooth) * 2 + 0.5
+    return layerSharp
 end
 
 -- Returns boolean
@@ -22,6 +29,25 @@ end
 -- Returns boolean
 function DepthMap:isRockAt(x, y)
     return DepthMap:getDepth(x, y) < DepthMap.RockDepth
+end
+
+function insertRock(x, y)
+    -- if x < 0 or y < 0 then
+    --     return
+    -- end
+    found = false
+    for i = 1, (#DepthMap.objects) do
+        obj = DepthMap.objects[i]
+        dx = x - obj[1]
+        dy = y - obj[2]
+        if dx*dx + dy*dy < 4*(10*10) then
+            found = true
+            break
+        end
+    end
+    if not found then
+        table.insert(DepthMap.objects, {x, y})
+    end
 end
 
 function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
@@ -41,6 +67,7 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
             depthColor = 255 - depth*160
             if DepthMap:depthIsRock(depth) then
                 love.graphics.setColor(255,180,0)
+                insertRock(x, y)
             else
                 love.graphics.setColor(depthColor*0.4,depthColor*0.6,depthColor)
             end

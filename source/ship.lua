@@ -10,7 +10,7 @@ Ship.location = cpml.vec2.new(100, 100)
 Ship.velocity = 8
 Ship.orientation = cpml.quat.new(0, 0, 0, 1)
 Ship.turnrate = 0.01
-Ship.maxturnspeed = 0.1
+Ship.maxturnspeed = 0.02
 Ship.turnspeed = 0
 
 function Ship.new()
@@ -59,6 +59,8 @@ function Ship.updateLocation(self, dt)
 
     turn = cpml.quat.from_angle_axis(self.turnspeed, cpml.vec3.unit_z)
     rot = rot * turn
+    print(rot)
+    print(turn)
 
     rot = rot:normalize()
     angle = self:angle()
