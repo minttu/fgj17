@@ -5,6 +5,11 @@ background.rain_minlen = 10
 background.rain_maxlen = 100
 background.raindrops = {}
 background.dropcount = 0
+background.brightness = 0
+
+function background:flash(brightness)
+    self.brightness = brightness
+end
 
 function background:update(drawWidth, drawHeight)
     if background.dropcount < 6000 then
@@ -15,7 +20,8 @@ function background:update(drawWidth, drawHeight)
         self.canvas:setFilter("linear")
     end
     love.graphics.setCanvas(self.canvas)
-    love.graphics.clear(0, 0, 20)
+    love.graphics.clear(self.brightness, self.brightness, 20+self.brightness/255*235)
+    self.brightness = math.floor(self.brightness*0.5)
     while #self.raindrops < background.dropcount do
         local x1 = math.random(-self.rain_maxlen/2,2*drawWidth)
         local y1 = -50

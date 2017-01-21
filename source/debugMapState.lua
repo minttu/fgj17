@@ -132,7 +132,13 @@ function debugMapState.update(self, dt)
     fuelGauge.val = ship.fuel
     fuelGauge:update(dt)
 
-    Sounds.misc:update(dt)
+    local playedRandomSound = Sounds.misc:update(dt)
+    if playedRandomSound == "thunder_01.ogg" then
+        Background:flash(180)
+    end
+    if playedRandomSound == "thunder_02.ogg" then
+        Background:flash(255)
+    end
     Background:update(canvas_w, canvas_h)
     leftwiper:update(dt)
     rightwiper:update(dt)
