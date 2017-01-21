@@ -39,6 +39,7 @@ local isDebugging = false
 
 local windowtranslation = {0, 0}
 local consoletranslation = {0, 0}
+local roll = 0
 
 function debugMapState:enter()
     Sounds.ambient:play()
@@ -59,6 +60,9 @@ function debugMapState.draw()
     -- ship:draw()
 
     love.graphics.push()
+    love.graphics.translate(1920/2, 1080/2)
+    love.graphics.rotate(roll)
+    love.graphics.translate(-1920/2, -1080/2)
     love.graphics.translate(windowtranslation[1], windowtranslation[2])
 
     leftwiper:draw(580, 14)
@@ -102,13 +106,16 @@ local draws = 0
 
 function debugMapState.update(self, dt)
     accumulator = accumulator + dt
-    windowtranslation = {math.sin(2*accumulator), 5 * math.sin(accumulator)}
-    consoletranslation = {3*math.sin(2*accumulator), 10*math.sin(accumulator)}
 
     radar:update(dt, ship)
     rudder:update(dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
+
+    multiplier = 8
+    windowtranslation = {math.sin(2*accumulator), multiplier*ship.orientation.y}
+    consoletranslation = {3*math.sin(2*accumulator), 5*multiplier*ship.orientation.y}
+    roll = ship.orientation.x / 7
 
     draws = draws + 1
     if (isDebugging) then
