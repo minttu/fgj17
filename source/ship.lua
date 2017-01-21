@@ -1,3 +1,4 @@
+require "util"
 cpml = require "cpml"
 
 Sounds = require "sounds"
@@ -21,10 +22,19 @@ end
 function Ship.angle(self)
     local rot = self.orientation
     ang = rot:to_vec3()
-    ang1 = math.atan2(0, 1)
-    ang2 = math.atan2(ang.y, ang.x)
-    angle = (ang1 - ang2) % (2*math.pi)
-    return angle
+    return -math.atan2(ang.y, ang.x)
+end
+
+
+function Ship:getRoll()
+    local rot = self.orientation:to_vec3()
+    local ang = math.atan2(rot.y, rot.z)
+    return fixAtan2Angle(ang)
+end
+function Ship:getPitch()
+    local rot = self.orientation:to_vec3()
+    local ang = math.atan2(rot.x, rot.z)
+    return fixAtan2Angle(ang)
 end
 
 function Ship.updateLocation(self, dt)
@@ -49,6 +59,8 @@ function Ship.updateLocation(self, dt)
 
     turn = cpml.quat.from_angle_axis(self.turnspeed, cpml.vec3.unit_z)
     rot = rot * turn
+    print(rot)
+    print(turn)
 
     rot = rot:normalize()
     angle = self:angle()
