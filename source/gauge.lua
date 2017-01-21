@@ -6,16 +6,16 @@ local arm = love.graphics.newImage("assets/graphics/gauge_arm.png")
 
 
 local gauge = class{
-    init = function(self, val)
-        self.val = val
-        self.radius = 100
+    init = function(self, pos, radius, val)
+        self.val = val or 0
+        self.radius = radius or 100
         self.offset = 0
         self.actual = 0
-        self.speed = 0.05
-        self.pos = Vector(0, 150)
+        self.speed = 1
+        self.pos = pos or Vector(0, 150)
     end,
     update = function(self, dt)
-        self.offset = math.random(0, self.val * 20)/200
+        self.offset = math.random(0, self.val * 20)/800
         local change = self.val - self.actual;
         if math.abs(change) > self.speed*dt then
             change = change / math.abs(change) * self.speed*dt
