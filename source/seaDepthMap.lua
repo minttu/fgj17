@@ -52,7 +52,7 @@ end
 
 -- Draws the depth map centered in map coordinates (x,y) and width, height in pixels
 function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
-    local cellSize = 10
+    local cellSize = 16
     local halfWidth = drawWidth/2
     local halfHeight = drawHeight/2
     if not self.canvas or self.canvas:getWidth() ~= drawWidth or self.canvas:getHeight() ~= drawHeight then
