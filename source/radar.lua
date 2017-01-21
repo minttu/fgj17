@@ -9,12 +9,13 @@ Radar.__index = Radar
 
 Radar.angle = 0
 Radar.previousangle = 0
-Radar.speed = 2
+Radar.speed = 3
 Radar.size = 200
 Radar.x = 1500
 Radar.y = 800
 Radar.range = 100
 Radar.seenobjects = {}
+Radar.beepvolume = 0.6
 
 function Radar.new()
     local self = setmetatable({}, Radar)
@@ -99,9 +100,9 @@ function Radar.update(self, dt, ship)
         if (self.angle > self.previousangle and angle >= self.previousangle and angle <= self.angle) or
             (self.angle < self.previousangle and (angle >= self.previousangle or angle <= self.angle)) then
             len = math.sqrt(dx*dx + dy*dy)/3
-            if len < self.size/1.05 then
+            if len < self.size/2 then
                 table.insert(self.seenobjects, {dx, dy, 255})
-                Sounds.ui:play("radar", 0.25 + (0.75 - (len / (self.size/1.05))))
+                Sounds.ui:play("radar", 0.1 + (self.beepvolume-0.1)*(1 - (len / (self.size/2))))
             end
         end
     end

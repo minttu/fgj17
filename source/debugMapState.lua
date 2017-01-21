@@ -7,6 +7,8 @@ Sounds = require "sounds"
 Gauge = require "gauge"
 Rendering = require "rendering.rendering"
 
+Background = require "background"
+
 -- Map to visualize the locations, ship movement and depth
 local debugMapState = {}
 
@@ -34,7 +36,7 @@ function debugMapState.draw()
 
     -- Draws the map covering the entire window
     DepthMap:debugDraw()
-
+    --Background:draw(0, 0)
     -- draw Ship location
     ship:draw()
 
@@ -65,6 +67,7 @@ function debugMapState.update(self, dt)
     rudderGauge:update(dt)
 
     Sounds.misc:update(dt)
+    --Background:update(canvas_w, canvas_h)
 end
 
 function debugMapState:mousereleased(x,y, mouse_btn)
