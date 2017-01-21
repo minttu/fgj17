@@ -1,5 +1,7 @@
 cpml = require "cpml"
 
+Sounds = require "sounds"
+
 local Ship = {}
 Ship.__index = Ship
 
@@ -64,6 +66,8 @@ end
 
 function Ship.update(self, dt)
     self:updateLocation(dt)
+    Sounds.ui:update(dt)
+    Sounds.ui:depthWarning(DepthMap:getDepth(self.location.x, self.location.y))
     --self:checkProblems()
 end
 

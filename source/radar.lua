@@ -1,4 +1,5 @@
 cpml = require "cpml"
+rendering = require "rendering.rendering"
 
 Sounds = require "sounds"
 
@@ -12,63 +13,97 @@ Radar.size = 300
 Radar.x = 900
 Radar.y = 700
 Radar.seenobjects = {}
+Radar.objects = {500, 200, 400, 100, 100, 1000, 50, 1000, 50, 900, 50, 800, 50, 700, 50, 600, 50, 500, 50, 400, 50, 300,
+1000, 1000, 500, 1000, 1000, 0}
 
 function Radar.new()
     local self = setmetatable({}, Radar)
+
+    self.canvas = love.graphics.newCanvas(self.size*2, self.size*2, "rgba32f")
+    self.prevCanvas = love.graphics.newCanvas(self.size*2, self.size*2, "rgba32f")
+
+    love.graphics.setCanvas(self.prevCanvas)
+    love.graphics.clear()
+    love.graphics.setCanvas()
+
     return self
 end
 
-function Radar.update(self, ship, dt)
+function Radar.prerender(self)
+    love.graphics.setCanvas(self.canvas)
+    love.graphics.clear()
 
-    objects = {500, 200, 400, 100, 100, 1000}
+    love.graphics.setShader(rendering.fader)
+    love.graphics.draw(self.prevCanvas)
+    love.graphics.setShader()
+
+    local xx = self.size + self.size * math.cos(self.angle) -- - y * math.sin(self.angle)
+    local yy = self.size + self.size * math.sin(self.angle) -- + y * math.cos(self.angle)
+
+    love.graphics.setColor(0, 200, 0)
+    love.graphics.circle("line", self.size, self.size, self.size)
+    love.graphics.circle("line", self.size, self.size, self.size/1.5)
+    love.graphics.circle("line", self.size, self.size, self.size/3)
+
+    -- for obj in seenobjects, draw obj --
+
+    love.graphics.setColor(0, 255, 0)
+    love.graphics.line(self.size, self.size, xx, yy)
+
+    love.graphics.setColor(255, 255, 255)
+
+    love.graphics.setCanvas()
+
+    local tmp = self.prevCanvas
+    self.prevCanvas = self.canvas
+    self.canvas = tmp
+end
+
+function Radar.update(self, dt, ship)
 
     self.previousangle = self.angle
     self.angle = (self.angle + self.speed*dt) % (2*math.pi)
 
-    for i = 1, (#objects)/2 do
-        x = objects[2*i-1]
-        y = objects[2*i]
+    for i = 1, (#self.objects)/2 do
+        x = self.objects[2*i-1]
+        y = self.objects[2*i]
         dx = x - ship.location.x
         dy = y - ship.location.y
-        angle = math.atan2(dy, dx)
-        if angle >= self.previousangle and angle <= self.angle  then
-            table.insert(self.seenobjects, {dx/4 + self.x, dy/4 + self.y, 255})
+        angle = math.atan2(dy, dx) % (2*math.pi)
+        if (self.angle > self.previousangle and angle >= self.previousangle and angle <= self.angle) or
+            (self.angle < self.previousangle and (angle >= self.previousangle or angle <= self.angle)) then
+            table.insert(self.seenobjects, {dx, dy, 255})
             Sounds.ui:play("radar")
         end
     end
-    --    angle = math.atan2(obj.y, obj.x)
-    --    if angle >= self.previousangle && angle <= self.angle 
-    --      add to seenobjects
 end
 
 function Radar.draw(self)
-    x = self.size
-    y = self.size
-    xx = x * math.cos(self.angle) -- - y * math.sin(self.angle)
-    yy = x * math.sin(self.angle) -- + y * math.cos(self.angle)
-
-    x = xx + self.x
-    y = yy + self.y
-
     love.graphics.setColor(0, 20, 0)
     love.graphics.circle("fill", self.x, self.y, self.size)
 
-    love.graphics.setColor(0, 200, 0)
-    love.graphics.circle("line", self.x, self.y, self.size)
-    love.graphics.circle("line", self.x, self.y, self.size/1.5)
-    love.graphics.circle("line", self.x, self.y, self.size/3)
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.draw(self.prevCanvas, self.x-self.size, self.y-self.size)
 
-    love.graphics.setColor(0, 255, 0)
-    love.graphics.line(self.x, self.y, x, y)
+    for i = 1, (#self.objects)/2 do
+        x = self.objects[2*i-1]
+        y = self.objects[2*i]
+        love.graphics.circle("fill", x, y, 10)
+    end
 
     for i = 1, (#self.seenobjects) do
         obj = self.seenobjects[i]
-        x = obj[1]
-        y = obj[2]
-        a = obj[3]
-        love.graphics.setColor(255, 255, 255, a)
-        love.graphics.circle("fill", x, y, 10)
-        -- love.graphics.line(self.x, self.y, x, y)
+        x = obj[1]/3
+        y = obj[2]/3
+        len = math.sqrt(x*x + y*y)
+        if len < self.size/1.05 then
+            x = x + self.x
+            y = y + self.y
+            a = obj[3]
+            love.graphics.setColor(255, 255, 255, a)
+            love.graphics.circle("fill", x, y, 10)
+            -- love.graphics.line(self.x, self.y, x, y)
+        end
     end
 
     for i = #self.seenobjects,1,-1 do
