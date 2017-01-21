@@ -19,7 +19,7 @@ local rudderGauge = Gauge(vector(1920 - 200, 100), 100, 0.5)
 local rollGauge = Gauge(vector(0, 300), 150)
 local pitchGauge = Gauge(vector(0, 200), 100)
 local rudder = Rudder(0,0)
-local compass = Compass(0,0,200)
+local compass = Compass(0,0,400, 400, 3)
 
 function debugMapState:enter()
     Sounds.ambient:play()
@@ -59,7 +59,7 @@ function debugMapState.update(self, dt)
     rudder:update(dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
-    
+
     rollGauge.val = ship:getRoll()
     pitchGauge.val = ship:getPitch()
 
@@ -69,7 +69,7 @@ function debugMapState.update(self, dt)
     rudderGauge.val = (ship.turnspeed * 25) + 0.5
     rudderGauge:update(dt)
 
-    compass:update()
+    compass:update(dt, ship:angle())
 
     Sounds.misc:update(dt)
     --Background:update(canvas_w, canvas_h)

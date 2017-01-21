@@ -44,16 +44,10 @@ function Radar.prerender(self)
         len = math.sqrt(x*x + y*y)
         if len < self.range/1.05 then
             a = obj[3]
-            love.graphics.setColor(255, 255, 255, a)
+            love.graphics.setColor(0, 255, 0)
             scale = self.size / self.range
             love.graphics.circle("fill", scale * x + self.size, scale * y + self.size, 10)
             -- love.graphics.line(self.x, self.y, x, y)
-        end
-    end
-    for i = #self.seenobjects,1,-1 do
-        self.seenobjects[i][3] = self.seenobjects[i][3] - 5.2
-        if self.seenobjects[i][3] < 0 then
-            table.remove(self.seenobjects, i)
         end
     end
 
@@ -107,7 +101,7 @@ function Radar.update(self, dt, ship)
     end
 
     for i = #self.seenobjects,1,-1 do
-        self.seenobjects[i][3] = self.seenobjects[i][3] - 3
+        self.seenobjects[i][3] = self.seenobjects[i][3] - 300*self.speed*dt/(math.pi*2)
         if self.seenobjects[i][3] < 0 then
             table.remove(self.seenobjects, i)
         end
