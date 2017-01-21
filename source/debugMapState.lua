@@ -63,7 +63,7 @@ function debugMapState.draw()
 
     leftwiper:draw(480, 20)
     rightwiper:draw(1440, 20)
-    love.graphics.draw(windowFrame, 0, 0)
+    love.graphics.draw(windowFrame, 0, -5, 0, 1, 1.05)
 
     love.graphics.push()
     love.graphics.translate(consoletranslation[1], consoletranslation[2])
@@ -104,7 +104,7 @@ local accumulator = 0
 function debugMapState.update(self, dt)
     accumulator = accumulator + dt
     windowtranslation = {0, 5 * math.sin(accumulator)}
-    consoletranslation = {0, 30*math.sin(accumulator)}
+    consoletranslation = {0, 15*math.sin(accumulator)}
 
     radar:update(dt, ship)
     rudder:update(dt)
