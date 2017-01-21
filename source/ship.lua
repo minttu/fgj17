@@ -22,6 +22,7 @@ Ship = Class
     , waveSpeed = 4
     , t = 0
     , waveFrequency = 0.1
+    , turnSpeedTiltMultiplier = math.pi/2
     }
 function Ship:init(x, y)
     self.location = cpml.vec2.new(x, y)
@@ -87,6 +88,7 @@ function Ship:updateLocation(dt)
     velocityVector = cpml.vec2.new(self.velocity * math.cos(angle), self.velocity * math.sin(angle))*dt
     self.location = self.location + velocityVector
 
+    -- Waves
     local l = self.location
     l = vec3(l.x, l.y, self:getWaveHeight(l,dt))
     local xDir = vec3(self.velocity,0,0):rotate(angle, vec3(0,0,1))
@@ -105,6 +107,9 @@ function Ship:updateLocation(dt)
     -- Fix sign, don't know why it's not preserved by above math
     if l.z < forwardPoint.z then pitch = -pitch end
     if l.z < leftPoint.z then roll = -roll end
+
+    -- Tilt by turning
+    roll = roll - self.turnspeed/self.maxturnspeed
 
     self.orientation = vector(roll,pitch)
 
