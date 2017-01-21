@@ -208,7 +208,6 @@ function debugMapState:mousereleased(x,y, mouse_btn)
     if mouse_btn == 1 then
         rudder:mouseReleased(x,y)
         wiperswitch:mouseReleased(screen_to_console_space(x,y))
-        print(screen_to_console_space(x,y))
         leftwiper:enable(wiperswitch.enabled)
         rightwiper:enable(wiperswitch.enabled)
     end
