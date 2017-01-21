@@ -13,6 +13,8 @@ Ship = Class
     , turnrate = 0.01
     , maxturnspeed = 0.02
     , turnspeed = 0
+    , fuel = 1
+    , fuelConsumptionMultiplier = 0.000001
     }
 function Ship:init(x, y)
     self.location = cpml.vec2.new(x, y)
@@ -74,6 +76,8 @@ function Ship:updateLocation(dt)
     self.location = self.location + velocityVector
 
     self.orientation = rot
+
+    self.fuel = self.fuel - self.velocity * self.fuelConsumptionMultiplier
 end
 
 function Ship:checkProblems()
