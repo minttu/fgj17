@@ -3,10 +3,12 @@ cpml = require "cpml"
 local Ship = {}
 Ship.__index = Ship
 
-Ship.location = cpml.vec2.new(0,0)
+Ship.location = cpml.vec2.new(100, 100)
 Ship.velocity = 1
 Ship.orientation = cpml.quat.new(0, 0, 0, 1)
-Ship.turnrate = 0.1 -- radians/tick
+Ship.turnrate = 0.005
+Ship.maxturnspeed = 0.1
+Ship.turnspeed = 0
 
 function Ship.new()
     local self = setmetatable({}, Ship)
@@ -27,14 +29,23 @@ function Ship.updateLocation(self)
     rot = self.orientation
 
     if love.keyboard.isDown( "left" ) then
-        turn = cpml.quat.from_angle_axis(-Ship.turnrate, cpml.vec3.unit_z)
-        rot = rot * turn
+        self.turnspeed = self.turnspeed - self.turnrate
+        if self.turnspeed < -self.maxturnspeed then
+            self.turnspeed = -self.maxturnspeed
+        end
     end
 
     if love.keyboard.isDown( "right" ) then
-        turn = cpml.quat.from_angle_axis(Ship.turnrate, cpml.vec3.unit_z)
-        rot = rot * turn
+        self.turnspeed = self.turnspeed + self.turnrate
+        if self.turnspeed > self.maxturnspeed then
+            self.turnspeed = self.maxturnspeed
+        end
     end
+
+    self.turnspeed = self.turnspeed / 1.01 -- slowly normalize
+
+    turn = cpml.quat.from_angle_axis(self.turnspeed, cpml.vec3.unit_z)
+    rot = rot * turn
 
     rot = rot:normalize()
     angle = self:angle()
