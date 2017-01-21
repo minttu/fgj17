@@ -1,5 +1,7 @@
 Class = require 'hump.class'
 
+Sounds = require "sounds"
+
 local base = love.graphics.newImage("assets/graphics/switch_base.png")
 local stick_on = love.graphics.newImage("assets/graphics/switch_know_up.png")
 local stick_off = love.graphics.newImage("assets/graphics/switch_know_down.png")
@@ -20,6 +22,7 @@ end
 function Switch:mouseReleased(x, y)
     if x>self.x and x<self.x+base:getWidth()*self.scale and y > self.y and y < self.y+base:getHeight()*self.scale then
         self.enabled = not self.enabled
+        Sounds.ui:play("switch")
     end
 end
 
