@@ -45,6 +45,8 @@ local roll = 0
 function debugMapState:enter()
     Sounds.ambient:play()
     DepthMap:debugDrawUpdate(0, 0, 400, 400)
+
+    compass.markers = {{color = {255,0,0}, rotation=2, width=2, text="P"}}
 end
 
 function debugMapState.draw()
