@@ -17,7 +17,7 @@ end
 
 function gameover:keyreleased(key)
     if key == "space" or key == "return" then
-        gamestate.switch(menu)
+        love.event.quit("restart")
     end
 end
 
