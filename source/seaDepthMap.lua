@@ -52,7 +52,7 @@ end
 
 -- Draws the depth map centered in map coordinates (x,y) and width, height in pixels
 function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
-    local cellSize = 8
+    local cellSize = 10
     local halfWidth = drawWidth/2
     local halfHeight = drawHeight/2
     if not self.canvas or self.canvas:getWidth() ~= drawWidth or self.canvas:getHeight() ~= drawHeight then
@@ -60,6 +60,7 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
         self.canvas:setFilter("linear")
     end
     love.graphics.setCanvas(self.canvas)
+    love.graphics.scale(1/scx,1/scy) -- this works for whatever reason
     love.graphics.setPointSize(cellSize)
     love.graphics.clear()
     for y=1,drawWidth,cellSize do
