@@ -19,6 +19,7 @@ function Compass:init(x, y, size, scrollSize, linesBetween)
     self.size = size
     self.scrollSize = scrollSize
     self.linesBetween = linesBetween
+    self.markers = {}
 end
 
 function Compass:update(dt, rotation)
@@ -48,6 +49,31 @@ function Compass:drawLine(x1, y1, x2, y2)
     end
 end
 
+function Compass:drawMarker(marker, scale)
+    love.graphics.push()
+    local xOffset = (-self.rotation+marker.rotation)/(2*math.pi) * self.scrollSize + 3
+
+    local x = xOffset;
+
+    while x > self.scrollSize do
+        x = x - self.scrollSize
+    end
+    while x < 0 do
+        x = x + self.scrollSize
+    end
+
+    local x = x + self.pos.x
+    local y1 = self.pos.y
+    local y2 = y1 + scale * frame:getHeight() - 1
+    local y3 = y1 + (scale * frame:getHeight())/2
+    love.graphics.setLineWidth(marker.width)
+    love.graphics.setColor(marker.color)
+    self:drawLine(x, y1, x, y2)
+    self:drawText(marker.text, marker.rotation + self.northRotation)
+    love.graphics.setColor(255,255,255)
+    love.graphics.pop()
+end
+
 function Compass:draw()
     local scale = self.size / frame:getWidth()
 
@@ -73,10 +99,15 @@ function Compass:draw()
         local y1 = self.pos.y
         local y2 = y1 + scale * frame:getHeight() - 1
         local y3 = y1 + (scale * frame:getHeight())/2
+        love.graphics.setLineWidth(2)
         self:drawLine(x, y1, x, y2)
         love.graphics.setColor(128, 128, 128)
         self:drawLine(x+lineSpacing/2, y3, x+lineSpacing/2, y2)
         love.graphics.setColor(255, 255, 255)
+    end
+
+    for i=1, #self.markers, 1 do
+        self:drawMarker(self.markers[i], scale)
     end
 
 

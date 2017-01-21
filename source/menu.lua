@@ -6,14 +6,8 @@ fonts = require "fonts"
 
 local menu = {}
 
-creditsOpen = false
-
 function play()
     gamestate.switch(debugMapState)
-end
-
-function credits()
-    creditsOpen = true
 end
 
 function exit()
@@ -21,57 +15,70 @@ function exit()
 end
 
 function menu:enter()
-    self.options = {{"Play", play}, {"Credits", credits}, {"Exit", exit}}
+    self.options = {{"Play", play}, {"Exit", exit}}
     self.selected = 1
-    self.makers = {
-        {"Nicklas Ahlskog", "Programming"},
-        {"Jaakko Hannikainen", "Programming"},
-        {"Tuomas Kinnunen", "Programming"},
-        {"Allan Palmu", "Programming"},
-        {"Juhani Imberg", "Sounds & Programming"},
-        {"Esa Niemi", "Graphics"}
-    }
+    love.graphics.setFont(fonts.menu)
 
+    self:initLogo()
+end
+
+logo = {}
+
+function menu:initLogo()
+    name = "Tyrsky"
+    for i = 1,#name do
+        local c = name:sub(i,i)
+        table.insert(logo, {c, 450 + 128 * i, 100})
+    end
+end
+
+accumulator = 0
+
+function menu:updateLogo(dt)
+    accumulator = accumulator + dt
+    for i = 1,#logo do
+        logo[i][3] = 200 + 20 * math.sin(accumulator + i)
+    end
+end
+
+function menu:drawLogo()
+    love.graphics.setFont(fonts.bigMenu)
+    for i = 1,#logo do
+        love.graphics.print(logo[i][1], logo[i][2], logo[i][3])
+    end
     love.graphics.setFont(fonts.menu)
 end
 
 function menu:draw()
     love.graphics.push()
     Rendering.scale()
-    if creditsOpen then
-        for i = 1,#self.makers do
-            name = self.makers[i][1]
-            role = self.makers[i][2]
-            love.graphics.print(name, 100, 200 + i*70)
-            love.graphics.print(role, 600, 200 + i*70)
+    self:drawLogo()
+
+    love.graphics.printf("\"game\" by\n\n\nNicklas Ahlskog\n\nJaakko Hannikainen\n\nTuomas Kinnunen\n\nAllan Palmu\n\nJuhani Imberg\n\nEsa Niemi", 350, 500, 500, "right")
+
+    for i = 1,#self.options do
+        if i == self.selected then
+            love.graphics.setColor(200, 200, 200)
         end
-    else
-        for i = 1,#self.options do
-            if i == self.selected then
-                love.graphics.setColor(200, 200, 200)
-            end
-            love.graphics.print(self.options[i][1], 100, 400 + i*100)
-            love.graphics.setColor(100, 100, 100)
-        end
+        love.graphics.print(self.options[i][1], 1050, 400 + (i * 96))
+        love.graphics.setColor(100, 100, 100)
     end
     love.graphics.pop()
 end
 
+function menu:update(dt)
+    self:updateLogo(dt)
+end
+
 function menu:keyreleased(key)
-    if creditsOpen then
-        if key == "space" or key == "return" then
-            creditsOpen = false
-        end
-    else
-        if key == "up" then
-            self.selected = math.max(1, self.selected-1)
-        end
-        if key == "down" then
-            self.selected = math.min(#self.options, self.selected+1)
-        end
-        if key == "space" or key == "return" then
-            self.options[self.selected][2]()
-        end
+    if key == "up" then
+        self.selected = math.max(1, self.selected-1)
+    end
+    if key == "down" then
+        self.selected = math.min(#self.options, self.selected+1)
+    end
+    if key == "space" or key == "return" then
+        self.options[self.selected][2]()
     end
 end
 

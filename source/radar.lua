@@ -58,6 +58,7 @@ function Radar:prerender()
     local oxx = self.size + self.size * math.cos(self.previousangle) -- - y * math.sin(self.angle)
     local oyy = self.size + self.size * math.sin(self.previousangle) -- + y * math.cos(self.angle)
 
+    love.graphics.setLineWidth(2)
     love.graphics.setColor(0, 200, 0)
     love.graphics.circle("line", self.size, self.size, self.size)
     love.graphics.circle("line", self.size, self.size, self.size/1.5)
