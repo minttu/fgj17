@@ -1,25 +1,22 @@
+Class = require "hump.class"
 cpml = require "cpml"
 rendering = require "rendering.rendering"
-
 Sounds = require "sounds"
 DepthMap = require "seaDepthMap"
 
-local Radar = {}
-Radar.__index = Radar
+Radar = Class
+    { angle = 0
+    , previousangle = 0
+    , speed = 3
+    , size = 200
+    , x = 1500
+    , y = 800
+    , range = 100
+    , seenobjects = {}
+    , beepvolume = 0.6
+    }
 
-Radar.angle = 0
-Radar.previousangle = 0
-Radar.speed = 3
-Radar.size = 200
-Radar.x = 1500
-Radar.y = 800
-Radar.range = 100
-Radar.seenobjects = {}
-Radar.beepvolume = 0.6
-
-function Radar.new(x, y)
-    local self = setmetatable({}, Radar)
-
+function Radar:init(x, y)
     self.x = x
     self.y = y
 
@@ -29,11 +26,9 @@ function Radar.new(x, y)
     love.graphics.setCanvas(self.prevCanvas)
     love.graphics.clear()
     love.graphics.setCanvas()
-
-    return self
 end
 
-function Radar.prerender(self)
+function Radar:prerender()
     love.graphics.setCanvas(self.canvas)
     love.graphics.clear()
 
@@ -83,7 +78,7 @@ function Radar.prerender(self)
     self.canvas = tmp
 end
 
-function Radar.update(self, dt, ship)
+function Radar:update(dt, ship)
 
     self.previousangle = self.angle
     self.angle = (self.angle + self.speed*dt) % (2*math.pi)
@@ -118,7 +113,7 @@ function Radar.update(self, dt, ship)
     end
 end
 
-function Radar.draw(self)
+function Radar:draw()
     love.graphics.setColor(0, 20, 0)
     love.graphics.circle("fill", self.x, self.y, self.size)
 
