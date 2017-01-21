@@ -1,23 +1,26 @@
+Class = require "hump.class"
 cpml = require "cpml"
 rendering = require "rendering.rendering"
-
 Sounds = require "sounds"
 DepthMap = require "seaDepthMap"
 
-local Radar = {}
-Radar.__index = Radar
+Radar = Class
+    { angle = 0
+    , previousangle = 0
+    , speed = 3
+    , size = 200
+    , x = 1500
+    , y = 800
+    , range = 100
+    , seenobjects = {}
+    , beepvolume = 0.6
+    }
 
-Radar.angle = 0
-Radar.previousangle = 0
-Radar.speed = 2
-Radar.size = 200
-Radar.x = 1500
-Radar.y = 800
-Radar.range = 100
-Radar.seenobjects = {}
+function Radar:init(pos, size)
 
-function Radar.new()
-    local self = setmetatable({}, Radar)
+    self.x = pos.x
+    self.y = pos.y
+    self.size = size
 
     self.canvas = love.graphics.newCanvas(self.size*2, self.size*2, "rgba32f")
     self.prevCanvas = love.graphics.newCanvas(self.size*2, self.size*2, "rgba32f")
@@ -25,11 +28,9 @@ function Radar.new()
     love.graphics.setCanvas(self.prevCanvas)
     love.graphics.clear()
     love.graphics.setCanvas()
-
-    return self
 end
 
-function Radar.prerender(self)
+function Radar:prerender()
     love.graphics.setCanvas(self.canvas)
     love.graphics.clear()
 
@@ -73,7 +74,7 @@ function Radar.prerender(self)
     self.canvas = tmp
 end
 
-function Radar.update(self, dt, ship)
+function Radar:update(dt, ship)
 
     self.previousangle = self.angle
     self.angle = (self.angle + self.speed*dt) % (2*math.pi)
@@ -93,9 +94,9 @@ function Radar.update(self, dt, ship)
         if (self.angle > self.previousangle and angle >= self.previousangle and angle <= self.angle) or
             (self.angle < self.previousangle and (angle >= self.previousangle or angle <= self.angle)) then
             len = math.sqrt(dx*dx + dy*dy)/3
-            if len < self.size/1.05 then
+            if len < self.size/2 then
                 table.insert(self.seenobjects, {dx, dy, 255})
-                Sounds.ui:play("radar", 0.25 + (0.75 - (len / (self.size/1.05))))
+                Sounds.ui:play("radar", 0.1 + (self.beepvolume-0.1)*(1 - (len / (self.size/2))))
             end
         end
     end
@@ -108,7 +109,7 @@ function Radar.update(self, dt, ship)
     end
 end
 
-function Radar.draw(self)
+function Radar:draw()
     love.graphics.setColor(0, 20, 0)
     love.graphics.circle("fill", self.x, self.y, self.size)
 

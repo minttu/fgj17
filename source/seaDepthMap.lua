@@ -50,8 +50,9 @@ function insertRock(x, y)
     end
 end
 
+-- Draws the depth map centered in map coordinates (x,y) and width, height in pixels
 function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
-    local cellSize = 4
+    local cellSize = 10
     local halfWidth = drawWidth/2
     local halfHeight = drawHeight/2
     if not self.canvas or self.canvas:getWidth() ~= drawWidth or self.canvas:getHeight() ~= drawHeight then
@@ -59,15 +60,16 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
         self.canvas:setFilter("linear")
     end
     love.graphics.setCanvas(self.canvas)
+    love.graphics.scale(1/scx,1/scy) -- this works for whatever reason
     love.graphics.setPointSize(cellSize)
     love.graphics.clear()
-    for y=mapY-halfHeight,drawHeight,cellSize do
-        for x=mapX-halfWidth,drawWidth,cellSize do
-            depth = DepthMap:getDepth(x,y)
+    for y=1,drawWidth,cellSize do
+        for x=1,drawWidth,cellSize do
+            depth = DepthMap:getDepth(mapX-halfWidth+x,mapY-halfHeight+y)
             depthColor = 255 - depth*160
             if DepthMap:depthIsRock(depth) then
                 love.graphics.setColor(255,180,0)
-                insertRock(x, y)
+                insertRock(mapX-halfWidth+x, mapY-halfHeight+y)
             else
                 love.graphics.setColor(depthColor*0.4,depthColor*0.6,depthColor)
             end
@@ -77,7 +79,6 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
     love.graphics.setCanvas()
 end
 
--- Draws the depth map centered in map coordinates (x,y) and width, height in pixels
 function DepthMap:debugDraw()
     local o_r, o_g, o_b = love.graphics.getColor()
     love.graphics.setColor(255, 255, 255)

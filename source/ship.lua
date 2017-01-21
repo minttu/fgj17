@@ -1,45 +1,51 @@
 require "util"
 cpml = require "cpml"
-
+quat = cpml.quat
+vec3 = cpml.vec3
+vector = require "hump.vector"
 Sounds = require "sounds"
+Class = require "hump.class"
 
-local Ship = {}
-Ship.__index = Ship
-
-Ship.location = cpml.vec2.new(100, 100)
-Ship.velocity = 8
-Ship.orientation = cpml.quat.new(0, 0, 0, 1)
-Ship.turnrate = 0.01
-Ship.maxturnspeed = 0.02
-Ship.turnspeed = 0
-
-function Ship.new()
-    local self = setmetatable({}, Ship)
-    self.orientation = cpml.quat.new(1, 0, 0, 1)
+Ship = Class
+    { location = cpml.vec2.new(100, 100)
+    , velocity = 8
+    , orientation = cpml.quat.new(0, 0, 0, 1)
+    , turnrate = 0.01
+    , maxturnspeed = 0.02
+    , turnspeed = 0
+    , fuel = 1
+    , fuelConsumptionMultiplier = 0.000001
+    }
+function Ship:init(x, y)
+    self.location = cpml.vec2.new(x, y)
+    self.orientation = vector(0,0) -- roll, pitch --quat.from_angle_axis(0, vec3.unit_z)
+    self.yaw = 0
     return self
 end
 
-function Ship.angle(self)
-    local rot = self.orientation
-    ang = rot:to_vec3()
-    return -math.atan2(ang.y, ang.x)
+function Ship:angle()
+    --local rot = self.orientation
+    --ang = rot:to_vec3()
+    --return -math.atan2(ang.y, ang.x)
+    return self.yaw
 end
 
 
 function Ship:getRoll()
-    local rot = self.orientation:to_vec3()
-    local ang = math.atan2(rot.y, rot.z)
-    return fixAtan2Angle(ang)
+    --local rot = self.orientation:to_vec3()
+    --local ang = math.atan2(rot.y, rot.z)
+    --return fixAtan2Angle(ang)
+    return self.orientation.x
 end
 function Ship:getPitch()
-    local rot = self.orientation:to_vec3()
-    local ang = math.atan2(rot.x, rot.z)
-    return fixAtan2Angle(ang)
+    --local rot = self.orientation:to_vec3()
+    --local ang = math.atan2(rot.x, rot.z)
+    --return fixAtan2Angle(ang)
+    return self.orientation.y
 end
 
-function Ship.updateLocation(self, dt)
+function Ship:updateLocation(dt)
 
-    rot = self.orientation
 
     if love.keyboard.isDown( "left" ) then
         self.turnspeed = self.turnspeed - self.turnrate*dt
@@ -55,36 +61,39 @@ function Ship.updateLocation(self, dt)
         end
     end
 
-    self.turnspeed = self.turnspeed / 1.01 -- slowly normalize
+    --self.turnspeed = self.turnspeed / 1.01 -- slowly normalize
 
-    turn = cpml.quat.from_angle_axis(self.turnspeed, cpml.vec3.unit_z)
-    rot = rot * turn
-    print(rot)
-    print(turn)
+    --rot = self.orientation
+    --turn = quat.from_angle_axis(self.turnspeed, cpml.vec3.unit_z)
+    --rot = rot * turn
 
-    rot = rot:normalize()
+    self.yaw = self.yaw + self.turnspeed
+
+
     angle = self:angle()
 
     velocityVector = cpml.vec2.new(self.velocity * math.cos(angle), self.velocity * math.sin(angle))*dt
     self.location = self.location + velocityVector
 
     self.orientation = rot
+
+    self.fuel = self.fuel - self.velocity * self.fuelConsumptionMultiplier
 end
 
-function Ship.checkProblems(self)
+function Ship:checkProblems()
     if DepthMap.isRockAt(self.location.x, self.location.y) then
         -- TODO: HIT ROCK
     end
 end
 
-function Ship.update(self, dt)
+function Ship:update(dt)
     self:updateLocation(dt)
     Sounds.ui:update(dt)
     Sounds.ui:depthWarning(DepthMap:getDepth(self.location.x, self.location.y))
     --self:checkProblems()
 end
 
-function Ship.draw(self)
+function Ship:draw()
     local vertices = {-10, -10, 10, -10, 10, 10, -10, 10}
     angle = self:angle()
     for i = 1, (#vertices)/2 do
@@ -92,8 +101,8 @@ function Ship.draw(self)
         y = vertices[2*i]
         vertices[2*i-1] = x * math.cos(angle) - y * math.sin(angle)
         vertices[2*i] = x * math.sin(angle) + y * math.cos(angle)
-        vertices[2*i-1] = vertices[2*i-1] + self.location.x;
-        vertices[2*i] = vertices[2*i] + self.location.y;
+        vertices[2*i-1] = vertices[2*i-1] + 200;
+        vertices[2*i] = vertices[2*i] + 200;
     end
 
     angle = self:angle()
