@@ -156,7 +156,7 @@ function debugMapState.update(self, dt)
         draws = 0
     end
 
-    rollGauge.val = ship:getRoll()/(2*math.pi) + 0.5
+    rollGauge.val = -ship:getRoll()/(2*math.pi) + 0.5
     pitchGauge.val = ship:getPitch()/(2*math.pi) + 0.5
 
     rollGauge:update(dt)
@@ -189,7 +189,7 @@ function debugMapState.update(self, dt)
     compass.markers[1].rotation = -ang + math.pi
     if checkpoints:checkCollision(playerLoc) then
         checkpoints:createCheckpoint(playerLoc)
-        ship.fuel = ship.fuel + ship.fuelConsumptionMultiplier*ship.velocity*1800
+        ship.fuel = ship.fuel + ship.fuelConsumptionMultiplier*ship.velocity*2500
         local c = {{255,0,255},{255,255,0}}
         compass.markers[1].color = c[checkpoints.counter % 2 + 1]
     end
