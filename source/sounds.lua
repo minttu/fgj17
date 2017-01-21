@@ -148,8 +148,8 @@ return {
                  {name = "radar_01.ogg", volume = 1}
             }},
             {name = "rudder", sounds = {
-                 {name = "rudder_01.ogg", volume = 1},
-                 {name = "rudder_02.ogg", volume = 1}
+                 {name = "rudder_01.ogg", volume = 0.5},
+                 {name = "rudder_02.ogg", volume = 0.5}
             }}
     }),
 }

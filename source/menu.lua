@@ -25,7 +25,7 @@ function menu:enter()
         {"Jaakko Hannikainen", "Programming"},
         {"Tuomas Kinnunen", "Programming"},
         {"Allan Palmu", "Programming"},
-        {"Juhani Imberg", "Sounds"},
+        {"Juhani Imberg", "Sounds & Programming"},
         {"Esa Niemi", "Graphics"}
     }
 end
@@ -56,7 +56,7 @@ function menu:keyreleased(key)
         end
     else
         if key == "up" then
-            self.selected = math.max(0, self.selected-1)
+            self.selected = math.max(1, self.selected-1)
         end
         if key == "down" then
             self.selected = math.min(#self.options, self.selected+1)
