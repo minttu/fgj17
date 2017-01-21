@@ -129,7 +129,7 @@ function debugMapState.update(self, dt)
     fuelGauge:update(dt)
 
     Sounds.misc:update(dt)
-    Background:update(canvas_w, canvas_h)
+    Background:update(canvas_w, canvas_h/4 * 4)
     leftwiper:update(dt)
     rightwiper:update(dt)
 end
