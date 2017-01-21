@@ -98,6 +98,7 @@ function debugMapState.draw()
 end
 
 local accumulator = 0
+local draws = 0
 
 function debugMapState.update(self, dt)
     accumulator = accumulator + dt
@@ -109,9 +110,12 @@ function debugMapState.update(self, dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
 
-    DepthMap:update(ship.location.x, ship.location.y, 700, 700)
+    draws = draws + 1
     if (isDebugging) then
         DepthMap:debugDrawUpdate(ship.location.x, ship.location.y, 400, 400)
+    elseif draws > 30 then
+        DepthMap:update(ship.location.x, ship.location.y, 700, 700)
+        draws = 0
     end
 
     rollGauge.val = ship:getRoll()/(2*math.pi) + 0.5
