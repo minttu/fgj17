@@ -5,8 +5,9 @@ Radar.__index = Radar
 
 Radar.angle = 0
 Radar.speed = 0.5
-Radar.x = 500
-Radar.y = 600
+Radar.size = 300
+Radar.x = 900
+Radar.y = 700
 
 function Radar.new()
     local self = setmetatable({}, Radar)
@@ -18,8 +19,8 @@ function Radar.update(self, dt)
 end
 
 function Radar.draw(self)
-    x = 100
-    y = 100
+    x = self.size
+    y = self.size
     xx = x * math.cos(self.angle) -- - y * math.sin(self.angle)
     yy = x * math.sin(self.angle) -- + y * math.cos(self.angle)
 
