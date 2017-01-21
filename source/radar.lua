@@ -80,7 +80,7 @@ function Radar.update(self, dt, ship)
             len = math.sqrt(dx*dx + dy*dy)/3
             if len < self.size/1.05 then
                 table.insert(self.seenobjects, {dx, dy, 255})
-                Sounds.ui:play("radar")
+                Sounds.ui:play("radar", 0.25 + (0.75 - (len / (self.size/1.05))))
             end
         end
     end
