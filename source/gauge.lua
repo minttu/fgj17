@@ -1,5 +1,5 @@
 class = require "hump.class"
-Vector = require "hump.Vector"
+Vector = require "hump.vector"
 
 local bg = love.graphics.newImage("assets/graphics/gauge.png")
 local arm = love.graphics.newImage("assets/graphics/gauge_arm.png")
