@@ -6,6 +6,7 @@ mat4 = cpml.mat4
 vector = require "hump.vector"
 Sounds = require "sounds"
 Class = require "hump.class"
+gameover = require "gameover"
 
 
 Ship = Class
@@ -117,8 +118,8 @@ function Ship:updateLocation(dt)
 end
 
 function Ship:checkProblems()
-    if DepthMap.isRockAt(self.location.x, self.location.y) then
-        -- TODO: HIT ROCK
+    if DepthMap:isRockAt(self.location.x, self.location.y) then
+        gameover:shipCrashed()
     end
 end
 
@@ -126,7 +127,7 @@ function Ship:update(dt)
     self:updateLocation(dt)
     Sounds.ui:update(dt)
     Sounds.ui:depthWarning(DepthMap:getDepth(self.location.x, self.location.y))
-    --self:checkProblems()
+    self:checkProblems()
 end
 
 function Ship:draw()
