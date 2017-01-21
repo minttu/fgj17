@@ -11,11 +11,12 @@ radar = Radar.new()
 
 function debugMapState:enter()
     Sounds.ambient:play()
+    DepthMap:debugDrawUpdate(0,0,canvas_w,canvas_h)
 end
 
 function debugMapState.draw()
     -- Draws the map covering the entire window
-    DepthMap:debugDraw(0,0,canvas_w,canvas_h)
+    DepthMap:debugDraw()
 
     -- draw Ship location
     ship:draw()
