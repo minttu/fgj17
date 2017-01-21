@@ -197,13 +197,13 @@ end
 
 function debugMapState:mousereleased(x,y, mouse_btn)
     local screen_to_console_space = function(x, y)
-        local xb, yb = x, y
+        local xb, yb = x/scx, y/scy
         xb, yb = xb - 1920/2, yb - 1080/2
         xb = xb * math.cos(-roll) - yb * math.sin(-roll)
         yb = xb * math.sin(-roll) + yb * math.cos(-roll)
         xb, yb = xb + 1920/2, yb + 1080/2
         xb, yb = xb - (consoletranslation[1]+windowtranslation[1]), yb - (consoletranslation[2]+windowtranslation[2])
-        return xb/scx, yb/scy
+        return xb, yb
     end
     if mouse_btn == 1 then
         rudder:mouseReleased(x,y)
