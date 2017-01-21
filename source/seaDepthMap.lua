@@ -30,7 +30,7 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
     local halfHeight = drawHeight/2
     if not self.canvas or self.canvas:getWidth() ~= drawWidth or self.canvas:getHeight() ~= drawHeight then
         self.canvas = love.graphics.newCanvas(drawWidth, drawHeight)
-        self.canvas:setFilter("nearest")
+        self.canvas:setFilter("linear")
     end
     love.graphics.setCanvas(self.canvas)
     love.graphics.setPointSize(cellSize)
