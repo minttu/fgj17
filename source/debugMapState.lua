@@ -46,7 +46,7 @@ function debugMapState.update(self, dt)
     radar:update(dt, ship)
     gauge:update(dt)
     rudder:update(dt)
-    ship.turnspeed = rudder.angle*0.0001
+    ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
     Sounds.misc:update(dt)
 end
