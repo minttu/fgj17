@@ -33,6 +33,9 @@ local compass = Compass((1920 / 2) - 200, (1080 / 2), 400, 400, 3)
 
 local isDebugging = false
 
+local windowtranslation = {0, 0}
+local consoletranslation = {0, 0}
+
 function debugMapState:enter()
     Sounds.ambient:play()
     DepthMap:debugDrawUpdate(0, 0, 400, 400)
@@ -50,7 +53,15 @@ function debugMapState.draw()
     Background:draw(0, 0)
     -- draw Ship location
     -- ship:draw()
+
+    love.graphics.push()
+    love.graphics.translate(windowtranslation[1], windowtranslation[2])
+
     love.graphics.draw(windowFrame, 0, 0)
+
+    love.graphics.push()
+    love.graphics.translate(consoletranslation[1], consoletranslation[2])
+
     love.graphics.draw(console, 72, 512, 0, 1.1, 1)
 
     rudderGauge:draw()
@@ -78,11 +89,17 @@ function debugMapState.draw()
         love.graphics.pop()
     end
 
-    -- draw Goal location
+    love.graphics.pop() -- console
+    love.graphics.pop() -- window
 end
 
+local accumulator = 0
+
 function debugMapState.update(self, dt)
-    -- Draws the map covering the entire window
+    accumulator = accumulator + dt
+    windowtranslation = {0, 5 * math.sin(accumulator)}
+    consoletranslation = {0, 30*math.sin(accumulator)}
+
     radar:update(dt, ship)
     rudder:update(dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
