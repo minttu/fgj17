@@ -36,8 +36,29 @@ function Radar.prerender(self)
     love.graphics.draw(self.prevCanvas)
     love.graphics.setShader()
 
+    for i = 1, (#self.seenobjects) do
+        obj = self.seenobjects[i]
+        x = obj[1]/3
+        y = obj[2]/3
+        len = math.sqrt(x*x + y*y)
+        if len < self.size/1.05 then
+            a = obj[3]
+            love.graphics.setColor(255, 255, 255, a)
+            love.graphics.circle("fill", x + self.size, y + self.size, 10)
+            -- love.graphics.line(self.x, self.y, x, y)
+        end
+    end
+    for i = #self.seenobjects,1,-1 do
+        self.seenobjects[i][3] = self.seenobjects[i][3] - 5.2
+        if self.seenobjects[i][3] < 0 then
+            table.remove(self.seenobjects, i)
+        end
+    end
+
     local xx = self.size + self.size * math.cos(self.angle) -- - y * math.sin(self.angle)
     local yy = self.size + self.size * math.sin(self.angle) -- + y * math.cos(self.angle)
+    local oxx = self.size + self.size * math.cos(self.previousangle) -- - y * math.sin(self.angle)
+    local oyy = self.size + self.size * math.sin(self.previousangle) -- + y * math.cos(self.angle)
 
     love.graphics.setColor(0, 200, 0)
     love.graphics.circle("line", self.size, self.size, self.size)
@@ -45,7 +66,7 @@ function Radar.prerender(self)
     love.graphics.circle("line", self.size, self.size, self.size/3)
 
     love.graphics.setColor(0, 255, 0)
-    love.graphics.line(self.size, self.size, xx, yy)
+    love.graphics.polygon("fill", self.size, self.size, oxx, oyy, xx, yy)
 
     love.graphics.setColor(255, 255, 255)
 
@@ -105,15 +126,12 @@ function Radar.draw(self)
     --     love.graphics.circle("fill", x, y, 10)
     -- end
 
-    for i = 1, (#self.seenobjects) do
-        obj = self.seenobjects[i]
-        x = obj[1]/3 + self.x
-        y = obj[2]/3 + self.y
-        a = obj[3]
-        love.graphics.setColor(255, 255, 255, a)
-        love.graphics.circle("fill", x, y, 10)
-        -- love.graphics.line(self.x, self.y, x, y)
-    end
+    love.graphics.setColor(0, 20, 0)
+    love.graphics.circle("fill", self.x, self.y, self.size)
+
+    love.graphics.setColor(255, 255, 255)
+
+    love.graphics.draw(self.prevCanvas, self.x-self.size, self.y-self.size)
 
     love.graphics.setColor(255, 255, 255)
 

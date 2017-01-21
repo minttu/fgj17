@@ -27,9 +27,9 @@ function DepthMap:isRockAt(x, y)
 end
 
 function insertRock(x, y)
-    if x < 0 or y < 0 then
-        return
-    end
+    -- if x < 0 or y < 0 then
+    --     return
+    -- end
     found = false
     for i = 1, (#DepthMap.objects) do
         obj = DepthMap.objects[i]

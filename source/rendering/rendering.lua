@@ -5,8 +5,8 @@ local faderShader = [[
     {
         vec4 texturecolor = Texel(texture, texture_coords);
         vec4 ocolor = texturecolor * color;
-        ocolor.w = clamp(ocolor.w-0.001,0,1);
-
+        //ocolor.w = clamp(ocolor.w-0.001,0,1);
+        ocolor.w *= 0.97;
         return ocolor;
     }
 ]]
