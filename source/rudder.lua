@@ -42,9 +42,6 @@ function Rudder:mouseReleased(x,y)
     end
     if refPosition:len2() == 0 or lastPos:len2() == 0 then return end
     local dRot = - refPosition:angleTo(lastPos)
-    print(refPosition)
-    print(lastPos)
-    print(dRot)
     -- Problems when x negative and y changes sign
     -- fix:
     if dRot > math.pi then dRot = dRot - 2*math.pi
