@@ -32,8 +32,8 @@ local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
 local compass = Compass((1920 / 2) - 200, (1080 / 2), 400, 400, 3)
 
-local leftwiper = Wiper(math.pi-0.02, 0.08, 1.15)
-local rightwiper = Wiper(0.05, math.pi-0.05, 1.18)
+local leftwiper = Wiper(math.pi-0.02, 0.08, 0.5, 1.15)
+local rightwiper = Wiper(0.05, math.pi-0.05, 0, 1.15)
 
 local isDebugging = false
 
@@ -54,8 +54,8 @@ function debugMapState.draw()
     Background:draw(0, 0)
     -- draw Ship location
     -- ship:draw()
-    leftwiper:draw(480, 20)
-    rightwiper:draw(1440, 20)
+    leftwiper:draw(580, 20)
+    rightwiper:draw(1340, 20)
     love.graphics.draw(windowFrame, 0, 0)
     love.graphics.draw(console, 72, 512, 0, 1.1, 1)
 
