@@ -11,6 +11,7 @@ fonts = require "fonts"
 
 Background = require "background"
 Wiper = require "wiper"
+Switch = require "switch"
 
 -- Map to visualize the locations, ship movement and depth
 local debugMapState = {}
@@ -33,8 +34,9 @@ local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
 local compass = Compass((1920 / 2) - 300, (1080 / 2) + 4, 600, 600, 3)
 
-local leftwiper = Wiper(math.pi-0.02, 0.08, 0.5, 1.15)
-local rightwiper = Wiper(0.05, math.pi-0.05, 0, 1.15)
+local leftwiper = Wiper(580, 4, math.pi-0.02, 0.08, 0.5, 1.15)
+local rightwiper = Wiper(1340, 4, 0.05, math.pi-0.05, 0, 1.15)
+local wiperswitch = Switch(1920/2+500, 800)
 
 local isDebugging = false
 
@@ -66,8 +68,8 @@ function debugMapState.draw()
     love.graphics.translate(-1920/2, -1080/2)
     love.graphics.translate(windowtranslation[1], windowtranslation[2])
 
-    leftwiper:draw(580, 14)
-    rightwiper:draw(1340, 14)
+    leftwiper:draw()
+    rightwiper:draw()
     love.graphics.draw(windowFrame, 0, -20, 0, 1, 1.05)
 
     love.graphics.push()
@@ -75,6 +77,7 @@ function debugMapState.draw()
 
     love.graphics.draw(console, 72, 512, 0, 1.1, 1)
 
+    wiperswitch:draw()
     rudderGauge:draw()
     rollGauge:draw()
     pitchGauge:draw()
@@ -158,6 +161,7 @@ end
 function debugMapState:mousereleased(x,y, mouse_btn)
     if mouse_btn == 1 then
         rudder:mouseReleased(x,y)
+        wiperswitch:mouseReleased(x,y)
     end
 end
 
