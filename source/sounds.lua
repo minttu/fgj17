@@ -24,7 +24,6 @@ AmbientPlayer = Class{
     __includes = SoundPlayer,
     init = function(self, soundDefinitions)
         SoundPlayer.init(self, soundDefinitions)
-
     end,
     play = function(self)
         for name, source in pairs(self.sources) do
@@ -37,10 +36,40 @@ AmbientPlayer = Class{
     end
 }
 
+MiscPlayer = Class{
+    __includes = SoundPlayer,
+    init = function(self, soundDefinitions)
+        SoundPlayer.init(self, soundDefinitions)
+        self:generateNextPlayTime()
+    end,
+    generateNextPlayTime = function(self)
+        self.nextPlayTime = 5 + math.random(15)
+    end,
+    playRandom = function(self)
+        source = self.sources[self.soundDefinitions[math.random(#self.soundDefinitions)].name]
+        source:seek(0)
+        source:play()
+    end,
+    update = function(self, dt)
+        if self.nextPlayTime - dt < 0 then
+            self:generateNextPlayTime()
+            self:playRandom()
+        end
+
+        self.nextPlayTime = self.nextPlayTime - dt
+    end,
+}
+
 
 return {
     ambient = AmbientPlayer({
             {name = "bg_humm_01.ogg", volume = 0.4},
             {name = "rain_01.ogg", volume = 1}
+    }),
+    misc = MiscPlayer({
+            {name = "rattling_01.ogg", volume = 0.2},
+            {name = "rattling_02.ogg", volume = 0.2},
+            {name = "thunder_01.ogg", volume = 2},
+            {name = "thunder_02.ogg", volume = 1}
     })
 }

@@ -21,9 +21,10 @@ function debugMapState.draw()
     -- draw Goal location
 end
 
-function debugMapState:update()
+function debugMapState:update(dt)
     -- Draws the map covering the entire window
     ship:update()
+    Sounds.misc:update(dt)
 end
 
 return debugMapState
