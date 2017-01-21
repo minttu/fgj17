@@ -42,7 +42,9 @@ end
 
 function Compass:drawLine(x1, y1, x2, y2)
     if x1 < self.pos.x + self.size - 10 then
-        love.graphics.line(x1, y1, x2, y2)
+        if x1 > self.pos.x + 2 then
+            love.graphics.line(x1, y1, x2, y2)
+        end
     end
 end
 
