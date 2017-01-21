@@ -8,6 +8,8 @@ Gauge = require "gauge"
 Rendering = require "rendering.rendering"
 Compass = require "compass"
 fonts = require "fonts"
+Checkpoints = require "checkpoint"
+require "util"
 
 Background = require "background"
 Wiper = require "wiper"
@@ -41,6 +43,8 @@ local isDebugging = false
 local windowtranslation = {0, 0}
 local consoletranslation = {0, 0}
 local roll = 0
+
+local checkpoints = Checkpoints(vec2toVector(ship.location))
 
 function debugMapState:enter()
     Sounds.ambient:play()
@@ -159,6 +163,12 @@ function debugMapState.update(self, dt)
     Background:update(canvas_w, canvas_h)
     leftwiper:update(dt)
     rightwiper:update(dt)
+
+    local playerLoc = vec2toVector(ship.location)
+    if checkpoints:checkCollision(playerLoc) then
+        checkpoints.createCheckpoint(playerLoc)
+        ship.fuel = ship.fuel + ship.fuelConsumptionMultiplier*ship.velocity*45
+    end
 end
 
 function debugMapState:mousereleased(x,y, mouse_btn)
