@@ -1,13 +1,13 @@
 Rudder = require "rudder"
 local hello = {}
 
-rudder = Rudder.new()
+rudder = Rudder(600,600)
 function hello.load()
 end
 
 function hello:mousereleased(x,y, mouse_btn)
     if mouse_btn == 1 then
-        Rudder.mouseReleased(x,y)
+        rudder:mouseReleased(x,y)
     end
 end
 
@@ -16,8 +16,8 @@ function hello.draw()
     rudder:draw()
 end
 
-function hello.update()
-    rudder:update()
+function hello:update(dt)
+    rudder:update(dt)
 end
 
 return hello
