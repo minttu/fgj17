@@ -18,8 +18,9 @@ function Wiper:init(min_ang, max_ang, start_time, speed)
 end
 
 function Wiper:update(dt)
-    self.timer = (self.timer + self.speed*dt) % 2
-    self.angle = self.start_angle + (self.end_angle - self.start_angle) * (self.timer>1 and 2-self.timer or self.timer)
+    self.timer = (self.timer + self.speed*dt) % 4
+    local t = math.min(2, self.timer)
+    self.angle = self.start_angle + (self.end_angle - self.start_angle) * (t>1 and 2-t or t)
 end
 
 function Wiper:draw(x, y)
