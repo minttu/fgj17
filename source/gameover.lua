@@ -7,8 +7,16 @@ local gameover = {}
 
 function gameover:shipCrashed()
     self.message = "You shipped over a rock"
-    love.graphics.setFont(fonts.menu)
     gamestate.switch(gameover)
+end
+
+function gameover:noFuel()
+    self.message = "You shipped out of fuel"
+    gamestate.switch(gameover)
+end
+
+function gameover:enter()
+    love.graphics.setFont(fonts.menu)
 end
 
 function gameover:draw()
