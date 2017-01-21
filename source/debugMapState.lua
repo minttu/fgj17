@@ -13,6 +13,7 @@ require "util"
 
 Background = require "background"
 Wiper = require "wiper"
+Switch = require "switch"
 
 -- Map to visualize the locations, ship movement and depth
 local debugMapState = {}
@@ -35,8 +36,9 @@ local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
 local compass = Compass((1920 / 2) - 300, (1080 / 2) + 4, 600, 600, 3)
 
-local leftwiper = Wiper(math.pi-0.02, 0.08, 0.5, 1.15)
-local rightwiper = Wiper(0.05, math.pi-0.05, 0, 1.15)
+local leftwiper = Wiper(580, 4, math.pi-0.02, 0.08, 0.5, 1.15)
+local rightwiper = Wiper(1340, 4, 0.05, math.pi-0.05, 0, 1.15)
+local wiperswitch = Switch(1920/2+200, 800)
 
 local isDebugging = false
 
@@ -44,9 +46,12 @@ local windowtranslation = {0, 0}
 local consoletranslation = {0, 0}
 local roll = 0
 
+local mainCanvas = love.graphics.newCanvas(1920*Rendering.factor, 1080*Rendering.factor)
+
 local checkpoints = Checkpoints(vec2toVector(ship.location))
 
 function debugMapState:enter()
+    mainCanvas:setFilter("linear", "linear")
     Sounds.ambient:play()
     DepthMap:debugDrawUpdate(0, 0, 400, 400)
 
@@ -56,11 +61,13 @@ function debugMapState:enter()
 end
 
 function debugMapState.draw()
-    love.graphics.scale(1, 1)
-
     radar:prerender()
 
+    love.graphics.push()
     Rendering.scale()
+
+
+    love.graphics.setCanvas(mainCanvas)
 
     -- Draws the map covering the entire window
     -- DepthMap:debugDraw()
@@ -74,8 +81,8 @@ function debugMapState.draw()
     love.graphics.translate(-1920/2, -1080/2)
     love.graphics.translate(windowtranslation[1], windowtranslation[2])
 
-    leftwiper:draw(580, 14)
-    rightwiper:draw(1340, 14)
+    leftwiper:draw()
+    rightwiper:draw()
     w, h = windowFrame:getDimensions()
     love.graphics.draw(windowFrame, -w/2 + 1920/2, -h/2 + 1080/2, 0, 1, 1.05)
 
@@ -84,6 +91,7 @@ function debugMapState.draw()
 
     love.graphics.draw(console, 72, 512, 0, 1.1, 1)
 
+    wiperswitch:draw()
     rudderGauge:draw()
     rollGauge:draw()
     pitchGauge:draw()
@@ -110,8 +118,17 @@ function debugMapState.draw()
         love.graphics.pop()
     end
 
+
     love.graphics.pop() -- console
     love.graphics.pop() -- window
+    love.graphics.pop() -- scale
+
+
+    love.graphics.setCanvas()
+
+    rendering.scalePost()
+
+    love.graphics.draw(mainCanvas)
 end
 
 local accumulator = 0
@@ -179,8 +196,21 @@ function debugMapState.update(self, dt)
 end
 
 function debugMapState:mousereleased(x,y, mouse_btn)
+    local screen_to_console_space = function(x, y)
+        local xb, yb = x, y
+        xb, yb = xb - 1920/2, yb - 1080/2
+        xb = xb * math.cos(-roll) - yb * math.sin(-roll)
+        yb = xb * math.sin(-roll) + yb * math.cos(-roll)
+        xb, yb = xb + 1920/2, yb + 1080/2
+        xb, yb = xb - (consoletranslation[1]+windowtranslation[1]), yb - (consoletranslation[2]+windowtranslation[2])
+        return xb, yb
+    end
     if mouse_btn == 1 then
         rudder:mouseReleased(x,y)
+        wiperswitch:mouseReleased(screen_to_console_space(x,y))
+        print(screen_to_console_space(x,y))
+        leftwiper:enable(wiperswitch.enabled)
+        rightwiper:enable(wiperswitch.enabled)
     end
 end
 

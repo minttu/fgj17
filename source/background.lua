@@ -2,7 +2,7 @@ local background = {}
 
 background.canvas = nil
 background.rain_minlen = 30
-background.rain_maxlen = 70
+background.rain_maxlen = 80
 background.raindrops = {}
 background.dropcount = 0
 background.brightness = 0

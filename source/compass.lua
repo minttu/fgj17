@@ -99,6 +99,7 @@ function Compass:draw()
         local y1 = self.pos.y
         local y2 = y1 + scale * frame:getHeight() - 1
         local y3 = y1 + (scale * frame:getHeight())/2
+        love.graphics.setLineWidth(2)
         self:drawLine(x, y1, x, y2)
         love.graphics.setColor(128, 128, 128)
         self:drawLine(x+lineSpacing/2, y3, x+lineSpacing/2, y2)
