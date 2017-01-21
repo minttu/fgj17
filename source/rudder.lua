@@ -1,3 +1,4 @@
+require "util"
 vector = require "hump.vector"
 Class = require 'hump.class'
 
@@ -14,6 +15,7 @@ Rudder = Class
     , w = 0 -- Rotation velocity
     --, momentOfInertia = 0.25
     , friction = 0.995
+    , maxangle = math.pi*6
 }
 
 function Rudder:init(x, y)
@@ -45,9 +47,7 @@ function Rudder:mouseReleased(x,y)
     local dRot = - refPosition:angleTo(lastPos)
     -- Problems when x negative and y changes sign
     -- fix:
-    if dRot > math.pi then dRot = dRot - 2*math.pi
-    elseif dRot < -math.pi then dRot = dRot + 2*math.pi
-    end
+    dRot = fixAtan2Angle(dRot)
 
     self.w = dRot / dt
 
@@ -75,7 +75,7 @@ function Rudder:update(dt)
         oldMousePos = self:getLastMousePos() or newMousePos
 
         moveAngle = oldMousePos:angleTo(newMousePos)
-        self.angle = self.angle - moveAngle
+        self.angle = self.angle - fixAtan2Angle(moveAngle)
 
         self.lastMousePos = newMousePos
         -- RRD Array
@@ -85,9 +85,22 @@ function Rudder:update(dt)
             self.mouseTrailIndex = 0
         end
 
+        if self.angle > self.maxangle then
+            self.angle = self.maxangle
+        elseif self.angle < -self.maxangle then
+            self.angle = -self.maxangle
+        end
+
     else
         self.angle = self.angle + self.w * dt
         self.w = self.w * self.friction
+        if self.angle > self.maxangle then
+            self.angle = self.maxangle
+            self.w = 0
+        elseif self.angle < -self.maxangle then
+            self.angle = -self.maxangle
+            self.w = 0
+        end
     end
 
 end
