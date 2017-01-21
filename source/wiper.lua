@@ -37,10 +37,10 @@ function Wiper:draw()
 end
 
 function Wiper:enable(state)
-    self.enabled = state
-    if self.enabled then
+    if not self.enabled and state then
         self.timer = 2 + self.start_time
     end
+    self.enabled = state
 end
 
 return Wiper
