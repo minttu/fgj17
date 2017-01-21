@@ -1,6 +1,8 @@
 
 local DepthMap = {}
 
+DepthMap.objects = {}
+
 DepthMap.canvas = nil
 
 -- How sharp changes in depth
@@ -29,6 +31,25 @@ function DepthMap:isRockAt(x, y)
     return DepthMap:getDepth(x, y) < DepthMap.RockDepth
 end
 
+function insertRock(x, y)
+    -- if x < 0 or y < 0 then
+    --     return
+    -- end
+    found = false
+    for i = 1, (#DepthMap.objects) do
+        obj = DepthMap.objects[i]
+        dx = x - obj[1]
+        dy = y - obj[2]
+        if dx*dx + dy*dy < 4*(10*10) then
+            found = true
+            break
+        end
+    end
+    if not found then
+        table.insert(DepthMap.objects, {x, y})
+    end
+end
+
 function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
     local cellSize = 4
     local halfWidth = drawWidth/2
@@ -46,6 +67,7 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
             depthColor = 255 - depth*160
             if DepthMap:depthIsRock(depth) then
                 love.graphics.setColor(255,180,0)
+                insertRock(x, y)
             else
                 love.graphics.setColor(depthColor*0.4,depthColor*0.6,depthColor)
             end
