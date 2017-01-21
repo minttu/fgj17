@@ -12,6 +12,7 @@ Radar.size = 300
 Radar.x = 900
 Radar.y = 700
 Radar.seenobjects = {}
+Radar.objects = {500, 200, 400, 100, 100, 1000}
 
 function Radar.new()
     local self = setmetatable({}, Radar)
@@ -20,14 +21,12 @@ end
 
 function Radar.update(self, ship, dt)
 
-    objects = {500, 200, 400, 100, 100, 1000}
-
     self.previousangle = self.angle
     self.angle = (self.angle + self.speed*dt) % (2*math.pi)
 
-    for i = 1, (#objects)/2 do
-        x = objects[2*i-1]
-        y = objects[2*i]
+    for i = 1, (#self.objects)/2 do
+        x = self.objects[2*i-1]
+        y = self.objects[2*i]
         dx = x - ship.location.x
         dy = y - ship.location.y
         angle = math.atan2(dy, dx) % (2*math.pi)
@@ -37,16 +36,13 @@ function Radar.update(self, ship, dt)
             Sounds.ui:play("radar")
         end
     end
-    --    angle = math.atan2(obj.y, obj.x)
-    --    if angle >= self.previousangle && angle <= self.angle 
-    --      add to seenobjects
 end
 
 function Radar.draw(self)
     x = self.size
     y = self.size
-    xx = x * math.cos(self.angle) -- - y * math.sin(self.angle)
-    yy = x * math.sin(self.angle) -- + y * math.cos(self.angle)
+    xx = x * math.cos(self.angle)
+    yy = x * math.sin(self.angle)
 
     x = xx + self.x
     y = yy + self.y
@@ -61,6 +57,12 @@ function Radar.draw(self)
 
     love.graphics.setColor(0, 255, 0)
     love.graphics.line(self.x, self.y, x, y)
+
+    for i = 1, (#self.objects)/2 do
+        x = self.objects[2*i-1]
+        y = self.objects[2*i]
+        love.graphics.circle("fill", x, y, 10)
+    end
 
     for i = 1, (#self.seenobjects) do
         obj = self.seenobjects[i]
