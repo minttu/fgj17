@@ -36,7 +36,7 @@ function Compass:drawText(txt, roff)
         xOffset = xOffset + self.scrollSize
     end
     if xOffset < self.size - 10 then
-        love.graphics.print(txt, self.pos.x + xOffset, self.pos.y + 8)
+        love.graphics.print(txt, self.pos.x + xOffset, self.pos.y + 10)
     end
 end
 
@@ -78,6 +78,7 @@ function Compass:draw()
         self:drawLine(x+lineSpacing/2, y3, x+lineSpacing/2, y2)
         love.graphics.setColor(255, 255, 255)
     end
+
 
     self:drawText("N", 0)
     self:drawText("E", math.pi/2)
