@@ -89,6 +89,8 @@ UIEffectsPlayer = Class{
         sound = self.sources[soundName]:clone()
         sound:setVolume(sound:getVolume() * (volume or 1))
         sound:play()
+
+        return sound
     end,
     depthWarning = function(self, depth)
         if self.depthWarningPossible > 0 then
@@ -104,6 +106,20 @@ UIEffectsPlayer = Class{
     update = function(self, dt)
         self.depthWarningPossible = self.depthWarningPossible - dt
     end,
+    startRudderRotation = function(self)
+        if self.rudderSound ~= nil then
+            return
+        end
+        sound = self:play("rudder")
+        sound:setLooping(true)
+        self.rudderSound = sound
+    end,
+    endRudderRotation = function(self)
+        if self.rudderSound ~= nil then
+            self.rudderSound:stop()
+            self.rudderSound = nil
+        end
+    end
 }
 
 
