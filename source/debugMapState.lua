@@ -61,7 +61,7 @@ function debugMapState.update(self, dt)
     rollGauge:update(dt)
     pitchGauge:update(dt)
 
-    rudderGauge.val = (ship.turnspeed * 5) + 0.5
+    rudderGauge.val = (ship.turnspeed * 25) + 0.5
     rudderGauge:update(dt)
 
     Sounds.misc:update(dt)
