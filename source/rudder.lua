@@ -3,7 +3,7 @@ vector = require "hump.vector"
 Class = require 'hump.class'
 
 Rudder = Class
-    { imageScale = 0.25
+    { imageScale = 0.45
     , screenPos = vector(0,0) -- Center of the rudder
     , angle = 0 -- Radians
     , mouseButtonDown = false
@@ -18,8 +18,8 @@ Rudder = Class
     , maxangle = math.pi*6
 }
 
-function Rudder:init(x, y)
-    self.screenPos = vector(x,y)
+function Rudder:init(pos)
+    self.screenPos = pos
     self.image = love.graphics.newImage("assets/graphics/wheel.png")
     -- assume that rudder is stationary in screen coords
     self.originOffset = vector(self.image:getWidth()/2, self.image:getHeight()/2)
