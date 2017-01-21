@@ -28,7 +28,7 @@ local fuelGauge = Gauge(vector((1920 / 4), 890), 100)
 
 local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
-local compass = Compass(0,0,400, 400, 3)
+local compass = Compass((1920 / 2) - 200, 20, 400, 400, 3)
 
 function debugMapState:enter()
     Sounds.ambient:play()
