@@ -32,7 +32,7 @@ function Radar.update(self, ship, dt)
         dy = y - ship.location.y
         angle = math.atan2(dy, dx) % (2*math.pi)
         if angle >= self.previousangle and angle <= self.angle  then
-            table.insert(self.seenobjects, {dx/4 + self.x, dy/4 + self.y, 255})
+            table.insert(self.seenobjects, {dx, dy, 255})
             Sounds.ui:play("radar")
         end
     end
@@ -65,6 +65,8 @@ function Radar.draw(self)
         obj = self.seenobjects[i]
         x = obj[1]
         y = obj[2]
+        x = math.tanh(x/100)*100 + self.x
+        y = math.tanh(y/100)*100 + self.y
         a = obj[3]
         love.graphics.setColor(255, 255, 255, a)
         love.graphics.circle("fill", x, y, 10)
