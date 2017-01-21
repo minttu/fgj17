@@ -1,5 +1,5 @@
 class = require "hump.class"
-Vector = require "hump.Vector"
+Vector = require "hump.vector"
 
 local bg = love.graphics.newImage("assets/graphics/gauge.png")
 local arm = love.graphics.newImage("assets/graphics/gauge_arm.png")
@@ -8,11 +8,11 @@ local arm = love.graphics.newImage("assets/graphics/gauge_arm.png")
 local gauge = class{
     init = function(self, val)
         self.val = val
-        self.radius = 300
+        self.radius = 100
         self.offset = 0
         self.actual = 0
         self.speed = 0.05
-        self.pos = Vector(0, 0)
+        self.pos = Vector(0, 150)
     end,
     update = function(self, dt)
         self.offset = math.random(0, self.val * 20)/200

@@ -1,7 +1,7 @@
 Rudder = require "rudder"
 local hello = {}
 
-rudder = Rudder()
+rudder = Rudder(600,600)
 function hello.load()
 end
 

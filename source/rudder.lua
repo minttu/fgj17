@@ -3,7 +3,7 @@ Class = require 'hump.class'
 
 Rudder = Class
     { imageScale = 0.25
-    , screenPos = vector(400,400) -- Center of the rudder
+    , screenPos = vector(0,0) -- Center of the rudder
     , angle = 0 -- Radians
     , mouseButtonDown = false
     , maxMouseTrail = 60 -- for getting the momentum to the rudder (eventually)
@@ -15,8 +15,8 @@ Rudder = Class
     , friction = 0.995
 }
 
-function Rudder:init()
-    --local self = setmetatable({}, {__index = Rudder})
+function Rudder:init(x, y)
+    self.screenPos = vector(x,y)
     self.image = love.graphics.newImage("assets/graphics/wheel.png")
     -- assume that rudder is stationary in screen coords
     self.originOffset = vector(self.image:getWidth()/2, self.image:getHeight()/2)
@@ -25,7 +25,7 @@ end
 
 function Rudder:mouseReleased(x,y)
     local lastPos = self:getLastMousePos()
-    local goalDtForMoment = 0.5
+    local goalDtForMoment = 0.9
     local refPosition = lastPos
     local dt = 0
     -- Sieniä
@@ -40,7 +40,11 @@ function Rudder:mouseReleased(x,y)
             end
         end
     end
+    if refPosition:len2() == 0 or lastPos:len2() == 0 then return end
     local dRot = - refPosition:angleTo(lastPos)
+    print(refPosition)
+    print(lastPos)
+    print(dRot)
     -- Problems when x negative and y changes sign
     -- fix:
     if dRot > math.pi then dRot = dRot - 2*math.pi
@@ -54,7 +58,7 @@ function Rudder:mouseReleased(x,y)
 end
 
 function Rudder:getLastMousePos()
-    return self.mouseTrail[self.mouseTrailIndex-1]
+    return self.mouseTrail[self.mouseTrailIndex-1] or vector(0)
 end
 function Rudder:getOldestMousePos()
     return self.mouseTrail[self.mouseTrailIndex] or self.mouseTrail[0]
