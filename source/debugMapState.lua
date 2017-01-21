@@ -117,10 +117,10 @@ function debugMapState.update(self, dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
 
-    multiplier = 8
+    multiplier = 12
     windowtranslation = {math.sin(2*accumulator), multiplier*ship.orientation.y}
     consoletranslation = {3*math.sin(2*accumulator), 5*multiplier*ship.orientation.y}
-    roll = ship.orientation.x / 7
+    roll = ship.orientation.x / 4
 
     draws = draws + 1
     if (isDebugging) then
