@@ -76,7 +76,7 @@ UIEffectsPlayer = Class{
 
         SoundPlayer.init(self, snds)
     end,
-    play = function(self, name)
+    play = function(self, name, volume)
         sounds = {}
         for i,v in ipairs(self.soundGroups) do
             if v.name == name then
@@ -87,6 +87,7 @@ UIEffectsPlayer = Class{
 
         soundName = sounds[math.random(#sounds)].name
         sound = self.sources[soundName]:clone()
+        sound:setVolume(sound:getVolume() * (volume or 1))
         sound:play()
     end,
     depthWarning = function(self, depth)
