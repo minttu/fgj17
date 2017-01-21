@@ -9,15 +9,16 @@ local gauge = class{
         self.val = val
         self.radius = 300
         self.offset = 0
-        self.actual = val
+        self.actual = 0
         self.speed = 0.05
     end,
     update = function(self)
         self.offset = math.random(0, self.val * 20)/200
         local change = self.val - self.actual;
         if math.abs(change) > self.speed then
-            change /= (math.abs(change)/self.speed)
+            change = change / math.abs(change) * self.speed
         end
+        self.actual = self.actual + change
     end,
     draw = function(self)
         local scale = self.radius / bg:getHeight()
