@@ -10,9 +10,10 @@ Radar.__index = Radar
 Radar.angle = 0
 Radar.previousangle = 0
 Radar.speed = 2
-Radar.size = 300
+Radar.size = 200
 Radar.x = 1500
-Radar.y = 700
+Radar.y = 800
+Radar.range = 100
 Radar.seenobjects = {}
 
 function Radar.new()
@@ -41,10 +42,11 @@ function Radar.prerender(self)
         x = obj[1]/3
         y = obj[2]/3
         len = math.sqrt(x*x + y*y)
-        if len < self.size/1.05 then
+        if len < self.range/1.05 then
             a = obj[3]
             love.graphics.setColor(255, 255, 255, a)
-            love.graphics.circle("fill", x + self.size, y + self.size, 10)
+            scale = self.size / self.range
+            love.graphics.circle("fill", scale * x + self.size, scale * y + self.size, 10)
             -- love.graphics.line(self.x, self.y, x, y)
         end
     end
