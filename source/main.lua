@@ -15,7 +15,7 @@ function love.load()
     gamestate.registerEvents()
     gamestate.switch(renderingSandbox)
 
-    --love.window.setMode(desktop_w, desktop_h, {borderless=true,msaa=4})
+    love.window.setMode(desktop_w, desktop_h, {borderless=true,msaa=4})
     gamestate.registerEvents()
     --gamestate.switch(helloWorld)
     --gamestate.switch(debugMapState)

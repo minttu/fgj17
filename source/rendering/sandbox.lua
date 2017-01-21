@@ -14,25 +14,30 @@ local ambientLight = { 128, 128, 128}
 local lightShader
 local lightFragmentCode = [[
     varying vec3 vpos;
-    uniform vec3 light_pos;
+    varying vec3 lpos;
+    uniform vec4 light_color;
     uniform float intensity;
     vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
     {
         vec4 texcolor = Texel(texture, texture_coords);
-        vec3 surface_to_light = light_pos - vpos;
+        vec3 surface_to_light = lpos - vpos;
 		float d = length(surface_to_light);
         surface_to_light /= d;
         vec3 normal = vec3(0.0, 0.0, -1.0);
         float a = 1.0 / pow((d/intensity)+1, 2);
-        return texcolor * color * max(0,dot(normal, surface_to_light)) * a;
+        return texcolor * color * light_color * max(0,dot(normal, surface_to_light)) * a;
     }
 ]]
 
 local lightVertexCode = [[
     varying vec3 vpos;
+    varying vec3 lpos;
+    uniform vec3 light_pos;
     vec4 position(mat4 transform_projection, vec4 vertex_position)
     {
-        vpos = vertex_position.xyz;
+        vpos = (transform_projection * vertex_position).xyz;
+        lpos = (transform_projection * vec4(light_pos, 0.0)).xyz;
+        lpos.z = light_pos.z;
         return transform_projection * vertex_position;
     }
 ]]
@@ -44,7 +49,7 @@ function sandbox.init()
     colorCanvas = love.graphics.newCanvas()
     lightShader = love.graphics.newShader(lightFragmentCode, lightVertexCode)
 
-    table.insert(lights, light({400, 100, -10}, {0, 255, 0}, 200))
+    table.insert(lights, light({200, 200, -2}, {0, 255, 0}, 2))
 end
 
 function sandbox.update()
@@ -64,8 +69,8 @@ function sandbox.draw()
     local light = lights[1]
     love.graphics.setShader(lightShader)
     love.graphics.setColor(light.color[1], light.color[2], light.color[3])
-    light.pos[3] = -math.abs(math.cos(love.timer.getTime()) * 150);
     lightShader:send("light_pos", light.pos)
+    lightShader:send("light_color", {light.color[1], light.color[2], light.color[3], 1})
     lightShader:send("intensity", light.intensity)
     love.graphics.draw(image)
     gauge0:draw()
