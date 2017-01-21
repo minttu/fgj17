@@ -14,7 +14,7 @@ local gauge = Gauge(0)
 
 function debugMapState:enter()
     Sounds.ambient:play()
-    DepthMap:debugDrawUpdate(0,0,canvas_w,canvas_h)
+    DepthMap:debugDrawUpdate(0, 0, canvas_w, canvas_h)
 end
 
 function debugMapState.draw()
