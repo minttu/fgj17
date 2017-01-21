@@ -50,7 +50,9 @@ function debugMapState:enter()
     Sounds.ambient:play()
     DepthMap:debugDrawUpdate(0, 0, 400, 400)
 
-    compass.markers = {{color = {255,0,0}, rotation=2, width=2, text="P"}}
+    compass.markers =
+        { {color = {255,0,0}, rotation=2, width=2, text="F"}
+        }
 end
 
 function debugMapState.draw()
@@ -165,8 +167,13 @@ function debugMapState.update(self, dt)
     rightwiper:update(dt)
 
     local playerLoc = vec2toVector(ship.location)
+    local ang = checkpoints:getAngleTo(playerLoc)
+    compass.markers[1].rotation = -ang + math.pi
+    print(playerLoc)
+    print(checkpoints.current)
+    print((playerLoc - checkpoints.current):len())
     if checkpoints:checkCollision(playerLoc) then
-        checkpoints.createCheckpoint(playerLoc)
+        checkpoints:createCheckpoint(playerLoc)
         ship.fuel = ship.fuel + ship.fuelConsumptionMultiplier*ship.velocity*45
     end
 end

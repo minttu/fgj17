@@ -4,7 +4,7 @@ vector = require "hump.vector"
 
 local Checkpoints = Class
     { GenerationRange = 40
-    , CollisionDistance = 10
+    , CollisionDistance = 15
     , locations = {}
     , current = nil
     }
@@ -24,7 +24,7 @@ function Checkpoints:createCheckpoint(origin)
 end
 
 function Checkpoints:getAngleTo(location)
-    return location:angleTo(self.current)
+    return vector(1,0):angleTo(self.current-location)
 end
 
 function Checkpoints:checkCollision(location)
