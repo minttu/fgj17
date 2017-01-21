@@ -36,16 +36,13 @@ function Radar.update(self, ship, dt)
             Sounds.ui:play("radar")
         end
     end
-    --    angle = math.atan2(obj.y, obj.x)
-    --    if angle >= self.previousangle && angle <= self.angle 
-    --      add to seenobjects
 end
 
 function Radar.draw(self)
     x = self.size
     y = self.size
-    xx = x * math.cos(self.angle) -- - y * math.sin(self.angle)
-    yy = x * math.sin(self.angle) -- + y * math.cos(self.angle)
+    xx = x * math.cos(self.angle)
+    yy = x * math.sin(self.angle)
 
     x = xx + self.x
     y = yy + self.y
