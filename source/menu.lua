@@ -25,7 +25,7 @@ function menu:enter()
         {"Jaakko Hannikainen", "Programming"},
         {"Tuomas Kinnunen", "Programming"},
         {"Allan Palmu", "Programming"},
-        {"Juhani Imberg", "Sounds"},
+        {"Juhani Imberg", "Sounds & Programming"},
         {"Esa Niemi", "Graphics"}
     }
 end
