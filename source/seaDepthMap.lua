@@ -60,6 +60,7 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
         self.canvas:setFilter("linear")
     end
     love.graphics.setCanvas(self.canvas)
+    love.graphics.scale(1/scx,1/scy) -- this works for whatever reason
     love.graphics.setPointSize(cellSize)
     love.graphics.clear()
     for y=1,drawWidth,cellSize do
