@@ -50,6 +50,7 @@ function insertRock(x, y)
     end
 end
 
+-- Draws the depth map centered in map coordinates (x,y) and width, height in pixels
 function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
     local cellSize = 8
     local halfWidth = drawWidth/2
@@ -61,9 +62,9 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
     love.graphics.setCanvas(self.canvas)
     love.graphics.setPointSize(cellSize)
     love.graphics.clear()
-    for y=mapY-halfHeight,drawHeight,cellSize do
-        for x=mapX-halfWidth,drawWidth,cellSize do
-            depth = DepthMap:getDepth(x,y)
+    for y=1,drawWidth,cellSize do
+        for x=1,drawWidth,cellSize do
+            depth = DepthMap:getDepth(mapX-halfWidth+x,mapY-halfHeight+y)
             depthColor = 255 - depth*160
             if DepthMap:depthIsRock(depth) then
                 love.graphics.setColor(255,180,0)
@@ -77,7 +78,6 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
     love.graphics.setCanvas()
 end
 
--- Draws the depth map centered in map coordinates (x,y) and width, height in pixels
 function DepthMap:debugDraw()
     local o_r, o_g, o_b = love.graphics.getColor()
     love.graphics.setColor(255, 255, 255)
