@@ -1,6 +1,8 @@
 gamestate = require "hump.gamestate"
 debugMapState = require "debugMapState"
 
+fonts = require "fonts"
+
 local menu = {}
 
 creditsOpen = false
@@ -28,6 +30,8 @@ function menu:enter()
         {"Juhani Imberg", "Sounds & Programming"},
         {"Esa Niemi", "Graphics"}
     }
+
+    love.graphics.setFont(fonts.menu)
 end
 
 function menu:draw()

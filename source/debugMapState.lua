@@ -7,6 +7,7 @@ Sounds = require "sounds"
 Gauge = require "gauge"
 Rendering = require "rendering.rendering"
 Compass = require "compass"
+fonts = require "fonts"
 
 Background = require "background"
 Wiper = require "wiper"
@@ -22,11 +23,11 @@ local ship = Ship(100, 100)
 
 local radar = Radar(vector((1920 / 2) + 550, 800), 200)
 
-local rollGauge = Gauge(vector((1920 / 4) - 240, 660), 100)
-local pitchGauge = Gauge(vector((1920 / 4), 660), 100)
+local rollGauge = Gauge("roll", vector((1920 / 4) - 240, 660), 100)
+local pitchGauge = Gauge("pitch", vector((1920 / 4), 660), 100)
 
-local rudderGauge = Gauge(vector((1920 / 4) - 240, 890), 100, 0.5)
-local fuelGauge = Gauge(vector((1920 / 4), 890), 100)
+local rudderGauge = Gauge("rudder", vector((1920 / 4) - 240, 890), 100, 0.5)
+local fuelGauge = Gauge("fuel", vector((1920 / 4), 890), 100)
 
 local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
@@ -39,6 +40,7 @@ local isDebugging = false
 
 local windowtranslation = {0, 0}
 local consoletranslation = {0, 0}
+local roll = 0
 
 function debugMapState:enter()
     Sounds.ambient:play()
@@ -59,6 +61,9 @@ function debugMapState.draw()
     -- ship:draw()
 
     love.graphics.push()
+    love.graphics.translate(1920/2, 1080/2)
+    love.graphics.rotate(roll)
+    love.graphics.translate(-1920/2, -1080/2)
     love.graphics.translate(windowtranslation[1], windowtranslation[2])
 
     leftwiper:draw(580, 14)
@@ -75,6 +80,9 @@ function debugMapState.draw()
     pitchGauge:draw()
     fuelGauge:draw()
     rudder:draw()
+
+    love.graphics.setFont(fonts.small)
+
     compass:draw()
 
     if isDebugging == false then
@@ -102,13 +110,16 @@ local draws = 0
 
 function debugMapState.update(self, dt)
     accumulator = accumulator + dt
-    windowtranslation = {math.sin(2*accumulator), 5 * math.sin(accumulator)}
-    consoletranslation = {3*math.sin(2*accumulator), 10*math.sin(accumulator)}
 
     radar:update(dt, ship)
     rudder:update(dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
+
+    multiplier = 8
+    windowtranslation = {math.sin(2*accumulator), multiplier*ship.orientation.y}
+    consoletranslation = {3*math.sin(2*accumulator), 5*multiplier*ship.orientation.y}
+    roll = ship.orientation.x / 7
 
     draws = draws + 1
     if (isDebugging) then
