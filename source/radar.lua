@@ -13,7 +13,8 @@ Radar.size = 300
 Radar.x = 900
 Radar.y = 700
 Radar.seenobjects = {}
-Radar.objects = {500, 200, 400, 100, 100, 1000}
+Radar.objects = {500, 200, 400, 100, 100, 1000, 50, 1000, 50, 900, 50, 800, 50, 700, 50, 600, 50, 500, 50, 400, 50, 300,
+1000, 1000, 500, 1000, 1000, 0}
 
 function Radar.new()
     local self = setmetatable({}, Radar)
@@ -92,14 +93,17 @@ function Radar.draw(self)
 
     for i = 1, (#self.seenobjects) do
         obj = self.seenobjects[i]
-        x = obj[1]
-        y = obj[2]
-        x = math.tanh(x/100)*100 + self.x
-        y = math.tanh(y/100)*100 + self.y
-        a = obj[3]
-        love.graphics.setColor(255, 255, 255, a)
-        love.graphics.circle("fill", x, y, 10)
-        -- love.graphics.line(self.x, self.y, x, y)
+        x = obj[1]/3
+        y = obj[2]/3
+        len = math.sqrt(x*x + y*y)
+        if len < self.size/1.05 then
+            x = x + self.x
+            y = y + self.y
+            a = obj[3]
+            love.graphics.setColor(255, 255, 255, a)
+            love.graphics.circle("fill", x, y, 10)
+            -- love.graphics.line(self.x, self.y, x, y)
+        end
     end
 
     for i = #self.seenobjects,1,-1 do
