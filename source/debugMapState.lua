@@ -127,8 +127,6 @@ function debugMapState.draw()
 
     love.graphics.setCanvas()
 
-    rendering.scalePost()
-
     local brightness = 255
     love.graphics.setColor(brightness,brightness,brightness)
     love.graphics.draw(mainCanvas)
