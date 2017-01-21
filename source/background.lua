@@ -12,8 +12,8 @@ function background:flash(brightness)
 end
 
 function background:update(drawWidth, drawHeight)
-    if background.dropcount < 6000 then
-        for i=0, 1, 1 do
+    if background.dropcount < 1600 then
+        for i=1, 1, 1 do
             background.dropcount = background.dropcount + 1
         end
     end
@@ -45,7 +45,7 @@ function background:update(drawWidth, drawHeight)
         y1 = drop[2]
         len = drop[5]
         local rnd = drop[6]
-        love.graphics.setColor(30 + rnd*170, 30 + rnd*170 ,30 + rnd*220, 128)
+        love.graphics.setColor(30 + rnd*170, 30 + rnd*170 ,30 + rnd*220, 128 + rnd*60)
         x2 = x1 - drop[3]*4
         y2 = y1 - drop[4]*2
         love.graphics.setLineStyle("rough")
