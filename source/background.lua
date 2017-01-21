@@ -1,7 +1,6 @@
 local background = {}
 
 background.canvas = nil
-background.rain_x_offset_per_y = 0.3
 background.rain_minlen = 10
 background.rain_maxlen = 100
 background.raindrops = {}
@@ -34,8 +33,8 @@ function background:update(drawWidth, drawHeight)
         y1 = drop[2]
         len = drop[5]
         love.graphics.setColor(len*2,len*2,len*2.55)
-        x2 = x1 + len*self.rain_x_offset_per_y
-        y2 = y1 + len
+        x2 = x1 - drop[3]*4
+        y2 = y1 - drop[4]*2
         love.graphics.setLineStyle("rough")
         love.graphics.setLineWidth(4)
         love.graphics.line(x1, y1, x2, y2)

@@ -56,7 +56,7 @@ function debugMapState.update(self, dt)
     rudder:update(dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
-    
+
     rollGauge.val = ship:getRoll()
     pitchGauge.val = ship:getPitch()
 
