@@ -7,6 +7,7 @@ Radar = require "radar"
 Sounds = require "sounds"
 Gauge = require "gauge"
 Rendering = require "rendering.rendering"
+Compass = require "compass"
 
 -- Map to visualize the locations, ship movement and depth
 local debugMapState = {}
@@ -15,6 +16,7 @@ ship = Ship.new()
 radar = Radar.new()
 local rudderGauge = Gauge(vector(1920 - 200, 0), 100, 0.5)
 local rudder = Rudder(0,0)
+local compass = Compass(0,0,200)
 
 function debugMapState:enter()
     Sounds.ambient:play()
@@ -39,6 +41,7 @@ function debugMapState.draw()
     radar:draw()
     rudderGauge:draw()
     rudder:draw()
+    compass:draw()
 
     -- draw Goal location
 end
@@ -52,6 +55,8 @@ function debugMapState.update(self, dt)
 
     rudderGauge.val = (ship.turnspeed * 5) + 0.5
     rudderGauge:update(dt)
+
+    compass:update()
 
     Sounds.misc:update(dt)
 end
