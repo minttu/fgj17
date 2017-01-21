@@ -18,7 +18,7 @@ function Switch:init(x, y, on)
 end
 
 function Switch:mouseReleased(x, y)
-    if x>self.x and x<self.x+base:getWidth()/self.scale and y > self.y and y < self.y+base:getHeight()/self.scale then
+    if x>self.x and x<self.x+base:getWidth()*self.scale and y > self.y and y < self.y+base:getHeight()*self.scale then
         self.enabled = not self.enabled
     end
 end
