@@ -60,6 +60,35 @@ MiscPlayer = Class{
     end,
 }
 
+UIEffectsPlayer = Class{
+    __includes = SoundPlayer,
+    init = function(self, soundGroups)
+        self.soundGroups = soundGroups
+
+        snds = {}
+        for i, group in ipairs(soundGroups) do
+            for i2, sound in ipairs(group.sounds) do
+                table.insert(snds, sound)
+            end
+        end
+
+        SoundPlayer.init(self, snds)
+    end,
+    play = function(self, name)
+        sounds = {}
+        for i,v in ipairs(self.soundGroups) do
+            if v.name == name then
+                sounds = v.sounds
+                break
+            end
+        end
+
+        soundName = sounds[math.random(#sounds)].name
+        sound = self.sources[soundName]:clone()
+        sound:play()
+    end,
+}
+
 
 return {
     ambient = AmbientPlayer({
@@ -71,5 +100,16 @@ return {
             {name = "rattling_02.ogg", volume = 0.2},
             {name = "thunder_01.ogg", volume = 2},
             {name = "thunder_02.ogg", volume = 1}
+    }),
+    ui = UIEffectsPlayer({
+            {name = "switch", sounds = {
+                 {name = "switch_01.ogg", volume = 1},
+                 {name = "switch_02.ogg", volume = 1},
+                 {name = "switch_03.ogg", volume = 1},
+                 {name = "switch_04.ogg", volume = 1}
+            }},
+            {name = "alarm", sounds = {
+                 {name = "alarm_01.ogg", volume = 1}
+            }}
     })
 }
