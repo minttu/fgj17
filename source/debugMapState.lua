@@ -70,7 +70,7 @@ function debugMapState.draw()
         radar:draw()
     else
         love.graphics.push()
-        love.graphics.translate((1920 / 2) + 400, 600)
+        love.graphics.translate(radar.x - radar.size - 14, radar.y - radar.size - 14)
 
         DepthMap:debugDraw()
         ship:draw()
