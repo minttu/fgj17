@@ -4,10 +4,12 @@ background.canvas = nil
 background.rain_minlen = 10
 background.rain_maxlen = 100
 background.raindrops = {}
-background.dropcount = 3000
-background.initted = false
+background.dropcount = 0
 
 function background:update(drawWidth, drawHeight)
+    if background.dropcount < 6000 then
+        background.dropcount = background.dropcount + 1
+    end
     if not self.canvas or self.canvas:getWidth() ~= drawWidth or self.canvas:getHeight() ~= drawHeight then
         self.canvas = love.graphics.newCanvas(drawWidth, drawHeight)
         self.canvas:setFilter("linear")
@@ -17,14 +19,10 @@ function background:update(drawWidth, drawHeight)
     while #self.raindrops < background.dropcount do
         local x1 = math.random(-self.rain_maxlen/2,2*drawWidth)
         local y1 = -50
-        if not initted then
-            y1 = math.random(0,2*drawHeight)
-        end
         local dx, dy = math.random(1, 3), math.random(30, 50)
         local len = math.random(self.rain_minlen,self.rain_maxlen)
         table.insert(background.raindrops, {x1, y1, dx, dy, len})
     end
-    initted = true
     for i=#self.raindrops,1,-1 do
         drop = self.raindrops[i]
         drop[1] = drop[1] + drop[3]
