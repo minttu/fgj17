@@ -11,7 +11,7 @@ local gauge = class{
         self.offset = 0
     end,
     update = function(self)
-        self.offset = math.random(0, 10)/200
+        self.offset = math.random(0, self.val * 20)/200
     end,
     draw = function(self)
         local scale = self.radius / bg:getHeight()
