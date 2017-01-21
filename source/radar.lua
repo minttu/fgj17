@@ -27,7 +27,15 @@ function Radar.draw(self)
     x = xx + self.x
     y = yy + self.y
 
+    love.graphics.setColor(0, 20, 0)
+    love.graphics.circle("fill", self.x, self.y, self.size)
+    love.graphics.setColor(0, 200, 0)
+    love.graphics.circle("line", self.x, self.y, self.size)
+    love.graphics.circle("line", self.x, self.y, self.size/1.5)
+    love.graphics.circle("line", self.x, self.y, self.size/3)
+    love.graphics.setColor(0, 255, 0)
     love.graphics.line(self.x, self.y, x, y)
+    love.graphics.setColor(255, 255, 255)
 end
 
 return Radar
