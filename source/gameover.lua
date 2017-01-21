@@ -1,4 +1,5 @@
 gamestate = require "hump.gamestate"
+Rendering = require "rendering.rendering"
 
 local gameover = {}
 
@@ -8,7 +9,10 @@ function gameover:shipCrashed()
 end
 
 function gameover:draw()
+    love.graphics.push()
+    Rendering.scale()
     love.graphics.print(self.message, 100, 200)
+    love.graphics.pop()
 end
 
 function gameover:keyreleased(key)
