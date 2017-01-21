@@ -38,11 +38,11 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
     for y=mapY-halfHeight,drawHeight,cellSize do
         for x=mapX-halfWidth,drawWidth,cellSize do
             depth = DepthMap:getDepth(x,y)
-            depthColor = 255 - depth*255
+            depthColor = 255 - depth*160
             if DepthMap:depthIsRock(depth) then
-                love.graphics.setColor(255,0,0)
+                love.graphics.setColor(255,180,0)
             else
-                love.graphics.setColor(depthColor,depthColor,depthColor)
+                love.graphics.setColor(depthColor*0.4,depthColor*0.6,depthColor)
             end
             love.graphics.points(x, y)
         end
