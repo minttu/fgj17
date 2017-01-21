@@ -51,7 +51,7 @@ function insertRock(x, y)
 end
 
 function DepthMap:update(mapX, mapY, drawWidth, drawHeight)
-    local cellSize = 6
+    local cellSize = 4
     local halfWidth = drawWidth/2
     local halfHeight = drawHeight/2
     for y=1,drawWidth,cellSize do
