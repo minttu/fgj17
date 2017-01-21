@@ -2,14 +2,15 @@ Class = require "hump.class"
 
 SoundPlayer = Class{
     soundPath = "assets/",
-    init = function(self, soundNames)
+    init = function(self, soundDefinitions)
         self.sources = {}
         self.volume = 1
 
-        self.soundNames = soundNames
+        self.soundDefinitions = soundDefinitions
 
-        for i, soundName in ipairs(soundNames) do
-            self.sources[soundName] = love.audio.newSource(self.soundPath .. soundName)
+        for i, soundDef in ipairs(soundDefinitions) do
+            self.sources[soundDef.name] = love.audio.newSource(self.soundPath .. soundDef.name)
+            self.sources[soundDef.name]:setVolume(soundDef.volume)
         end
     end,
     stopAll = function(sel)
@@ -21,8 +22,8 @@ SoundPlayer = Class{
 
 AmbientPlayer = Class{
     __includes = SoundPlayer,
-    init = function(self, soundNames)
-        SoundPlayer.init(self, soundNames)
+    init = function(self, soundDefinitions)
+        SoundPlayer.init(self, soundDefinitions)
 
     end,
     play = function(self)
@@ -38,5 +39,8 @@ AmbientPlayer = Class{
 
 
 return {
-    ambient = AmbientPlayer({"bg_humm_01.ogg", "rain_01.ogg"})
+    ambient = AmbientPlayer({
+            {name = "bg_humm_01.ogg", volume = 0.4},
+            {name = "rain_01.ogg", volume = 1}
+    })
 }
