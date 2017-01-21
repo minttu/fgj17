@@ -44,9 +44,12 @@ local windowtranslation = {0, 0}
 local consoletranslation = {0, 0}
 local roll = 0
 
+local mainCanvas = love.graphics.newCanvas(1920*Rendering.factor, 1080*Rendering.factor)
+
 local checkpoints = Checkpoints(vec2toVector(ship.location))
 
 function debugMapState:enter()
+    mainCanvas:setFilter("linear", "linear")
     Sounds.ambient:play()
     DepthMap:debugDrawUpdate(0, 0, 400, 400)
 
@@ -54,11 +57,13 @@ function debugMapState:enter()
 end
 
 function debugMapState.draw()
-    love.graphics.scale(1, 1)
-
     radar:prerender()
 
+    love.graphics.push()
     Rendering.scale()
+
+
+    love.graphics.setCanvas(mainCanvas)
 
     -- Draws the map covering the entire window
     -- DepthMap:debugDraw()
@@ -108,8 +113,17 @@ function debugMapState.draw()
         love.graphics.pop()
     end
 
+
     love.graphics.pop() -- console
     love.graphics.pop() -- window
+    love.graphics.pop() -- scale
+
+
+    love.graphics.setCanvas()
+
+    rendering.scalePost()
+
+    love.graphics.draw(mainCanvas)
 end
 
 local accumulator = 0

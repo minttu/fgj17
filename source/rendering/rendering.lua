@@ -17,12 +17,18 @@ local gradientShaderCode = [[
 
 rendering.fader = love.graphics.newShader(faderShader)
 
+rendering.factor = 1.0
+
 function rendering.scale()
     local desktop_w, desktop_h = love.window.getDesktopDimensions()
     scx = desktop_w / canvas_w
     scy = desktop_h / canvas_h
 
-    love.graphics.scale(scx,scy)
+    love.graphics.scale(scx*rendering.factor,scy*rendering.factor)
+end
+
+function rendering.scalePost()
+    love.graphics.scale(scx/rendering.factor,scy/rendering.factor)
 end
 
 return rendering
