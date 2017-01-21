@@ -30,7 +30,7 @@ local fuelGauge = Gauge(vector((1920 / 4), 890), 100)
 
 local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
-local compass = Compass((1920 / 2) - 200, (1080 / 2) + 4, 400, 400, 3)
+local compass = Compass((1920 / 2) - 300, (1080 / 2) + 4, 600, 600, 3)
 
 local leftwiper = Wiper(math.pi-0.02, 0.08, 0.5, 1.15)
 local rightwiper = Wiper(0.05, math.pi-0.05, 0, 1.15)
