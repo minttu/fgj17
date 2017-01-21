@@ -2,6 +2,8 @@ require "util"
 vector = require "hump.vector"
 Class = require 'hump.class'
 
+Sounds = require "sounds"
+
 Rudder = Class
     { imageScale = 0.45
     , screenPos = vector(0,0) -- Center of the rudder
@@ -102,6 +104,12 @@ function Rudder:update(dt)
             self.angle = -self.maxangle
             self.w = 0
         end
+    end
+
+    if math.abs(self.w) > 0.1 then
+        Sounds.ui:startRudderRotation()
+    else
+        Sounds.ui:endRudderRotation()
     end
 
 end
