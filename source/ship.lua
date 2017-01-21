@@ -97,8 +97,8 @@ function Ship:draw()
         y = vertices[2*i]
         vertices[2*i-1] = x * math.cos(angle) - y * math.sin(angle)
         vertices[2*i] = x * math.sin(angle) + y * math.cos(angle)
-        vertices[2*i-1] = vertices[2*i-1] + self.location.x;
-        vertices[2*i] = vertices[2*i] + self.location.y;
+        vertices[2*i-1] = vertices[2*i-1] + 200;
+        vertices[2*i] = vertices[2*i] + 200;
     end
 
     angle = self:angle()

@@ -16,9 +16,11 @@ Radar = Class
     , beepvolume = 0.6
     }
 
-function Radar:init(x, y)
-    self.x = x
-    self.y = y
+function Radar:init(pos, size)
+
+    self.x = pos.x
+    self.y = pos.y
+    self.size = size
 
     self.canvas = love.graphics.newCanvas(self.size*2, self.size*2, "rgba32f")
     self.prevCanvas = love.graphics.newCanvas(self.size*2, self.size*2, "rgba32f")
