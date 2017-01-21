@@ -13,8 +13,9 @@ Ship.turnrate = 0.01
 Ship.maxturnspeed = 0.02
 Ship.turnspeed = 0
 
-function Ship.new()
+function Ship.new(x, y)
     local self = setmetatable({}, Ship)
+    self.location = cpml.vec2.new(x, y)
     self.orientation = cpml.quat.new(1, 0, 0, 1)
     return self
 end

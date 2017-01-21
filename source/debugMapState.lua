@@ -12,8 +12,6 @@ Background = require "background"
 -- Map to visualize the locations, ship movement and depth
 local debugMapState = {}
 
-ship = Ship.new()
-radar = Radar.new()
 local rudderGauge = Gauge(vector(1920 - 200, 100), 100, 0.5)
 local rollGauge = Gauge(vector(0, 300), 150)
 local pitchGauge = Gauge(vector(0, 200), 100)
@@ -21,8 +19,10 @@ local rudder = Rudder(0,0)
 
 function debugMapState:enter()
     Sounds.ambient:play()
+    ship = Ship.new(100, 100)
+    radar = Radar.new(1500, 800)
     DepthMap:debugDrawUpdate(0, 0, canvas_w, canvas_h)
-    rudder:init(canvas_w/2, canvas_h*0.82)
+    rudder:init(canvas_w/2, canvas_h*0.95)
     pitchGauge.pos = vector(canvas_w/8, canvas_h*0.82)
     rollGauge.pos = vector(canvas_w*2/8, canvas_h*0.82)
 end

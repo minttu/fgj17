@@ -17,8 +17,11 @@ Radar.range = 100
 Radar.seenobjects = {}
 Radar.beepvolume = 0.6
 
-function Radar.new()
+function Radar.new(x, y)
     local self = setmetatable({}, Radar)
+
+    self.x = x
+    self.y = y
 
     self.canvas = love.graphics.newCanvas(self.size*2, self.size*2, "rgba32f")
     self.prevCanvas = love.graphics.newCanvas(self.size*2, self.size*2, "rgba32f")
