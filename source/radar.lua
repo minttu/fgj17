@@ -35,6 +35,7 @@ function Radar:prerender()
     love.graphics.clear()
 
     love.graphics.setShader(rendering.fader)
+    love.graphics.setColor(255, 255, 255)
     love.graphics.draw(self.prevCanvas)
     love.graphics.setShader()
 
@@ -66,7 +67,6 @@ function Radar:prerender()
     love.graphics.polygon("fill", self.size, self.size, oxx, oyy, xx, yy)
 
     love.graphics.setColor(255, 255, 255)
-
     love.graphics.setCanvas()
 
     local tmp = self.prevCanvas
@@ -114,23 +114,8 @@ function Radar:draw()
     love.graphics.circle("fill", self.x, self.y, self.size)
 
     love.graphics.setColor(255, 255, 255)
-    love.graphics.draw(self.prevCanvas, self.x-self.size, self.y-self.size)
-
-    -- for i = 1, (#DepthMap.objects) do
-    --     obj = DepthMap.objects[i]
-    --     x = obj[1]
-    --     y = obj[2]
-    --     love.graphics.circle("fill", x, y, 10)
-    -- end
-
-    love.graphics.setColor(0, 20, 0)
-    love.graphics.circle("fill", self.x, self.y, self.size)
-
-    love.graphics.setColor(255, 255, 255)
 
     love.graphics.draw(self.prevCanvas, self.x-self.size, self.y-self.size)
-
-    love.graphics.setColor(255, 255, 255)
 
 end
 
