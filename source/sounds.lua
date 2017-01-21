@@ -46,17 +46,20 @@ MiscPlayer = Class{
         self.nextPlayTime = 5 + math.random(15)
     end,
     playRandom = function(self)
-        source = self.sources[self.soundDefinitions[math.random(#self.soundDefinitions)].name]
+        local played = self.soundDefinitions[math.random(#self.soundDefinitions)].name
+        source = self.sources[played]
         source:seek(0)
         source:play()
+        return played
     end,
     update = function(self, dt)
         if self.nextPlayTime - dt < 0 then
             self:generateNextPlayTime()
-            self:playRandom()
+            return self:playRandom()
         end
 
         self.nextPlayTime = self.nextPlayTime - dt
+        return ""
     end,
 }
 
