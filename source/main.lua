@@ -10,7 +10,7 @@ function love.load()
 
     scx = desktop_w / canvas_w
     scy = desktop_h / canvas_h
-    love.window.setMode(desktop_w, desktop_h, {borderless=true,msaa=4})
+    love.window.setMode(desktop_w, desktop_h, {fullscreen=true,fullscreentype="exclusive",msaa=4})
     gamestate.registerEvents()
     --gamestate.switch(helloWorld)
     gamestate.switch(debugMapState)
