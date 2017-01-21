@@ -18,8 +18,9 @@ Rudder = Class
     , maxangle = math.pi*6
 }
 
-function Rudder:init(pos)
-    self.screenPos = pos
+function Rudder:init(pos, imageScale)
+    self.screenPos = pos or self.screenPos
+    self.imageScale = imageScale or self.imageScale
     self.image = love.graphics.newImage("assets/graphics/wheel.png")
     -- assume that rudder is stationary in screen coords
     self.originOffset = vector(self.image:getWidth()/2, self.image:getHeight()/2)

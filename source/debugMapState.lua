@@ -26,7 +26,7 @@ local pitchGauge = Gauge(vector((1920 / 4), 660), 100)
 local rudderGauge = Gauge(vector((1920 / 4) - 240, 890), 100, 0.5)
 local fuelGauge = Gauge(vector((1920 / 4), 890), 100)
 
-local rudder = Rudder(vector(1920 / 2, 1000))
+local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
 local compass = Compass(0,0,400, 400, 3)
 
