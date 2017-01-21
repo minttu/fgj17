@@ -20,6 +20,7 @@ function Ship.new()
 end
 
 function Ship.angle(self)
+    local rot = self.orientation
     ang = rot:to_vec3()
     return -math.atan2(ang.y, ang.x)
 end

@@ -15,6 +15,7 @@ Rudder = Class
     , w = 0 -- Rotation velocity
     --, momentOfInertia = 0.25
     , friction = 0.995
+    , maxangle = math.pi*6
 }
 
 function Rudder:init(x, y)
@@ -84,9 +85,22 @@ function Rudder:update(dt)
             self.mouseTrailIndex = 0
         end
 
+        if self.angle > self.maxangle then
+            self.angle = self.maxangle
+        elseif self.angle < -self.maxangle then
+            self.angle = -self.maxangle
+        end
+
     else
         self.angle = self.angle + self.w * dt
         self.w = self.w * self.friction
+        if self.angle > self.maxangle then
+            self.angle = self.maxangle
+            self.w = 0
+        elseif self.angle < -self.maxangle then
+            self.angle = -self.maxangle
+            self.w = 0
+        end
     end
 
 end
