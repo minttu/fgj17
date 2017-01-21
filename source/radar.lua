@@ -1,5 +1,7 @@
 cpml = require "cpml"
 
+Sounds = require "sounds"
+
 local Radar = {}
 Radar.__index = Radar
 
@@ -31,6 +33,7 @@ function Radar.update(self, ship, dt)
         angle = math.atan2(dy, dx)
         if angle >= self.previousangle and angle <= self.angle  then
             table.insert(self.seenobjects, {dx/4 + self.x, dy/4 + self.y, 255})
+            Sounds.ui:play("radar")
         end
     end
     --    angle = math.atan2(obj.y, obj.x)
