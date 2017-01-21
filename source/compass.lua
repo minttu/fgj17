@@ -85,7 +85,7 @@ function Compass:draw()
     self:drawText("S", math.pi)
     self:drawText("W", -math.pi/2)
 
-    love.graphics.draw(frame, self.pos.x, self.pos.y, 0, scale, scale)
+    love.graphics.draw(frame, self.pos.x-8, self.pos.y-5, 0, scale*1.05, scale*1.13)
 end
 
 return Compass

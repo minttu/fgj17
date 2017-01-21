@@ -1,5 +1,8 @@
 gamestate = require "hump.gamestate"
 debugMapState = require "debugMapState"
+Rendering = require "rendering.rendering"
+
+fonts = require "fonts"
 
 local menu = {}
 
@@ -28,15 +31,19 @@ function menu:enter()
         {"Juhani Imberg", "Sounds & Programming"},
         {"Esa Niemi", "Graphics"}
     }
+
+    love.graphics.setFont(fonts.menu)
 end
 
 function menu:draw()
+    love.graphics.push()
+    Rendering.scale()
     if creditsOpen then
         for i = 1,#self.makers do
             name = self.makers[i][1]
             role = self.makers[i][2]
             love.graphics.print(name, 100, 200 + i*70)
-            love.graphics.print(role, 400, 200 + i*70)
+            love.graphics.print(role, 600, 200 + i*70)
         end
     else
         for i = 1,#self.options do
@@ -47,6 +54,7 @@ function menu:draw()
             love.graphics.setColor(100, 100, 100)
         end
     end
+    love.graphics.pop()
 end
 
 function menu:keyreleased(key)
