@@ -9,15 +9,21 @@ local gauge = class{
         self.val = val
         self.radius = 300
         self.offset = 0
+        self.actual = val
+        self.speed = 0.05
     end,
     update = function(self)
         self.offset = math.random(0, self.val * 20)/200
+        local change = self.val - self.actual;
+        if math.abs(change) > self.speed then
+            change /= (math.abs(change)/self.speed)
+        end
     end,
     draw = function(self)
         local scale = self.radius / bg:getHeight()
         love.graphics.draw(bg, 0, 0, 0, scale, scale)
 
-        local r = -2.1 + 4.2 * self.val + self.offset;
+        local r = -2.1 + 4.2 * self.actual + self.offset;
 
         love.graphics.draw(arm, 150, 150, r, scale, scale, arm:getWidth()/2, 380 )
     end
