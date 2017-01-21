@@ -10,7 +10,6 @@ local faderShader = [[
         return ocolor;
     }
 ]]
-
 rendering.fader = love.graphics.newShader(faderShader)
 
 function rendering.scale()
