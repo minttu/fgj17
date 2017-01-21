@@ -59,6 +59,8 @@ function Ship.updateLocation(self, dt)
 
     turn = cpml.quat.from_angle_axis(self.turnspeed, cpml.vec3.unit_z)
     rot = rot * turn
+    print(rot)
+    print(turn)
 
     rot = rot:normalize()
     angle = self:angle()
