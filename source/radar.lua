@@ -34,10 +34,21 @@ function Radar.prerender(self)
     love.graphics.clear()
 
     love.graphics.setShader(rendering.fader)
-    love.graphics.scale(1, 1)
     love.graphics.draw(self.prevCanvas)
     love.graphics.setShader()
-    rendering.scale()
+
+    for i = 1, (#self.seenobjects) do
+        obj = self.seenobjects[i]
+        x = obj[1]/3
+        y = obj[2]/3
+        len = math.sqrt(x*x + y*y)
+        if len < self.size/1.05 then
+            a = obj[3]
+            love.graphics.setColor(255, 255, 255, a)
+            love.graphics.circle("fill", x + self.size, y + self.size, 10)
+            -- love.graphics.line(self.x, self.y, x, y)
+        end
+    end
 
     local xx = self.size + self.size * math.cos(self.angle) -- - y * math.sin(self.angle)
     local yy = self.size + self.size * math.sin(self.angle) -- + y * math.cos(self.angle)
@@ -81,32 +92,18 @@ function Radar.update(self, dt, ship)
 end
 
 function Radar.draw(self)
-    love.graphics.setColor(0, 20, 0)
-    love.graphics.circle("fill", self.x, self.y, self.size)
-
-    love.graphics.setColor(255, 255, 255)
-    love.graphics.draw(self.prevCanvas, self.x-self.size, self.y-self.size)
-
     for i = 1, (#self.objects)/2 do
         x = self.objects[2*i-1]
         y = self.objects[2*i]
         love.graphics.circle("fill", x, y, 10)
     end
 
-    for i = 1, (#self.seenobjects) do
-        obj = self.seenobjects[i]
-        x = obj[1]/3
-        y = obj[2]/3
-        len = math.sqrt(x*x + y*y)
-        if len < self.size/1.05 then
-            x = x + self.x
-            y = y + self.y
-            a = obj[3]
-            love.graphics.setColor(255, 255, 255, a)
-            love.graphics.circle("fill", x, y, 10)
-            -- love.graphics.line(self.x, self.y, x, y)
-        end
-    end
+    love.graphics.setColor(0, 20, 0)
+    love.graphics.circle("fill", self.x, self.y, self.size)
+
+    love.graphics.setColor(255, 255, 255)
+
+    love.graphics.draw(self.prevCanvas, self.x-self.size, self.y-self.size)
 
     for i = #self.seenobjects,1,-1 do
         self.seenobjects[i][3] = self.seenobjects[i][3] - 1.2
