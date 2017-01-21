@@ -103,8 +103,8 @@ local accumulator = 0
 
 function debugMapState.update(self, dt)
     accumulator = accumulator + dt
-    windowtranslation = {0, 5 * math.sin(accumulator)}
-    consoletranslation = {0, 15*math.sin(accumulator)}
+    windowtranslation = {math.sin(2*accumulator), 5 * math.sin(accumulator)}
+    consoletranslation = {5*math.sin(2*accumulator), 15*math.sin(accumulator)}
 
     radar:update(dt, ship)
     rudder:update(dt)
