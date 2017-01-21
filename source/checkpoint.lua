@@ -7,6 +7,7 @@ local Checkpoints = Class
     , CollisionDistance = 15
     , locations = {}
     , current = nil
+    , counter = 0
     }
 
 -- startLocation is vector
@@ -20,6 +21,7 @@ function Checkpoints:createCheckpoint(origin)
     local new = origin:rotated(phi)
     table.insert(self.locations,new)
     self.current = new
+    self.counter = self.counter + 1
     return new
 end
 
