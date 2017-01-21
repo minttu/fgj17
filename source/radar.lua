@@ -34,8 +34,10 @@ function Radar.prerender(self)
     love.graphics.clear()
 
     love.graphics.setShader(rendering.fader)
+    love.graphics.scale(1, 1)
     love.graphics.draw(self.prevCanvas)
     love.graphics.setShader()
+    rendering.scale()
 
     local xx = self.size + self.size * math.cos(self.angle) -- - y * math.sin(self.angle)
     local yy = self.size + self.size * math.sin(self.angle) -- + y * math.cos(self.angle)
