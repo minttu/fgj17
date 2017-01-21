@@ -110,7 +110,7 @@ UIEffectsPlayer = Class{
 return {
     ambient = AmbientPlayer({
             {name = "bg_humm_01.ogg", volume = 0.4},
-            {name = "rain_01.ogg", volume = 1}
+            {name = "rain_01.ogg", volume = 2}
     }),
     misc = MiscPlayer({
             {name = "rattling_01.ogg", volume = 0.2},

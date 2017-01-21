@@ -6,6 +6,7 @@ Radar = require "radar"
 Sounds = require "sounds"
 Gauge = require "gauge"
 Rendering = require "rendering.rendering"
+Compass = require "compass"
 
 Background = require "background"
 
@@ -25,7 +26,9 @@ local pitchGauge = Gauge(vector((1920 / 4), 660), 100)
 local rudderGauge = Gauge(vector((1920 / 4) - 240, 890), 100, 0.5)
 local fuelGauge = Gauge(vector((1920 / 4), 890), 100)
 
-local rudder = Rudder(vector(1920 / 2, 1000))
+local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
+
+local compass = Compass((1920 / 2) - 200, 20, 400, 400, 3)
 
 function debugMapState:enter()
     Sounds.ambient:play()
@@ -58,6 +61,7 @@ function debugMapState.draw()
     pitchGauge:draw()
     fuelGauge:draw()
     rudder:draw()
+    compass:draw()
 
     love.graphics.push()
     love.graphics.translate((1920 / 2) + 400, 600)
@@ -76,16 +80,19 @@ function debugMapState.update(self, dt)
     rudder:update(dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
+
     DepthMap:debugDrawUpdate(ship.location.x, ship.location.y, 400, 400)
-    
+
     rollGauge.val = ship:getRoll()/(2*math.pi) + 0.5
     pitchGauge.val = ship:getPitch()/(2*math.pi) + 0.5
-    
+
     rollGauge:update(dt)
     pitchGauge:update(dt)
 
     rudderGauge.val = (ship.turnspeed * 25) + 0.5
     rudderGauge:update(dt)
+
+    compass:update(dt, ship:angle())
 
     fuelGauge.val = ship.fuel
     fuelGauge:update(dt)
