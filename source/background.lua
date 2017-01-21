@@ -45,7 +45,7 @@ function background:update(drawWidth, drawHeight)
         y1 = drop[2]
         len = drop[5]
         local rnd = drop[6]
-        love.graphics.setColor(30 + rnd*170, 30 + rnd*170 ,30 + rnd*220, 128 + rnd*60)
+        love.graphics.setColor(50 + rnd*170, 50 + rnd*170 ,80 + rnd*150, 128 + rnd*60)
         x2 = x1 - drop[3]*4
         y2 = y1 - drop[4]*2
         love.graphics.setLineStyle("rough")
