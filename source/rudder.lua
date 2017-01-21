@@ -16,7 +16,7 @@ Rudder = Class
     , currentTrailLen = 0
     , w = 0 -- Rotation velocity
     --, momentOfInertia = 0.25
-    , friction = 0.995
+    , friction = 0.990 -- 1 means no friction, lower is more
     , maxangle = math.pi*6
 }
 
@@ -31,7 +31,7 @@ end
 
 function Rudder:mouseReleased(x,y)
     local lastPos = self:getLastMousePos() or vector(0)
-    local goalDtForMoment = 0.9
+    local goalDtForMoment = 0.2
     local refPosition = lastPos
     local dt = 0
     -- Sieniä
