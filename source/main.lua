@@ -11,8 +11,8 @@ function love.load()
     scy = desktop_h / canvas_h
     love.window.setMode(desktop_w, desktop_h, {borderless=true})
     gamestate.registerEvents()
-    gamestate.switch(helloWorld)
-    --gamestate.switch(depthMapDebugState)
+    --gamestate.switch(helloWorld)
+    gamestate.switch(depthMapDebugState)
 
 end
 
