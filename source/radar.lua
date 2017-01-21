@@ -20,7 +20,10 @@ function Radar.update(self, dt)
     self.previousangle = self.angle
     self.angle = (self.angle + self.speed*dt) % (2*math.pi)
     Radar.seenobjects = {}
-    -- for objects, if between ship.angle + prevangle and ship.angle + angle, add to seenobjects --
+    -- for obj in objects
+    --    angle = math.atan2(obj.y, obj.x)
+    --    if angle >= self.previousangle && angle <= self.angle 
+    --      add to seenobjects
 end
 
 function Radar.draw(self)
