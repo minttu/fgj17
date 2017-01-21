@@ -4,9 +4,9 @@ local Ship = {}
 Ship.__index = Ship
 
 Ship.location = cpml.vec2.new(100, 100)
-Ship.velocity = 1
+Ship.velocity = 8
 Ship.orientation = cpml.quat.new(0, 0, 0, 1)
-Ship.turnrate = 0.005
+Ship.turnrate = 0.01
 Ship.maxturnspeed = 0.1
 Ship.turnspeed = 0
 
@@ -24,19 +24,19 @@ function Ship.angle(self)
     return angle
 end
 
-function Ship.updateLocation(self)
+function Ship.updateLocation(self, dt)
 
     rot = self.orientation
 
     if love.keyboard.isDown( "left" ) then
-        self.turnspeed = self.turnspeed - self.turnrate
+        self.turnspeed = self.turnspeed - self.turnrate*dt
         if self.turnspeed < -self.maxturnspeed then
             self.turnspeed = -self.maxturnspeed
         end
     end
 
     if love.keyboard.isDown( "right" ) then
-        self.turnspeed = self.turnspeed + self.turnrate
+        self.turnspeed = self.turnspeed + self.turnrate*dt
         if self.turnspeed > self.maxturnspeed then
             self.turnspeed = self.maxturnspeed
         end
@@ -50,7 +50,7 @@ function Ship.updateLocation(self)
     rot = rot:normalize()
     angle = self:angle()
 
-    velocityVector = cpml.vec2.new(1 * math.cos(angle), 1 * math.sin(angle))
+    velocityVector = cpml.vec2.new(self.velocity * math.cos(angle), self.velocity * math.sin(angle))*dt
     self.location = self.location + velocityVector
 
     self.orientation = rot
@@ -62,8 +62,8 @@ function Ship.checkProblems(self)
     end
 end
 
-function Ship.update(self)
-    self:updateLocation()
+function Ship.update(self, dt)
+    self:updateLocation(dt)
     --self:checkProblems()
 end
 

@@ -1,11 +1,13 @@
 DepthMap = require "seaDepthMap"
 Ship = require "ship"
+Radar = require "radar"
 Sounds = require "sounds"
 
 -- Map to visualize the locations, ship movement and depth
 local debugMapState = {}
 
 ship = Ship.new()
+radar = Radar.new()
 
 function debugMapState:enter()
     Sounds.ambient:play()
@@ -18,12 +20,16 @@ function debugMapState.draw()
     -- draw Ship location
     ship:draw()
 
+    -- draw the radar
+    radar:draw()
+
     -- draw Goal location
 end
 
-function debugMapState:update(dt)
+function debugMapState.update(self, dt)
     -- Draws the map covering the entire window
-    ship:update()
+    ship:update(dt)
+    radar:update(dt)
     Sounds.misc:update(dt)
 end
 
