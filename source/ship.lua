@@ -3,25 +3,22 @@ cpml = require "cpml"
 quat = cpml.quat
 vec3 = cpml.vec3
 Sounds = require "sounds"
+Class = require "hump.class"
 
-local Ship = {}
-Ship.__index = Ship
-
-Ship.location = cpml.vec2.new(100, 100)
-Ship.velocity = 8
-Ship.orientation = cpml.quat.new(0, 0, 0, 1)
-Ship.turnrate = 0.01
-Ship.maxturnspeed = 0.02
-Ship.turnspeed = 0
-
-function Ship.new(x, y)
-    local self = setmetatable({}, Ship)
+Ship = Class
+    { location = cpml.vec2.new(100, 100)
+    , velocity = 8
+    , orientation = cpml.quat.new(0, 0, 0, 1)
+    , turnrate = 0.01
+    , maxturnspeed = 0.02
+    , turnspeed = 0
+    }
+function Ship:init(x, y)
     self.location = cpml.vec2.new(x, y)
     self.orientation = quat.from_angle_axis(0, vec3.unit_z)
-    return self
 end
 
-function Ship.angle(self)
+function Ship:angle()
     local rot = self.orientation
     ang = rot:to_vec3()
     return -math.atan2(ang.y, ang.x)
@@ -39,7 +36,7 @@ function Ship:getPitch()
     return fixAtan2Angle(ang)
 end
 
-function Ship.updateLocation(self, dt)
+function Ship:updateLocation(dt)
 
     rot = self.orientation
 
@@ -83,20 +80,20 @@ function Ship.updateLocation(self, dt)
     self.orientation = rot
 end
 
-function Ship.checkProblems(self)
+function Ship:checkProblems()
     if DepthMap.isRockAt(self.location.x, self.location.y) then
         -- TODO: HIT ROCK
     end
 end
 
-function Ship.update(self, dt)
+function Ship:update(dt)
     self:updateLocation(dt)
     Sounds.ui:update(dt)
     Sounds.ui:depthWarning(DepthMap:getDepth(self.location.x, self.location.y))
     --self:checkProblems()
 end
 
-function Ship.draw(self)
+function Ship:draw()
     local vertices = {-10, -10, 10, -10, 10, 10, -10, 10}
     angle = self:angle()
     for i = 1, (#vertices)/2 do
