@@ -1,4 +1,4 @@
-gauge = require "rendering.gauge"
+gauge = require "gauge"
 
 sandbox = {}
 
@@ -9,7 +9,7 @@ local lights = {}
 
 local colorCanvas
 
-local ambientLight = { 128, 128, 128}
+local ambientLight = {0,0,0}--{ 128, 128, 128}
 
 local lightShader
 local lightFragmentCode = [[
@@ -49,7 +49,7 @@ function sandbox.init()
     colorCanvas = love.graphics.newCanvas()
     lightShader = love.graphics.newShader(lightFragmentCode, lightVertexCode)
 
-    table.insert(lights, light({200, 200, -2}, {0, 255, 0}, 2))
+    table.insert(lights, light({10, 10, -2}, {0, 255, 0}, 2))
 end
 
 function sandbox.update()
@@ -63,7 +63,7 @@ function sandbox.draw()
 
     love.graphics.setShader()
     love.graphics.setColor(ambientLight[1], ambientLight[2], ambientLight[3])
-    love.graphics.draw(image)
+    --love.graphics.draw(image)
     gauge0:draw()
 
     local light = lights[1]
@@ -72,7 +72,7 @@ function sandbox.draw()
     lightShader:send("light_pos", light.pos)
     lightShader:send("light_color", {light.color[1], light.color[2], light.color[3], 1})
     lightShader:send("intensity", light.intensity)
-    love.graphics.draw(image)
+    --love.graphics.draw(image)
     gauge0:draw()
 
     love.graphics.setShader()
