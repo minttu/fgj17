@@ -1,6 +1,6 @@
 gamestate = require "hump.gamestate"
 helloWorld = require "helloworld"
-mapDebugState = require "debugMapState"
+debugMapState = require "debugMapState"
 
 local scx, scy
 canvas_w, canvas_h = 1920, 1080
@@ -12,7 +12,7 @@ function love.load()
     love.window.setMode(desktop_w, desktop_h, {borderless=true})
     gamestate.registerEvents()
     --gamestate.switch(helloWorld)
-    gamestate.switch(mapDebugState)
+    gamestate.switch(debugMapState)
 
 end
 
