@@ -27,8 +27,4 @@ function rendering.scale()
     love.graphics.scale(scx*rendering.factor,scy*rendering.factor)
 end
 
-function rendering.scalePost()
-    love.graphics.scale(scx/rendering.factor,scy/rendering.factor)
-end
-
 return rendering
