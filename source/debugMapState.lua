@@ -68,7 +68,8 @@ function debugMapState.draw()
 
     leftwiper:draw(580, 14)
     rightwiper:draw(1340, 14)
-    love.graphics.draw(windowFrame, 0, -20, 0, 1, 1.05)
+    w, h = windowFrame:getDimensions()
+    love.graphics.draw(windowFrame, -w/2 + 1920/2, -h/2 + 1080/2, 0, 1, 1.05)
 
     love.graphics.push()
     love.graphics.translate(consoletranslation[1], consoletranslation[2])
