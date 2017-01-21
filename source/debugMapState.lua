@@ -70,7 +70,8 @@ function debugMapState.draw()
 
     leftwiper:draw()
     rightwiper:draw()
-    love.graphics.draw(windowFrame, 0, -20, 0, 1, 1.05)
+    w, h = windowFrame:getDimensions()
+    love.graphics.draw(windowFrame, -w/2 + 1920/2, -h/2 + 1080/2, 0, 1, 1.05)
 
     love.graphics.push()
     love.graphics.translate(consoletranslation[1], consoletranslation[2])
@@ -119,10 +120,10 @@ function debugMapState.update(self, dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
 
-    multiplier = 8
+    multiplier = 12
     windowtranslation = {math.sin(2*accumulator), multiplier*ship.orientation.y}
     consoletranslation = {3*math.sin(2*accumulator), 5*multiplier*ship.orientation.y}
-    roll = ship.orientation.x / 7
+    roll = ship.orientation.x / 4
 
     draws = draws + 1
     if (isDebugging) then
