@@ -35,12 +35,14 @@ function insertRock(x, y)
         obj = DepthMap.objects[i]
         dx = x - obj[1]
         dy = y - obj[2]
-        if dx*dx + dy*dy < 3*(10*10) then
+        if dx*dx + dy*dy < (10*10) then
             found = true
             break
         end
     end
-    table.insert(DepthMap.objects, {x, y})
+    if not found then
+        table.insert(DepthMap.objects, {x, y})
+    end
 end
 
 function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
