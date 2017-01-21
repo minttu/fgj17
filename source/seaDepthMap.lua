@@ -4,7 +4,7 @@ local DepthMap = {}
 DepthMap.canvas = nil
 
 -- How sharp changes in depth
-DepthMap.Sharpiness = 0.01
+DepthMap.Sharpiness = 0.005
 
 -- What depth and below is considered as rock/land, in range [0,1]
 DepthMap.RockDepth = 0.05
