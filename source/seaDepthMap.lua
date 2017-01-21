@@ -52,7 +52,7 @@ end
 
 -- Draws the depth map centered in map coordinates (x,y) and width, height in pixels
 function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
-    local cellSize = 8
+    local cellSize = 10
     local halfWidth = drawWidth/2
     local halfHeight = drawHeight/2
     if not self.canvas or self.canvas:getWidth() ~= drawWidth or self.canvas:getHeight() ~= drawHeight then
@@ -68,7 +68,7 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
             depthColor = 255 - depth*160
             if DepthMap:depthIsRock(depth) then
                 love.graphics.setColor(255,180,0)
-                insertRock(x, y)
+                insertRock(mapX-halfWidth+x, mapY-halfHeight+y)
             else
                 love.graphics.setColor(depthColor*0.4,depthColor*0.6,depthColor)
             end

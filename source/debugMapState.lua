@@ -23,9 +23,9 @@ local rollGauge = Gauge(vector((1920 / 4) - 240, 660), 100)
 local pitchGauge = Gauge(vector((1920 / 4), 660), 100)
 
 local rudderGauge = Gauge(vector((1920 / 4) - 240, 890), 100, 0.5)
-local idkGauge = Gauge(vector((1920 / 4), 890), 100)
+local fuelGauge = Gauge(vector((1920 / 4), 890), 100)
 
-local rudder = Rudder(vector(1920 / 2, 1080))
+local rudder = Rudder(vector(1920 / 2, 1000))
 
 function debugMapState:enter()
     Sounds.ambient:play()
@@ -56,7 +56,7 @@ function debugMapState.draw()
     rudderGauge:draw()
     rollGauge:draw()
     pitchGauge:draw()
-    idkGauge:draw()
+    fuelGauge:draw()
     rudder:draw()
 
     love.graphics.push()
@@ -87,7 +87,8 @@ function debugMapState.update(self, dt)
     rudderGauge.val = (ship.turnspeed * 25) + 0.5
     rudderGauge:update(dt)
 
-    idkGauge:update(dt)
+    fuelGauge.val = ship.fuel
+    fuelGauge:update(dt)
 
     Sounds.misc:update(dt)
     Background:update(canvas_w, canvas_h)
