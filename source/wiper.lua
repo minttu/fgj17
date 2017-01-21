@@ -10,9 +10,10 @@ Wiper = Class {
     , angle = 0
 }
 
-function Wiper:init(start_ang, end_ang, speed)
-    self.start_angle = start_ang
-    self.end_angle = end_ang
+function Wiper:init(min_ang, max_ang, start_time, speed)
+    self.start_angle = min_ang
+    self.end_angle = max_ang
+    self.timer = start_time
     self.speed = speed
 end
 
