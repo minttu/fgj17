@@ -68,7 +68,7 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
             depthColor = 255 - depth*160
             if DepthMap:depthIsRock(depth) then
                 love.graphics.setColor(255,180,0)
-                insertRock(x, y)
+                insertRock(mapX-halfWidth+x, mapY-halfHeight+y)
             else
                 love.graphics.setColor(depthColor*0.4,depthColor*0.6,depthColor)
             end
