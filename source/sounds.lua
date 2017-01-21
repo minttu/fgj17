@@ -110,6 +110,13 @@ return {
             }},
             {name = "alarm", sounds = {
                  {name = "alarm_01.ogg", volume = 1}
+            }},
+            {name = "radar", sounds = {
+                 {name = "radar_01.ogg", volume = 1}
+            }},
+            {name = "rudder", sounds = {
+                 {name = "rudder_01.ogg", volume = 1},
+                 {name = "rudder_02.ogg", volume = 1}
             }}
-    })
+    }),
 }
