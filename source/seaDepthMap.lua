@@ -61,8 +61,8 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight)
     love.graphics.setCanvas(self.canvas)
     love.graphics.setPointSize(cellSize)
     love.graphics.clear()
-    for y=mapY-halfHeight,drawHeight,cellSize do
-        for x=mapX-halfWidth,drawWidth,cellSize do
+    for y=mapY-halfHeight,mapY+drawHeight,cellSize do
+        for x=mapX-halfWidth,mapX+drawWidth,cellSize do
             depth = DepthMap:getDepth(x,y)
             depthColor = 255 - depth*160
             if DepthMap:depthIsRock(depth) then
