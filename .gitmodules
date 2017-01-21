@@ -1,3 +1,6 @@
 [submodule "source/hump"]
 	path = source/hump
-	url = https://github.com/vrld/hump.git
+	url = https://github.com/vrld/hump
+[submodule "source/cpml"]
+	path = source/cpml
+	url = https://github.com/excessive/cpml
