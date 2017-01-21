@@ -7,6 +7,7 @@ Sounds = require "sounds"
 Gauge = require "gauge"
 Rendering = require "rendering.rendering"
 Compass = require "compass"
+fonts = require "fonts"
 
 Background = require "background"
 Wiper = require "wiper"
@@ -22,11 +23,11 @@ local ship = Ship(100, 100)
 
 local radar = Radar(vector((1920 / 2) + 550, 800), 200)
 
-local rollGauge = Gauge(vector((1920 / 4) - 240, 660), 100)
-local pitchGauge = Gauge(vector((1920 / 4), 660), 100)
+local rollGauge = Gauge("roll", vector((1920 / 4) - 240, 660), 100)
+local pitchGauge = Gauge("pitch", vector((1920 / 4), 660), 100)
 
-local rudderGauge = Gauge(vector((1920 / 4) - 240, 890), 100, 0.5)
-local fuelGauge = Gauge(vector((1920 / 4), 890), 100)
+local rudderGauge = Gauge("rudder", vector((1920 / 4) - 240, 890), 100, 0.5)
+local fuelGauge = Gauge("fuel", vector((1920 / 4), 890), 100)
 
 local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
@@ -79,6 +80,9 @@ function debugMapState.draw()
     pitchGauge:draw()
     fuelGauge:draw()
     rudder:draw()
+
+    love.graphics.setFont(fonts.small)
+
     compass:draw()
 
     if isDebugging == false then
