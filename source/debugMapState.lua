@@ -3,6 +3,7 @@ Ship = require "ship"
 Radar = require "radar"
 Sounds = require "sounds"
 Gauge = require "gauge"
+Rendering = require "rendering.rendering"
 
 -- Map to visualize the locations, ship movement and depth
 local debugMapState = {}
@@ -17,6 +18,12 @@ function debugMapState:enter()
 end
 
 function debugMapState.draw()
+    love.graphics.scale(1, 1)
+
+    radar:prerender()
+
+    Rendering.scale()
+
     -- Draws the map covering the entire window
     DepthMap:debugDraw()
 
@@ -24,7 +31,6 @@ function debugMapState.draw()
     ship:draw()
 
     -- draw the radar
-    radar:prerender()
     radar:draw()
     gauge:draw()
 

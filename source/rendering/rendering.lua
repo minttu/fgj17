@@ -13,4 +13,12 @@ local faderShader = [[
 
 rendering.fader = love.graphics.newShader(faderShader)
 
+function rendering.scale()
+    local desktop_w, desktop_h = love.window.getDesktopDimensions()
+    scx = desktop_w / canvas_w
+    scy = desktop_h / canvas_h
+
+    love.graphics.scale(scx,scy)
+end
+
 return rendering
