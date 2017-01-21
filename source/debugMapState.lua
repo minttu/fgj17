@@ -9,7 +9,7 @@ local debugMapState = {}
 
 ship = Ship.new()
 radar = Radar.new()
-local gauge = Gauge()
+local gauge = Gauge(0)
 
 function debugMapState:enter()
     Sounds.ambient:play()
@@ -24,6 +24,7 @@ function debugMapState.draw()
     ship:draw()
 
     -- draw the radar
+    radar:prerender()
     radar:draw()
     gauge:draw()
 
@@ -34,6 +35,7 @@ function debugMapState.update(self, dt)
     -- Draws the map covering the entire window
     ship:update(dt)
     radar:update(dt)
+    gauge:update(dt)
     Sounds.misc:update(dt)
 end
 
