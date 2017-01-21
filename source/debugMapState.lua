@@ -30,7 +30,7 @@ local fuelGauge = Gauge(vector((1920 / 4), 890), 100)
 
 local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
-local compass = Compass((1920 / 2) - 200, (1080 / 2), 400, 400, 3)
+local compass = Compass((1920 / 2) - 200, (1080 / 2) + 4, 400, 400, 3)
 
 local leftwiper = Wiper(math.pi-0.02, 0.08, 0.5, 1.15)
 local rightwiper = Wiper(0.05, math.pi-0.05, 0, 1.15)
@@ -77,8 +77,6 @@ function debugMapState.draw()
     rudder:draw()
     compass:draw()
 
-
-
     if isDebugging == false then
         love.graphics.setColor(0, 0, 0, 255)
         love.graphics.rectangle("fill", radar.x - radar.size - 5, radar.y - radar.size - 5, (radar.size * 2) + 5, (radar.size * 2) + 5)
@@ -111,8 +109,10 @@ function debugMapState.update(self, dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
 
-    DepthMap:debugDrawUpdate(ship.location.x, ship.location.y, 400, 400)
-
+    if (isDebugging) then
+        DepthMap:debugDrawUpdate(ship.location.x, ship.location.y, 400, 400)
+    end
+    
     rollGauge.val = ship:getRoll()/(2*math.pi) + 0.5
     pitchGauge.val = ship:getPitch()/(2*math.pi) + 0.5
 
