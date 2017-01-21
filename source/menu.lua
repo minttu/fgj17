@@ -1,5 +1,6 @@
 gamestate = require "hump.gamestate"
 debugMapState = require "debugMapState"
+Rendering = require "rendering.rendering"
 
 fonts = require "fonts"
 
@@ -35,6 +36,8 @@ function menu:enter()
 end
 
 function menu:draw()
+    love.graphics.push()
+    Rendering.scale()
     if creditsOpen then
         for i = 1,#self.makers do
             name = self.makers[i][1]
@@ -51,6 +54,7 @@ function menu:draw()
             love.graphics.setColor(100, 100, 100)
         end
     end
+    love.graphics.pop()
 end
 
 function menu:keyreleased(key)
