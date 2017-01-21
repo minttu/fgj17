@@ -1,4 +1,5 @@
 vector = require "hump.vector"
+DepthMap = require "seaDepthMap"
 
 local Ship = {}
 
