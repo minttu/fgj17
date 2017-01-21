@@ -2,7 +2,7 @@ gamestate = require "hump.gamestate"
 helloWorld = require "helloworld"
 debugMapState = require "debugMapState"
 
-local scx, scy
+--local scx, scy
 canvas_w, canvas_h = 1920, 1080
 
 function love.load()
