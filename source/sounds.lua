@@ -64,6 +64,8 @@ UIEffectsPlayer = Class{
     __includes = SoundPlayer,
     init = function(self, soundGroups)
         self.soundGroups = soundGroups
+        self.depthWarningGap = 0.5
+        self.depthWarningPossible = self.depthWarningGap
 
         snds = {}
         for i, group in ipairs(soundGroups) do
@@ -86,6 +88,20 @@ UIEffectsPlayer = Class{
         soundName = sounds[math.random(#sounds)].name
         sound = self.sources[soundName]:clone()
         sound:play()
+    end,
+    depthWarning = function(self, depth)
+        if self.depthWarningPossible > 0 then
+            return
+        end
+
+        if depth < 0.1 then
+            self:play("alarm")
+        end
+
+        self.depthWarningPossible = self.depthWarningGap
+    end,
+    update = function(self, dt)
+        self.depthWarningPossible = self.depthWarningPossible - dt
     end,
 }
 
@@ -113,6 +129,10 @@ return {
             }},
             {name = "radar", sounds = {
                  {name = "radar_01.ogg", volume = 1}
+            }},
+            {name = "rudder", sounds = {
+                 {name = "rudder_01.ogg", volume = 1},
+                 {name = "rudder_02.ogg", volume = 1}
             }}
-    })
+    }),
 }
