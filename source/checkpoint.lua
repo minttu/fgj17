@@ -1,10 +1,11 @@
 Class = require "hump.class"
 vector = require "hump.vector"
+DepthMap = require "seaDepthMap"
 
 
 local Checkpoints = Class
     { GenerationRange = 40
-    , CollisionDistance = 15
+    , CollisionDistance = 18
     , locations = {}
     , current = nil
     , counter = 0
@@ -17,12 +18,16 @@ function Checkpoints:init(startLocation, seed)
 end
 
 function Checkpoints:createCheckpoint(origin)
-    local phi = math.random()*2*math.pi
-    local new = origin:rotated(phi)
-    table.insert(self.locations,new)
-    self.current = new
-    self.counter = self.counter + 1
-    return new
+    while true do
+        local phi = math.random()*2*math.pi
+        local new = origin:rotated(phi)
+        if not DepthMap:isRockAt(new.x, new.y) then
+            table.insert(self.locations,new)
+            self.current = new
+            self.counter = self.counter + 1
+            return new
+        end
+    end
 end
 
 function Checkpoints:getAngleTo(location)
