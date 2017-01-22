@@ -155,6 +155,9 @@ return {
             {name = "rudder", sounds = {
                  {name = "rudder_01.ogg", volume = 0.5},
                  {name = "rudder_02.ogg", volume = 0.5}
+            }},
+            {name = "gameover", sounds = {
+                 {name = "gameover.ogg", volume = 1}
             }}
     }),
 }

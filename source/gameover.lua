@@ -2,6 +2,7 @@ gamestate = require "hump.gamestate"
 Rendering = require "rendering.rendering"
 
 fonts = require "fonts"
+Sounds = require "sounds"
 
 seaDepthMap = require "seaDepthMap"
 
@@ -41,6 +42,8 @@ end
 
 function gameover:enter()
     love.graphics.setFont(fonts.menu)
+    love.audio.stop()
+    Sounds.ui:play("gameover")
 end
 
 function gameover:render_map()
