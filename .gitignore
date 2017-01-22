@@ -1,2 +1,5 @@
 *~
 *-autosave.kra
+*.love
+*.zip
+.build
