@@ -209,7 +209,7 @@ function debugMapState.update(self, dt)
     rudder:update(dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
-    fuelLed.blinking = true
+    fuelLed.blinking = ship.fuel < 0.2
     fuelLed:update(dt)
 
     multiplier = 12
