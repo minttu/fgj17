@@ -14,6 +14,7 @@ require "util"
 Background = require "background"
 Wiper = require "wiper"
 Switch = require "switch"
+Led = require "led"
 
 -- Map to visualize the locations, ship movement and depth
 local debugMapState = {}
@@ -31,6 +32,7 @@ local pitchGauge = Gauge("pitch", vector((1920 / 4), 660), 100)
 
 local rudderGauge = Gauge("rudder", vector((1920 / 4) - 240, 890), 100, 0.5)
 local fuelGauge = Gauge("fuel", vector((1920 / 4), 890), 100)
+local fuelLed = Led(vector((1920 / 4), 890))
 
 local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
@@ -97,6 +99,7 @@ function debugMapState.draw()
     rollGauge:draw()
     pitchGauge:draw()
     fuelGauge:draw()
+    fuelLed:draw()
     rudder:draw()
 
     love.graphics.setFont(fonts.small)
@@ -142,6 +145,7 @@ function debugMapState.update(self, dt)
     rudder:update(dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
+    fuelLed.enabled = ship.fuel <= 0.2
 
     multiplier = 12
     windowtranslation = {math.sin(2*accumulator), multiplier*ship.orientation.y}

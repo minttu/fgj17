@@ -1,8 +1,8 @@
 gamestate = require "hump.gamestate"
 helloWorld = require "helloworld"
 debugMapState = require "debugMapState"
-menu = require "menu"
 fonts = require "fonts"
+splash = require "splashscreen"
 
 --local scx, scy
 canvas_w, canvas_h = 1920, 1080
@@ -18,6 +18,7 @@ function love.load()
     gamestate.registerEvents()
     --gamestate.switch(helloWorld)
     --gamestate.switch(debugMapState)
-    gamestate.switch(menu)
+    --gamestate.switch(menu)
+    gamestate.switch(splash)
 
 end
