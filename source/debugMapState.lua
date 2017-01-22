@@ -156,7 +156,7 @@ function debugMapState.drawSwitch(switch)
     love.graphics.push()
     local xrudderScale = 1.0
     local yrudderScale = 1.1
-    local xoff = -3 / xrudderScale
+    local xoff = 3 / xrudderScale
     local yoff = 25 / yrudderScale
     love.graphics.translate((1-xrudderScale)*rudder.screenPos.x+xoff,(1-yrudderScale)*rudder.screenPos.y + yoff)
     love.graphics.scale(xrudderScale, yrudderScale)
