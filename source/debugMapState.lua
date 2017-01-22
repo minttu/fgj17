@@ -22,6 +22,7 @@ local debugMapState = {}
 local windowFrame = love.graphics.newImage("assets/graphics/frame_grey.png")
 local console = love.graphics.newImage("assets/graphics/console.png")
 local fishFinderFrame = love.graphics.newImage("assets/graphics/fish_finder.png")
+local imgLightBig = love.graphics.newImage("assets/graphics/imglightbig.png")
 
 local ship = Ship(100, 100)
 
@@ -42,12 +43,15 @@ local leftwiper = Wiper(580, 4, math.pi-0.02, 0.08, 0.5, 1.15)
 local rightwiper = Wiper(1340, 4, 0.05, math.pi-0.05, 0, 1.15)
 local wiperswitch = Switch(1920/2+200, 800)
 local radarSoundsSwitch = Switch(1920/2+250, 800)
+local lightSwitch = Switch(1920/2+200, 750)
 
 local isDebugging = false
 
 local windowtranslation = {0, 0}
 local consoletranslation = {0, 0}
 local roll = 0
+
+local shadowFactor = 0.5
 
 local desktop_w, desktop_h = love.window.getDesktopDimensions()
 local mainCanvas = love.graphics.newCanvas(desktop_w*Rendering.factor, desktop_h*Rendering.factor)
@@ -94,6 +98,7 @@ function debugMapState.drawScene()
 
     debugMapState.drawSwitch(wiperswitch)
     debugMapState.drawSwitch(radarSoundsSwitch)
+    debugMapState.drawSwitch(lightSwitch)
 
 
     rudderGauge:draw()
@@ -129,11 +134,18 @@ function debugMapState.drawScene()
     local yoff = 40 / yrudderScale
     love.graphics.translate((1-xrudderScale)*rudder.screenPos.x+xoff,(1-yrudderScale)*rudder.screenPos.y + yoff)
     love.graphics.scale(xrudderScale, yrudderScale)
-    love.graphics.setColor(0,0,0, 64)
+    love.graphics.setColor(0,0,0, 255 * shadowFactor)
     rudder:draw()
     love.graphics.pop()
     love.graphics.setColor(255,255,255)
     rudder:draw()
+
+    if lightSwitch.enabled then
+        Rendering.light(true)
+        love.graphics.draw(imgLightBig, 1920/2, 0, 0, 1, 1, 0, 200)
+        love.graphics.draw(imgLightBig, 1920/2, 0, 0, -1, 1, 0, 200)
+        Rendering.light(false)
+    end
 
     love.graphics.pop() -- console
     love.graphics.pop() -- window
@@ -148,7 +160,7 @@ function debugMapState.drawSwitch(switch)
     local yoff = 25 / yrudderScale
     love.graphics.translate((1-xrudderScale)*rudder.screenPos.x+xoff,(1-yrudderScale)*rudder.screenPos.y + yoff)
     love.graphics.scale(xrudderScale, yrudderScale)
-    love.graphics.setColor(0,0,0, 64)
+    love.graphics.setColor(0,0,0, 255 * shadowFactor)
     switch:draw()
     love.graphics.pop()
     love.graphics.setColor(255,255,255)
@@ -244,6 +256,12 @@ function debugMapState.update(self, dt)
         local c = {{255,0,255},{255,255,0}}
         compass.markers[1].color = c[checkpoints.counter % 2 + 1]
     end
+
+    if lightSwitch.enabled then
+        shadowFactor = 0.5
+    else
+        shadowFactor = 0.3
+    end
 end
 
 function debugMapState:mousereleased(x,y, mouse_btn)
@@ -260,6 +278,7 @@ function debugMapState:mousereleased(x,y, mouse_btn)
         rudder:mouseReleased(x,y)
         wiperswitch:mouseReleased(screen_to_console_space(x,y))
         radarSoundsSwitch:mouseReleased(screen_to_console_space(x,y))
+        lightSwitch:mouseReleased(screen_to_console_space(x,y))
         leftwiper:enable(wiperswitch.enabled)
         rightwiper:enable(wiperswitch.enabled)
     end
