@@ -91,10 +91,10 @@ function DepthMap:debugDrawUpdate(mapX, mapY, drawWidth, drawHeight, cellSize)
     love.graphics.setCanvas()
 end
 
-function DepthMap:debugDraw(x, y)
+function DepthMap:debugDraw(x, y, scale)
     local o_r, o_g, o_b = love.graphics.getColor()
     love.graphics.setColor(255, 255, 255)
-    love.graphics.draw(self.canvas, x or 0, y or 0)
+    love.graphics.draw(self.canvas, x or 0, y or 0, 0, scale or 1, scale or 1)
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 10)
     love.graphics.setColor(o_r, o_g, o_b)
 end
