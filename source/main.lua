@@ -17,8 +17,8 @@ function love.load()
     love.window.setMode(desktop_w, desktop_h, {fullscreen=true,fullscreentype="exclusive",msaa=4})
     gamestate.registerEvents()
     --gamestate.switch(helloWorld)
-    gamestate.switch(debugMapState)
+    --gamestate.switch(debugMapState)
     --gamestate.switch(menu)
-    --gamestate.switch(splash)
+    gamestate.switch(splash)
 
 end

@@ -24,6 +24,7 @@ Ship = Class
     , t = 0
     , waveFrequency = 0.1
     , turnSpeedTiltMultiplier = math.pi/2
+    , pathlog = {n = 0}
     }
 function Ship:init(x, y)
     self.location = cpml.vec2.new(x, y)
@@ -115,20 +116,22 @@ function Ship:updateLocation(dt)
     self.orientation = vector(roll,pitch)
 
     self.fuel = self.fuel - self.velocity * self.fuelConsumptionMultiplier
+    table.insert(self.pathlog, {t = self.t, pos = self.location, yaw = self.yaw, roll = roll, pitch = pitch})
+    self.pathlog.n = self.pathlog.n + 1
 end
 
 function Ship:checkProblems()
     if DepthMap:isRockAt(self.location.x, self.location.y) then
-        gameover:shipCrashed()
+        gameover:shipCrashed(self.pathlog)
     end
     if DepthMap:getDepth(self.location.x, self.location.y) < 0.2 then
         Sounds.ui:warning()
     end
     if self.fuel < 0 then
-        gameover:noFuel()
+        gameover:noFuel(self.pathlog)
     end
     if math.abs(self:getRoll()) > math.pi/2 then
-        gameover:shipCapsized()
+        gameover:shipCapsized(self.pathlog)
     end
 end
 
