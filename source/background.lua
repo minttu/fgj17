@@ -1,3 +1,4 @@
+Rendering = require "rendering.rendering"
 local background = {}
 
 background.canvas = nil
@@ -61,6 +62,7 @@ end
 
 function background:draw(x, y)
     local o_r, o_g, o_b = love.graphics.getColor()
+
     love.graphics.setColor(255, 255, 255)
     love.graphics.draw(self.canvas, x, y)
     love.graphics.setColor(o_r, o_g, o_b)

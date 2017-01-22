@@ -50,6 +50,7 @@ local roll = 0
 
 local desktop_w, desktop_h = love.window.getDesktopDimensions()
 local mainCanvas = love.graphics.newCanvas(desktop_w*Rendering.factor, desktop_h*Rendering.factor)
+local lightCanvas = love.graphics.newCanvas(desktop_w*Rendering.factor, desktop_h*Rendering.factor)
 
 local checkpoints = Checkpoints(vec2toVector(ship.location))
 
@@ -119,7 +120,6 @@ function debugMapState.drawScene()
     end
 
         love.graphics.push()
-    love.graphics.setShader(Rendering.rudderShadow)
     local xrudderScale = 1.0
     local yrudderScale = 1.1
     local xoff = -10 / xrudderScale
@@ -128,7 +128,6 @@ function debugMapState.drawScene()
     love.graphics.scale(xrudderScale, yrudderScale)
     love.graphics.setColor(0,0,0, 64)
     rudder:draw()
-    love.graphics.setShader()
     love.graphics.pop()
     love.graphics.setColor(255,255,255)
     rudder:draw()
@@ -139,20 +138,28 @@ function debugMapState.drawScene()
 end
 
 function debugMapState.draw()
+    love.graphics.setBlendMode("alpha")
     radar:prerender()
+    love.graphics.setColor(255,255,255)
 
-    love.graphics.setCanvas(mainCanvas)
-    love.graphics.clear()
+
+    love.graphics.setCanvas(mainCanvas, lightCanvas)
+    love.graphics.setShader(Rendering.kiviLightShader)
+    Rendering.light(false)
+    love.graphics.clear(0,0,0,256)
 
     debugMapState.drawScene()
 
-    local brightness = 255
+    local brightness = 128
 
     love.graphics.setCanvas()
     love.graphics.clear()
 
     love.graphics.setColor(brightness,brightness,brightness)
     love.graphics.draw(mainCanvas)
+    love.graphics.setBlendMode("add")
+    love.graphics.setColor(255,255,255)
+    love.graphics.draw(lightCanvas)
 end
 
 local accumulator = 0

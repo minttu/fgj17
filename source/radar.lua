@@ -3,6 +3,7 @@ cpml = require "cpml"
 rendering = require "rendering.rendering"
 Sounds = require "sounds"
 DepthMap = require "seaDepthMap"
+Rendering = require "rendering.rendering"
 
 Radar = Class
     { angle = 0
@@ -115,8 +116,9 @@ function Radar:draw()
     love.graphics.circle("fill", self.x, self.y, self.size)
 
     love.graphics.setColor(255, 255, 255)
-
+    Rendering.light(true)
     love.graphics.draw(self.prevCanvas, self.x-self.size, self.y-self.size)
+    Rendering.light(false)
 
 end
 
