@@ -1,5 +1,7 @@
 Class = require 'hump.class'
+vector = require "hump.vector"
 
+Label = require "label"
 Sounds = require "sounds"
 
 local base = love.graphics.newImage("assets/graphics/switch_base.png")
@@ -13,10 +15,12 @@ Switch = Class {
     scale = 0.1
 }
 
-function Switch:init(x, y, on)
+function Switch:init(name, x, y, on)
+    self.name = name
     self.x = x
     self.y = y
     self.enabled = on or false
+    self.label = Label(self.name, vector(x - 28, y + 60), true)
 end
 
 function Switch:mouseReleased(x, y)
@@ -26,7 +30,7 @@ function Switch:mouseReleased(x, y)
     end
 end
 
-function Switch:draw(x, y)
+function Switch:draw()
     love.graphics.draw(base, self.x, self.y, 0, self.scale, self.scale)
     love.graphics.draw(self.enabled and stick_on or stick_off, self.x, self.y, 0, self.scale, self.scale)
 end

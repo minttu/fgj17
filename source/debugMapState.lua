@@ -43,9 +43,10 @@ local compass = Compass((1920 / 2) - 300, (1080 / 2) + 14, 600, 600, 3)
 
 local leftwiper = Wiper(580, 4, math.pi-0.02, 0.08, 0.5, 1.15)
 local rightwiper = Wiper(1340, 4, 0.05, math.pi-0.05, 0, 1.15)
-local wiperswitch = Switch(1920/2+200, 800)
-local radarSoundsSwitch = Switch(1920/2+250, 800)
-local lightSwitch = Switch(1920/2+200, 750)
+
+local wiperSwitch = Switch("wipers", (1920/2) - 200 - 16, 630)
+local radarSoundsSwitch = Switch("beep", (1920/2) - 100 - 16, 630)
+local lightSwitch = Switch("lights", (1920/2) - 16, 630)
 
 local isDebugging = false
 
@@ -98,7 +99,7 @@ function debugMapState.drawScene()
 
     love.graphics.draw(console, 72, 512, 0, 1.1, 1)
 
-    debugMapState.drawSwitch(wiperswitch)
+    debugMapState.drawSwitch(wiperSwitch)
     debugMapState.drawSwitch(radarSoundsSwitch)
     debugMapState.drawSwitch(lightSwitch)
 
@@ -169,6 +170,7 @@ function debugMapState.drawSwitch(switch)
     love.graphics.pop()
     love.graphics.setColor(255,255,255)
     switch:draw()
+    switch.label:draw()
 end
 
 function debugMapState.draw()
@@ -290,11 +292,11 @@ function debugMapState:mousereleased(x,y, mouse_btn)
     end
     if mouse_btn == 1 then
         rudder:mouseReleased(x,y)
-        wiperswitch:mouseReleased(screen_to_console_space(x,y))
+        wiperSwitch:mouseReleased(screen_to_console_space(x,y))
         radarSoundsSwitch:mouseReleased(screen_to_console_space(x,y))
         lightSwitch:mouseReleased(screen_to_console_space(x,y))
-        leftwiper:enable(wiperswitch.enabled)
-        rightwiper:enable(wiperswitch.enabled)
+        leftwiper:enable(wiperSwitch.enabled)
+        rightwiper:enable(wiperSwitch.enabled)
     end
 end
 
