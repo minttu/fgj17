@@ -282,8 +282,9 @@ function debugMapState.update(self, dt)
     end
 
 
-    rollLed.blinking = rollGauge.val < 0.2 or rollGauge.val > 0.8
-    pitchLed.blinking = pitchGauge.val < 0.2 or pitchGauge.val > 0.8
+    local tiltWarning = 0.11
+    rollLed.blinking = rollGauge.val < tiltWarning or rollGauge.val > 1-tiltWarning
+    pitchLed.blinking = pitchGauge.val < tiltWarning or pitchGauge.val > 1-tiltWarning
 
     rollLed:update(dt)
     pitchLed:update(dt)
