@@ -126,6 +126,8 @@ function Ship:checkProblems()
     end
     if self.fuel < 0 then
         gameover:noFuel(self.pathlog)
+    elseif self.fuel > 1 then
+        self.fuel = 1
     end
     if math.abs(self:getRoll()) > math.pi/2 then
         gameover:shipCapsized(self.pathlog)
