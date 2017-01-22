@@ -46,8 +46,8 @@ function gameover:enter()
     Sounds.ui:play("gameover")
 end
 
+local minX, maxX, minY, maxY
 function gameover:render_map()
-    local minX, maxX, minY, maxY
     for i=1,self.shipPath.n do
         local pos = self.shipPath[i].pos
         minX = math.min(minX or math.huge, pos.x)
@@ -86,7 +86,7 @@ function gameover:draw()
         for i=1,self.shipPath.checkpoints.n do
             love.graphics.setColor(80,200,20)
             love.graphics.circle("fill", gameover.mapLeftX+mapscale*(self.mapWidth/2+(self.shipPath.checkpoints[i].x-self.mapCenterX))
-                               , gameover.mapTopY+mapscale*(self.mapHeight/2+(self.shipPath.checkpoints[i].y-self.mapCenterY)), mapscale*16, 5)
+                                   , gameover.mapTopY+mapscale*(self.mapHeight/2+(self.shipPath.checkpoints[i].y-self.mapCenterY)), mapscale*12, 5)
         end
         love.graphics.setColor(r,g,b)
         love.graphics.draw(boat, gameover.mapLeftX+mapscale*(self.mapWidth/2+(shipState.pos.x-self.mapCenterX)), gameover.mapTopY+mapscale*(self.mapHeight/2+(shipState.pos.y-self.mapCenterY)), shipState.yaw+math.pi/2
