@@ -1,14 +1,17 @@
 LOVE_FILE=release/tyrsky.love
 ZIP_TO_UPLOAD=ggj_upload.zip
 BUILD_DIR=.build
+BUILD_ZIP_DIR=$(BUILD_DIR)/tyrsky
 
 all: $(ZIP_TO_UPLOAD)
 
 $(LOVE_FILE): clean
-	cd ./source; zip -r ../$(LOVE_FILE) * -x "*.kra" -x "*.git"
+	cd ./source; zip -9 -r ../$(LOVE_FILE) * -x "*.kra" -x "*.git"
 
 $(ZIP_TO_UPLOAD): $(LOVE_FILE)
-	zip -r $(ZIP_TO_UPLOAD) LICENSE LICENSES other press README.md release source -x "*.git"
+	mkdir -p $(BUILD_ZIP_DIR)
+	cd $(BUILD_ZIP_DIR); ln -s ../../LICENSE ../../LICENSES ../../other ../../press ../../README.md ../../release ../../source .
+	cd $(BUILD_DIR); zip -r ../$(ZIP_TO_UPLOAD) tyrsky -x "*.git"
 
 .phony: clean
 clean:
