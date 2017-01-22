@@ -131,7 +131,6 @@ end
 
 function Ship:update(dt)
     self:updateLocation(dt)
-    Sounds.ui:update(dt)
     Sounds.ui:depthWarning(DepthMap:getDepth(self.location.x, self.location.y))
     self:checkProblems()
 end

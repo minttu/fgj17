@@ -13,7 +13,7 @@ Led = Class{
         self.blinkGap = 0.2
         self.blinkTime = self.blinkGap
         self.enabled = false
-        self.blinking = true
+        self.blinking = false
         self.pos = pos + vector(-13, 25)
     end,
     draw = function(self)
