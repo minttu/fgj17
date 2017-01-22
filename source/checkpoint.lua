@@ -13,7 +13,8 @@ local Checkpoints = Class
 
 -- startLocation is vector
 function Checkpoints:init(startLocation, seed)
-    --self.seed = seed or os.clock()
+    self.seed = seed or os.clock()
+    math.randomseed(self.seed)
     self:createCheckpoint(startLocation)
 end
 
