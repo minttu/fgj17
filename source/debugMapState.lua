@@ -273,6 +273,9 @@ function debugMapState.update(self, dt)
         ship.fuel = ship.fuel + ship.fuelConsumptionMultiplier*ship.velocity*4500
         local c = {{255,0,255},{255,255,0}}
         compass.markers[1].color = c[checkpoints.counter % 2 + 1]
+
+        ship.pathlog.checkpoints = checkpoints.locations
+        ship.pathlog.checkpoints.n = checkpoints.counter
     end
 
     if lightSwitch.enabled then

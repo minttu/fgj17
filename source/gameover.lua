@@ -77,13 +77,18 @@ function gameover:draw()
         seaDepthMap:debugDraw(gameover.mapLeftX,gameover.mapTopY,mapscale)
         local shipState = self.shipPath[self.pathI]
         local iStep = love.keyboard.isDown("left") and 2 or (love.keyboard.isDown("right") and 8 or 4)
+        local r,g,b = love.graphics.getColor()
         for i,val in ipairs(self.trail) do
             love.graphics.setLineWidth(math.ceil(3*mapscale))
-            local r,g,b = love.graphics.getColor()
             love.graphics.setColor(120,0,20)
             love.graphics.line(val.x0,val.y0,val.x1,val.y1)
-            love.graphics.setColor(r,g,b)
         end
+        for i=1,self.shipPath.checkpoints.n do
+            love.graphics.setColor(80,200,20)
+            love.graphics.circle("fill", gameover.mapLeftX+mapscale*(self.mapWidth/2+(self.shipPath.checkpoints[i].x-self.mapCenterX))
+                               , gameover.mapTopY+mapscale*(self.mapHeight/2+(self.shipPath.checkpoints[i].y-self.mapCenterY)), mapscale*16, 5)
+        end
+        love.graphics.setColor(r,g,b)
         love.graphics.draw(boat, gameover.mapLeftX+mapscale*(self.mapWidth/2+(shipState.pos.x-self.mapCenterX)), gameover.mapTopY+mapscale*(self.mapHeight/2+(shipState.pos.y-self.mapCenterY)), shipState.yaw+math.pi/2
                          , mapscale*(0.35-0.15*(math.abs(shipState.roll)/math.pi*2)), mapscale*(0.35-0.1*(math.abs(shipState.pitch)/math.pi*2)), boat:getWidth()/2, boat:getHeight()/2)
         if self.pathI < self.shipPath.n then
