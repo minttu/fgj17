@@ -161,8 +161,8 @@ function debugMapState.update(self, dt)
         draws = 0
     end
 
-    rollGauge.val = -ship:getRoll()/(2*math.pi) + 0.5
-    pitchGauge.val = ship:getPitch()/(2*math.pi) + 0.5
+    rollGauge.val = -ship:getRoll()*2/(2*math.pi) + 0.5
+    pitchGauge.val = ship:getPitch()*2/(2*math.pi) + 0.5
 
     rollGauge:update(dt)
     pitchGauge:update(dt)
