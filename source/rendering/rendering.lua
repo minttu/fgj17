@@ -13,13 +13,13 @@ local faderShader = [[
 
 local kiviLightShaderCode = [[
     uniform vec2 masks;
+    uniform vec4 bgColor;
     void effects(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
     {
         vec4 texturecolor = Texel(texture, texture_coords);
         vec4 ocolor = texturecolor * color;
 
-        love_Canvases[0] = masks.x * ocolor;
-        love_Canvases[1] = masks.y * ocolor;
+        love_Canvases[0] = (masks.x * ocolor * bgColor) + (masks.y * ocolor);
     }
 
 ]]
@@ -36,6 +36,10 @@ function rendering.scale()
     scy = desktop_h / canvas_h
 
     love.graphics.scale(scx*rendering.factor,scy*rendering.factor)
+end
+
+function rendering.setBgColor(color)
+    rendering.kiviLightShader:sendColor("bgColor", color)
 end
 
 function rendering.light(isLight)
