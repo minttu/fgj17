@@ -6,16 +6,16 @@ fonts = require "fonts"
 local gameover = {}
 
 function gameover:shipCrashed()
-    self.message = "You shipped over a rock"
+    self.message = "You shipped over a rock\npress Space or Enter to restart\npress Esc to quit"
     gamestate.switch(gameover)
 end
 
 function gameover:noFuel()
-    self.message = "You shipped out of fuel"
+    self.message = "You shipped out of fuel\npress Space or Enter to restart\npress Esc to quit"
     gamestate.switch(gameover)
 end
 function gameover:shipCapsized()
-    self.message = "You shipped upside down"
+    self.message = "You shipped upside down\npress Space or Enter to restart\npress Esc to quit"
     gamestate.switch(gameover)
 end
 
@@ -34,6 +34,9 @@ end
 function gameover:keyreleased(key)
     if key == "space" or key == "return" then
         love.event.quit("restart")
+    end
+    if key == "escape" then
+        love.event.quit("exit")
     end
 end
 
