@@ -48,7 +48,7 @@ function Radar:prerender()
             a = obj[3]
             love.graphics.setColor(0, 255, 0)
             scale = self.size / self.range
-            love.graphics.circle("fill", scale * x + self.size, scale * y + self.size, 10)
+            love.graphics.circle("fill", scale * x + self.size, scale * y + self.size, 4)
             -- love.graphics.line(self.x, self.y, x, y)
         end
     end
