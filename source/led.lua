@@ -33,6 +33,8 @@ Led = Class{
             else
                 self.blinkTime = self.blinkTime - dt
             end
+        else
+            self.enabled = false
         end
     end,
 }
