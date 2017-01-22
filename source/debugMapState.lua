@@ -63,14 +63,10 @@ function debugMapState:enter()
         }
 end
 
-function debugMapState.draw()
-    radar:prerender()
+function debugMapState.drawScene()
 
     love.graphics.push()
     Rendering.scale()
-
-    love.graphics.setCanvas(mainCanvas)
-    love.graphics.clear()
 
     -- Draws the map covering the entire window
     -- DepthMap:debugDraw()
@@ -140,6 +136,15 @@ function debugMapState.draw()
     love.graphics.pop() -- console
     love.graphics.pop() -- window
     love.graphics.pop() -- scale
+end
+
+function debugMapState.draw()
+    radar:prerender()
+
+    love.graphics.setCanvas(mainCanvas)
+    love.graphics.clear()
+
+    debugMapState.drawScene()
 
     local brightness = 255
 
