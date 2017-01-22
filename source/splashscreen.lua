@@ -2,6 +2,8 @@ gamestate = require "hump.gamestate"
 menu = require "menu"
 Rendering = require "rendering.rendering"
 
+piesplash = require "piesplash"
+
 local splashscreen = {}
 
 splashscreen.entrytime = nil
@@ -11,8 +13,8 @@ splashscreen.brightness = 0
 splashscreen.fadeOutTime = 0.2
 splashscreen.fadeInTime = 0.2
 
-function enter()
-    gamestate.switch(menu)
+local function enter()
+    gamestate.switch(piesplash)
 end
 
 function splashscreen:enter()
