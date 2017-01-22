@@ -17,6 +17,10 @@ gameover.mapWidth = 0
 gameover.mapHeight = 0
 gameover.pathI = 1
 gameover.trail = {n=0}
+gameover.trailSegmentLen = 120
+gameover.mapscale = 1
+gameover.mapLeftX = 800
+gameover.mapTopY = 160
 
 function gameover:shipCrashed(pathlog)
     self.shipPath = pathlog
@@ -48,10 +52,11 @@ function gameover:render_map()
         maxX = math.max(maxX or -math.huge, pos.x)
         maxY = math.max(maxY or -math.huge, pos.y)
     end
-    self.mapCenterX = (minX+maxX)/2
-    self.mapCenterY = (minY+maxY)/2
-    self.mapWidth = maxX-minX + 100
-    self.mapHeight = maxY-minY + 100
+    self.mapCenterX = math.floor((minX+maxX)/2)
+    self.mapCenterY = math.floor((minY+maxY)/2)
+    self.mapWidth = math.floor(maxX-minX + 180)
+    self.mapHeight = math.floor(maxY-minY + 180)
+    self.mapscale = math.min(1, math.min((1820-self.mapLeftX)/self.mapWidth, (980-self.mapTopY)/self.mapHeight))
     seaDepthMap:debugDrawUpdate(self.mapCenterX, self.mapCenterY, self.mapWidth, self.mapHeight, 2)
 end
 
@@ -60,29 +65,36 @@ function gameover:draw()
     Rendering.scale()
     love.graphics.setColor(255, 255, 255, 255)
     love.graphics.print(self.message, 100, 200)
-    love.graphics.pop()
     if not self.first_draw_done then
         self.first_draw_done = true
         self:render_map()
     else
-        love.graphics.print("map (press right/left)", 804, 120)
-        seaDepthMap:debugDraw(800,160)
+        local mapscale = self.mapscale
+        love.graphics.print("map (press right/left)", gameover.mapLeftX+4, gameover.mapTopY-40)
+        seaDepthMap:debugDraw(gameover.mapLeftX,gameover.mapTopY,mapscale)
         local shipState = self.shipPath[self.pathI]
-        local iStep = love.keyboard.isDown("left") and 1 or (love.keyboard.isDown("right") and 4 or 2)
-        if (self.trail.n >= 4) then
-            love.graphics.line(unpack(self.trail))
+        local iStep = love.keyboard.isDown("left") and 2 or (love.keyboard.isDown("right") and 8 or 4)
+        for i,val in ipairs(self.trail) do
+            love.graphics.setLineWidth(math.ceil(3*mapscale))
+            local r,g,b = love.graphics.getColor()
+            love.graphics.setColor(120,0,20)
+            love.graphics.line(val.x0,val.y0,val.x1,val.y1)
+            love.graphics.setColor(r,g,b)
         end
-        love.graphics.draw(boat, 800+self.mapWidth/2+(shipState.pos.x-self.mapCenterX), 160+self.mapHeight/2+(shipState.pos.y-self.mapCenterY), shipState.yaw+math.pi/2
-                         , 0.35-0.15*(math.abs(shipState.roll)/math.pi*2), 0.35-0.1*(math.abs(shipState.pitch)/math.pi*2), boat:getWidth()/2, boat:getHeight()/2)
+        love.graphics.draw(boat, gameover.mapLeftX+mapscale*(self.mapWidth/2+(shipState.pos.x-self.mapCenterX)), gameover.mapTopY+mapscale*(self.mapHeight/2+(shipState.pos.y-self.mapCenterY)), shipState.yaw+math.pi/2
+                         , mapscale*(0.35-0.15*(math.abs(shipState.roll)/math.pi*2)), mapscale*(0.35-0.1*(math.abs(shipState.pitch)/math.pi*2)), boat:getWidth()/2, boat:getHeight()/2)
         if self.pathI < self.shipPath.n then
             for i=self.pathI,math.min(self.pathI + iStep, self.shipPath.n)-1 do
-                table.insert(self.trail, 800+self.mapWidth/2+(self.shipPath[i].pos.x-self.mapCenterX))
-                table.insert(self.trail, 160+self.mapHeight/2+(self.shipPath[i].pos.y-self.mapCenterY))
-                self.trail.n = self.trail.n + 2
+                if ((i-1)%(self.trailSegmentLen*2)) < self.trailSegmentLen then
+                    table.insert(self.trail, {x0 = gameover.mapLeftX+mapscale*(self.mapWidth/2+(self.shipPath[i].pos.x-self.mapCenterX)), y0 = gameover.mapTopY+mapscale*(self.mapHeight/2+(self.shipPath[i].pos.y-self.mapCenterY))
+                                        ,x1 = gameover.mapLeftX+mapscale*(self.mapWidth/2+(self.shipPath[i+1].pos.x-self.mapCenterX)), y1 = gameover.mapTopY+mapscale*(self.mapHeight/2+(self.shipPath[i+1].pos.y-self.mapCenterY))})
+                    self.trail.n = self.trail.n + 1
+                end
             end
             self.pathI = math.min(self.pathI + iStep, self.shipPath.n)
         end
     end
+    love.graphics.pop()
 end
 
 function gameover:keyreleased(key)

@@ -19,7 +19,7 @@ Ship = Class
     , fuel = 1
     , fuelConsumptionMultiplier = 0.00001
     --, seaWaveDirection = vector(1,0).rotated(-math.pi/2)
-    , waveAmplitude = 15
+    , waveAmplitude = 28 -- original 15
     , waveSpeed = 4
     , t = 0
     , waveFrequency = 0.1
@@ -123,9 +123,6 @@ end
 function Ship:checkProblems()
     if DepthMap:isRockAt(self.location.x, self.location.y) then
         gameover:shipCrashed(self.pathlog)
-    end
-    if DepthMap:getDepth(self.location.x, self.location.y) < 0.2 then
-        Sounds.ui:warning()
     end
     if self.fuel < 0 then
         gameover:noFuel(self.pathlog)

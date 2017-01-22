@@ -15,12 +15,13 @@ Background = require "background"
 Wiper = require "wiper"
 Switch = require "switch"
 Led = require "led"
+Label = require "label"
 
 -- Map to visualize the locations, ship movement and depth
 local debugMapState = {}
 
 local windowFrame = love.graphics.newImage("assets/graphics/frame_grey.png")
-local console = love.graphics.newImage("assets/graphics/console.png")
+local console = love.graphics.newImage("assets/graphics/console2.png")
 local fishFinderFrame = love.graphics.newImage("assets/graphics/fish_finder.png")
 local imgLightBig = love.graphics.newImage("assets/graphics/imglightbig.png")
 
@@ -37,6 +38,9 @@ local rudderGauge = Gauge("rudder", vector((1920 / 4) - 240, 890), 100, 0.5)
 local fuelGauge = Gauge("fuel", vector((1920 / 4), 890), 100)
 local fuelLed = Led(vector((1920 / 4), 890))
 
+local depthLed = Led(vector((1920 / 2) + 216, 616))
+local depthLabel = Label("depth\nwarning", vector((1920 / 2) + 200 - 32, 675), true)
+
 local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
 local compass = Compass((1920 / 2) - 300, (1080 / 2) + 14, 600, 600, 3)
@@ -45,7 +49,7 @@ local leftwiper = Wiper(580, 4, math.pi-0.02, 0.08, 0.5, 1.15)
 local rightwiper = Wiper(1340, 4, 0.05, math.pi-0.05, 0, 1.15)
 
 local wiperSwitch = Switch("wipers", (1920/2) - 200 - 16, 630)
-local radarSoundsSwitch = Switch("beep", (1920/2) - 100 - 16, 630)
+local radarSoundsSwitch = Switch("ping", (1920/2) - 100 - 16, 630, true)
 local lightSwitch = Switch("lights", (1920/2) - 16, 630)
 
 local isDebugging = false
@@ -102,6 +106,9 @@ function debugMapState.drawScene()
     debugMapState.drawSwitch(wiperSwitch)
     debugMapState.drawSwitch(radarSoundsSwitch)
     debugMapState.drawSwitch(lightSwitch)
+
+    depthLed:draw()
+    depthLabel:draw()
 
 
     rudderGauge:draw()
@@ -214,6 +221,9 @@ function debugMapState.update(self, dt)
     fuelLed.blinking = ship.fuel < 0.2
     fuelLed:update(dt)
 
+    depthLed.blinking = DepthMap:getDepth(ship.location.x, ship.location.y) < 0.2
+    depthLed:update(dt)
+
     multiplier = 12
     windowtranslation = {math.sin(2*accumulator), multiplier*ship.orientation.y}
     consoletranslation = {3*math.sin(2*accumulator), 5*multiplier*ship.orientation.y}
@@ -260,7 +270,7 @@ function debugMapState.update(self, dt)
     compass.markers[1].rotation = -ang + math.pi
     if checkpoints:checkCollision(playerLoc) then
         checkpoints:createCheckpoint(playerLoc)
-        ship.fuel = ship.fuel + ship.fuelConsumptionMultiplier*ship.velocity*2500
+        ship.fuel = ship.fuel + ship.fuelConsumptionMultiplier*ship.velocity*4500
         local c = {{255,0,255},{255,255,0}}
         compass.markers[1].color = c[checkpoints.counter % 2 + 1]
     end
@@ -272,8 +282,9 @@ function debugMapState.update(self, dt)
     end
 
 
-    rollLed.blinking = rollGauge.val < 0.2 or rollGauge.val > 0.8
-    pitchLed.blinking = pitchGauge.val < 0.2 or pitchGauge.val > 0.8
+    local tiltWarning = 0.11
+    rollLed.blinking = rollGauge.val < tiltWarning or rollGauge.val > 1-tiltWarning
+    pitchLed.blinking = pitchGauge.val < tiltWarning or pitchGauge.val > 1-tiltWarning
 
     rollLed:update(dt)
     pitchLed:update(dt)

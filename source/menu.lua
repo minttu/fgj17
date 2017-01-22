@@ -3,6 +3,7 @@ debugMapState = require "debugMapState"
 Rendering = require "rendering.rendering"
 
 fonts = require "fonts"
+Sounds = require "sounds"
 
 local menu = {}
 
@@ -19,6 +20,8 @@ function menu:enter()
     self.selected = 1
     love.graphics.setFont(fonts.menu)
 
+    Sounds.menu:play()
+
     self:initLogo()
 end
 
@@ -28,7 +31,7 @@ function menu:initLogo()
     name = "Tyrsky"
     for i = 1,#name do
         local c = name:sub(i,i)
-        table.insert(logo, {c, 450 + 128 * i, 100})
+        table.insert(logo, {c, 240 + 180 * i, 0})
     end
 end
 
@@ -37,7 +40,7 @@ accumulator = 0
 function menu:updateLogo(dt)
     accumulator = accumulator + dt
     for i = 1,#logo do
-        logo[i][3] = 200 + 20 * math.sin(accumulator + i)
+        logo[i][3] = 100 + 20 * math.sin(accumulator + i)
     end
 end
 
@@ -54,7 +57,7 @@ function menu:draw()
     Rendering.scale()
     self:drawLogo()
 
-    love.graphics.printf("\"game\" by\n\n\nNicklas Ahlskog\n\nJaakko Hannikainen\n\nTuomas Kinnunen\n\nAllan Palmu\n\nJuhani Imberg\n\nEsa Niemi", 350, 500, 500, "right")
+    love.graphics.printf("game by\n\n\nNicklas Ahlskog\n\nJaakko Hannikainen\n\nTuomas Kinnunen\n\nAllan Palmu\n\nJuhani Imberg\n\nEsa Niemi", 350, 500, 500, "right")
 
     for i = 1,#self.options do
         if i == self.selected then
