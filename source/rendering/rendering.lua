@@ -26,7 +26,7 @@ local kiviLightShaderCode = [[
 
 rendering.fader = love.graphics.newShader(faderShader)
 
-rendering.factor = 1.0
+rendering.factor = 1
 
 rendering.kiviLightShader = love.graphics.newShader(kiviLightShaderCode)
 

@@ -76,7 +76,7 @@ function Radar:prerender()
     self.canvas = tmp
 end
 
-function Radar:update(dt, ship)
+function Radar:update(dt, ship, soundsEnabled)
 
     self.previousangle = self.angle
     self.angle = (self.angle + self.speed*dt) % (2*math.pi)
@@ -98,7 +98,9 @@ function Radar:update(dt, ship)
             len = math.sqrt(dx*dx + dy*dy)/3
             if len < self.size/2 then
                 table.insert(self.seenobjects, {dx, dy, 255})
-                Sounds.ui:play("radar", 0.1 + (self.beepvolume-0.1)*(1 - (len / (self.size/2))))
+                if soundsEnabled then
+                    Sounds.ui:play("radar", 0.1 + (self.beepvolume-0.1)*(1 - (len / (self.size/2))))
+                end
             end
         end
     end

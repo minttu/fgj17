@@ -41,6 +41,7 @@ local compass = Compass((1920 / 2) - 300, (1080 / 2) + 14, 600, 600, 3)
 local leftwiper = Wiper(580, 4, math.pi-0.02, 0.08, 0.5, 1.15)
 local rightwiper = Wiper(1340, 4, 0.05, math.pi-0.05, 0, 1.15)
 local wiperswitch = Switch(1920/2+200, 800)
+local radarSoundsSwitch = Switch(1920/2+250, 800)
 
 local isDebugging = false
 
@@ -91,7 +92,10 @@ function debugMapState.drawScene()
 
     love.graphics.draw(console, 72, 512, 0, 1.1, 1)
 
-    wiperswitch:draw()
+    debugMapState.drawSwitch(wiperswitch)
+    debugMapState.drawSwitch(radarSoundsSwitch)
+
+
     rudderGauge:draw()
     rollGauge:draw()
     pitchGauge:draw()
@@ -118,7 +122,7 @@ function debugMapState.drawScene()
         love.graphics.pop()
     end
 
-        love.graphics.push()
+    love.graphics.push()
     local xrudderScale = 1.0
     local yrudderScale = 1.1
     local xoff = -10 / xrudderScale
@@ -134,6 +138,21 @@ function debugMapState.drawScene()
     love.graphics.pop() -- console
     love.graphics.pop() -- window
     love.graphics.pop() -- scale
+end
+
+function debugMapState.drawSwitch(switch)
+    love.graphics.push()
+    local xrudderScale = 1.0
+    local yrudderScale = 1.1
+    local xoff = -3 / xrudderScale
+    local yoff = 25 / yrudderScale
+    love.graphics.translate((1-xrudderScale)*rudder.screenPos.x+xoff,(1-yrudderScale)*rudder.screenPos.y + yoff)
+    love.graphics.scale(xrudderScale, yrudderScale)
+    love.graphics.setColor(0,0,0, 64)
+    switch:draw()
+    love.graphics.pop()
+    love.graphics.setColor(255,255,255)
+    switch:draw()
 end
 
 function debugMapState.draw()
@@ -158,6 +177,7 @@ function debugMapState.draw()
     love.graphics.setShader()
 
     love.graphics.setColor(255,255,255)
+    love.graphics.scale(1/Rendering.factor, 1/Rendering.factor)
     love.graphics.draw(mainCanvas)
 end
 
@@ -167,7 +187,7 @@ local draws = 0
 function debugMapState.update(self, dt)
     accumulator = accumulator + dt
 
-    radar:update(dt, ship)
+    radar:update(dt, ship, radarSoundsSwitch.enabled)
     rudder:update(dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
@@ -239,6 +259,7 @@ function debugMapState:mousereleased(x,y, mouse_btn)
     if mouse_btn == 1 then
         rudder:mouseReleased(x,y)
         wiperswitch:mouseReleased(screen_to_console_space(x,y))
+        radarSoundsSwitch:mouseReleased(screen_to_console_space(x,y))
         leftwiper:enable(wiperswitch.enabled)
         rightwiper:enable(wiperswitch.enabled)
     end
