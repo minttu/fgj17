@@ -4,7 +4,7 @@ DepthMap = require "seaDepthMap"
 
 
 local Checkpoints = Class
-    { GenerationRange = 40
+    { GenerationRange = 30*8
     , CollisionDistance = 18
     , locations = {}
     , current = nil
@@ -20,7 +20,7 @@ end
 function Checkpoints:createCheckpoint(origin)
     while true do
         local phi = math.random()*2*math.pi
-        local new = origin:rotated(phi)
+        local new = origin + (vector(self.GenerationRange,0):rotated(phi))
         if not DepthMap:isRockAt(new.x, new.y) then
             table.insert(self.locations,new)
             self.current = new

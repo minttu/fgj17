@@ -260,7 +260,7 @@ function debugMapState.update(self, dt)
     compass.markers[1].rotation = -ang + math.pi
     if checkpoints:checkCollision(playerLoc) then
         checkpoints:createCheckpoint(playerLoc)
-        ship.fuel = ship.fuel + ship.fuelConsumptionMultiplier*ship.velocity*2500
+        ship.fuel = ship.fuel + ship.fuelConsumptionMultiplier*ship.velocity*4500
         local c = {{255,0,255},{255,255,0}}
         compass.markers[1].color = c[checkpoints.counter % 2 + 1]
     end
