@@ -1,4 +1,5 @@
 gamestate = require "hump.gamestate"
+Timer = require "hump.timer"
 Rendering = require "rendering.rendering"
 
 fonts = require "fonts"
@@ -44,6 +45,13 @@ function gameover:enter()
     love.graphics.setFont(fonts.menu)
     love.audio.stop()
     Sounds.ui:play("gameover")
+    bgmtimer = Timer.after(15, function()
+        Sounds.gameoverbgm:play()
+    end )
+end
+
+function gameover:update(dt)
+    Timer.update(dt)
 end
 
 function gameover:render_map()

@@ -129,6 +129,9 @@ return {
     menu = AmbientPlayer({
             {name = "menu.ogg", volume = 1}
     }),
+    gameoverbgm = AmbientPlayer({
+            {name = "gameoverbgm.ogg", volume = 1}
+    }),
     ambient = AmbientPlayer({
             {name = "bg_humm_01.ogg", volume = 0.4},
             {name = "rain_01.ogg", volume = 1}
