@@ -69,8 +69,8 @@ function debugMapState.draw()
     love.graphics.push()
     Rendering.scale()
 
-
     love.graphics.setCanvas(mainCanvas)
+    love.graphics.clear()
 
     -- Draws the map covering the entire window
     -- DepthMap:debugDraw()
@@ -83,6 +83,7 @@ function debugMapState.draw()
     love.graphics.rotate(roll)
     love.graphics.translate(-1920/2, -1080/2)
     love.graphics.translate(windowtranslation[1], windowtranslation[2])
+
 
     leftwiper:draw()
     rightwiper:draw()
@@ -100,7 +101,6 @@ function debugMapState.draw()
     pitchGauge:draw()
     fuelGauge:draw()
     fuelLed:draw()
-    rudder:draw()
 
     love.graphics.setFont(fonts.small)
 
@@ -122,15 +122,30 @@ function debugMapState.draw()
         love.graphics.pop()
     end
 
+        love.graphics.push()
+    love.graphics.setShader(Rendering.rudderShadow)
+    local xrudderScale = 1.0
+    local yrudderScale = 1.1
+    local xoff = -10 / xrudderScale
+    local yoff = 40 / yrudderScale
+    love.graphics.translate((1-xrudderScale)*rudder.screenPos.x+xoff,(1-yrudderScale)*rudder.screenPos.y + yoff)
+    love.graphics.scale(xrudderScale, yrudderScale)
+    love.graphics.setColor(0,0,0, 64)
+    rudder:draw()
+    love.graphics.setShader()
+    love.graphics.pop()
+    love.graphics.setColor(255,255,255)
+    rudder:draw()
 
     love.graphics.pop() -- console
     love.graphics.pop() -- window
     love.graphics.pop() -- scale
 
+    local brightness = 255
 
     love.graphics.setCanvas()
+    love.graphics.clear()
 
-    local brightness = 255
     love.graphics.setColor(brightness,brightness,brightness)
     love.graphics.draw(mainCanvas)
 end
