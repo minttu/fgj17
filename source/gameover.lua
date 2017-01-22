@@ -62,7 +62,6 @@ function gameover:draw()
     Rendering.scale()
     love.graphics.setColor(255, 255, 255, 255)
     love.graphics.print(self.message, 100, 200)
-    love.graphics.pop()
     if not self.first_draw_done then
         self.first_draw_done = true
         self:render_map()
@@ -91,6 +90,7 @@ function gameover:draw()
             self.pathI = math.min(self.pathI + iStep, self.shipPath.n)
         end
     end
+    love.graphics.pop()
 end
 
 function gameover:keyreleased(key)
