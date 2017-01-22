@@ -34,7 +34,7 @@ local fuelGauge = Gauge("fuel", vector((1920 / 4), 890), 100)
 
 local rudder = Rudder(vector(1920 / 2, 1000), 0.5)
 
-local compass = Compass((1920 / 2) - 300, (1080 / 2) + 4, 600, 600, 3)
+local compass = Compass((1920 / 2) - 300, (1080 / 2) + 14, 600, 600, 3)
 
 local leftwiper = Wiper(580, 4, math.pi-0.02, 0.08, 0.5, 1.15)
 local rightwiper = Wiper(1340, 4, 0.05, math.pi-0.05, 0, 1.15)
@@ -197,7 +197,7 @@ end
 
 function debugMapState:mousereleased(x,y, mouse_btn)
     local screen_to_console_space = function(x, y)
-        local xb, yb = x, y
+        local xb, yb = x/scx, y/scy
         xb, yb = xb - 1920/2, yb - 1080/2
         xb = xb * math.cos(-roll) - yb * math.sin(-roll)
         yb = xb * math.sin(-roll) + yb * math.cos(-roll)
@@ -208,7 +208,6 @@ function debugMapState:mousereleased(x,y, mouse_btn)
     if mouse_btn == 1 then
         rudder:mouseReleased(x,y)
         wiperswitch:mouseReleased(screen_to_console_space(x,y))
-        print(screen_to_console_space(x,y))
         leftwiper:enable(wiperswitch.enabled)
         rightwiper:enable(wiperswitch.enabled)
     end
