@@ -17,3 +17,7 @@ $(ZIP_TO_UPLOAD): $(LOVE_FILE)
 clean:
 	rm -f $(LOVE_FILE) $(ZIP_TO_UPLOAD)
 	rm -rf $(BUILD_DIR)
+
+.phony: love
+love:
+	cd ./source; love .

@@ -26,7 +26,9 @@ AmbientPlayer = Class{
         SoundPlayer.init(self, soundDefinitions)
     end,
     play = function(self)
+        love.audio.stop()
         for name, source in pairs(self.sources) do
+            source:seek(0)
             source:setLooping(true)
             source:play()
         end
@@ -124,14 +126,17 @@ UIEffectsPlayer = Class{
 
 
 return {
+    menu = AmbientPlayer({
+            {name = "menu.ogg", volume = 1}
+    }),
     ambient = AmbientPlayer({
             {name = "bg_humm_01.ogg", volume = 0.4},
-            {name = "rain_01.ogg", volume = 2}
+            {name = "rain_01.ogg", volume = 1}
     }),
     misc = MiscPlayer({
             {name = "rattling_01.ogg", volume = 0.2},
             {name = "rattling_02.ogg", volume = 0.2},
-            {name = "thunder_01.ogg", volume = 2},
+            {name = "thunder_01.ogg", volume = 1},
             {name = "thunder_02.ogg", volume = 1}
     }),
     ui = UIEffectsPlayer({
