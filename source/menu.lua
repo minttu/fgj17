@@ -3,6 +3,7 @@ debugMapState = require "debugMapState"
 Rendering = require "rendering.rendering"
 
 fonts = require "fonts"
+Sounds = require "sounds"
 
 local menu = {}
 
@@ -18,6 +19,8 @@ function menu:enter()
     self.options = {{"Play", play}, {"Exit", exit}}
     self.selected = 1
     love.graphics.setFont(fonts.menu)
+
+    Sounds.menu:play()
 
     self:initLogo()
 end
