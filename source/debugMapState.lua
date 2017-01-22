@@ -269,19 +269,9 @@ function debugMapState.update(self, dt)
         shadowFactor = 0.3
     end
 
-    if rollGauge.val < 0.2 or rollGauge.val > 0.8 then
-        rollLed.blinking = true
-        Sounds.ui:depthWarning(0)
-    else
-        rollLed.blinking = false
-    end
-    if pitchGauge.val < 0.2 or pitchGauge.val > 0.8 then
-        pitchLed.blinking = true
-        Sounds.ui:depthWarning(0)
-    else
-        pitchLed.blinking = false
-    end
 
+    rollLed.blinking = rollGauge.val < 0.2 or rollGauge.val > 0.8
+    pitchLed.blinking = pitchGauge.val < 0.2 or pitchGauge.val > 0.8
 
     rollLed:update(dt)
     pitchLed:update(dt)

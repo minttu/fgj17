@@ -1,6 +1,7 @@
 Class = require "hump.class"
 vector = require "hump.vector"
 Rendering = require "rendering.rendering"
+Sounds = require "sounds"
 
 
 local ledBase = love.graphics.newImage("assets/graphics/led.png")
@@ -30,6 +31,7 @@ Led = Class{
             if self.blinkTime < 0 then
                 self.blinkTime = self.blinkGap
                 self.enabled = not self.enabled
+                Sounds.ui:warning()
             else
                 self.blinkTime = self.blinkTime - dt
             end
