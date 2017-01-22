@@ -49,7 +49,7 @@ local leftwiper = Wiper(580, 4, math.pi-0.02, 0.08, 0.5, 1.15)
 local rightwiper = Wiper(1340, 4, 0.05, math.pi-0.05, 0, 1.15)
 
 local wiperSwitch = Switch("wipers", (1920/2) - 200 - 16, 630)
-local radarSoundsSwitch = Switch("beep", (1920/2) - 100 - 16, 630)
+local radarSoundsSwitch = Switch("ping", (1920/2) - 100 - 16, 630, true)
 local lightSwitch = Switch("lights", (1920/2) - 16, 630)
 
 local isDebugging = false
