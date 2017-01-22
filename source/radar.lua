@@ -3,6 +3,7 @@ cpml = require "cpml"
 rendering = require "rendering.rendering"
 Sounds = require "sounds"
 DepthMap = require "seaDepthMap"
+Rendering = require "rendering.rendering"
 
 Radar = Class
     { angle = 0
@@ -75,7 +76,7 @@ function Radar:prerender()
     self.canvas = tmp
 end
 
-function Radar:update(dt, ship)
+function Radar:update(dt, ship, soundsEnabled)
 
     self.previousangle = self.angle
     self.angle = (self.angle + self.speed*dt) % (2*math.pi)
@@ -97,7 +98,9 @@ function Radar:update(dt, ship)
             len = math.sqrt(dx*dx + dy*dy)/3
             if len < self.size/2 then
                 table.insert(self.seenobjects, {dx, dy, 255})
-                Sounds.ui:play("radar", 0.1 + (self.beepvolume-0.1)*(1 - (len / (self.size/2))))
+                if soundsEnabled then
+                    Sounds.ui:play("radar", 0.1 + (self.beepvolume-0.1)*(1 - (len / (self.size/2))))
+                end
             end
         end
     end
@@ -115,8 +118,9 @@ function Radar:draw()
     love.graphics.circle("fill", self.x, self.y, self.size)
 
     love.graphics.setColor(255, 255, 255)
-
+    Rendering.light(true)
     love.graphics.draw(self.prevCanvas, self.x-self.size, self.y-self.size)
+    Rendering.light(false)
 
 end
 

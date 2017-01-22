@@ -22,6 +22,7 @@ local debugMapState = {}
 local windowFrame = love.graphics.newImage("assets/graphics/frame_grey.png")
 local console = love.graphics.newImage("assets/graphics/console.png")
 local fishFinderFrame = love.graphics.newImage("assets/graphics/fish_finder.png")
+local imgLightBig = love.graphics.newImage("assets/graphics/imglightbig.png")
 
 local ship = Ship(100, 100)
 
@@ -29,6 +30,8 @@ local radar = Radar(vector((1920 / 2) + 550, 800), 200)
 
 local rollGauge = Gauge("roll", vector((1920 / 4) - 240, 660), 100)
 local pitchGauge = Gauge("pitch", vector((1920 / 4), 660), 100)
+local rollLed = Led(vector((1920 / 4 -240), 660))
+local pitchLed = Led(vector((1920 / 4), 660))
 
 local rudderGauge = Gauge("rudder", vector((1920 / 4) - 240, 890), 100, 0.5)
 local fuelGauge = Gauge("fuel", vector((1920 / 4), 890), 100)
@@ -40,13 +43,18 @@ local compass = Compass((1920 / 2) - 300, (1080 / 2) + 14, 600, 600, 3)
 
 local leftwiper = Wiper(580, 4, math.pi-0.02, 0.08, 0.5, 1.15)
 local rightwiper = Wiper(1340, 4, 0.05, math.pi-0.05, 0, 1.15)
-local wiperswitch = Switch(1920/2+200, 800)
+
+local wiperSwitch = Switch("wipers", (1920/2) - 200 - 16, 630)
+local radarSoundsSwitch = Switch("beep", (1920/2) - 100 - 16, 630)
+local lightSwitch = Switch("lights", (1920/2) - 16, 630)
 
 local isDebugging = false
 
 local windowtranslation = {0, 0}
 local consoletranslation = {0, 0}
 local roll = 0
+
+local shadowFactor = 0.5
 
 local desktop_w, desktop_h = love.window.getDesktopDimensions()
 local mainCanvas = love.graphics.newCanvas(desktop_w*Rendering.factor, desktop_h*Rendering.factor)
@@ -63,14 +71,10 @@ function debugMapState:enter()
         }
 end
 
-function debugMapState.draw()
-    radar:prerender()
+function debugMapState.drawScene()
 
     love.graphics.push()
     Rendering.scale()
-
-
-    love.graphics.setCanvas(mainCanvas)
 
     -- Draws the map covering the entire window
     -- DepthMap:debugDraw()
@@ -84,6 +88,7 @@ function debugMapState.draw()
     love.graphics.translate(-1920/2, -1080/2)
     love.graphics.translate(windowtranslation[1], windowtranslation[2])
 
+
     leftwiper:draw()
     rightwiper:draw()
     w, h = windowFrame:getDimensions()
@@ -94,13 +99,18 @@ function debugMapState.draw()
 
     love.graphics.draw(console, 72, 512, 0, 1.1, 1)
 
-    wiperswitch:draw()
+    debugMapState.drawSwitch(wiperSwitch)
+    debugMapState.drawSwitch(radarSoundsSwitch)
+    debugMapState.drawSwitch(lightSwitch)
+
+
     rudderGauge:draw()
     rollGauge:draw()
     pitchGauge:draw()
     fuelGauge:draw()
     fuelLed:draw()
-    rudder:draw()
+    pitchLed:draw()
+    rollLed:draw()
 
     love.graphics.setFont(fonts.small)
 
@@ -122,16 +132,70 @@ function debugMapState.draw()
         love.graphics.pop()
     end
 
+    love.graphics.push()
+    local xrudderScale = 1.0
+    local yrudderScale = 1.1
+    local xoff = -10 / xrudderScale
+    local yoff = 40 / yrudderScale
+    love.graphics.translate((1-xrudderScale)*rudder.screenPos.x+xoff,(1-yrudderScale)*rudder.screenPos.y + yoff)
+    love.graphics.scale(xrudderScale, yrudderScale)
+    love.graphics.setColor(0,0,0, 255 * shadowFactor)
+    rudder:draw()
+    love.graphics.pop()
+    love.graphics.setColor(255,255,255)
+    rudder:draw()
+
+    if lightSwitch.enabled then
+        Rendering.light(true)
+        love.graphics.draw(imgLightBig, 1920/2, 0, 0, 1, 1, 0, 200)
+        love.graphics.draw(imgLightBig, 1920/2, 0, 0, -1, 1, 0, 200)
+        Rendering.light(false)
+    end
 
     love.graphics.pop() -- console
     love.graphics.pop() -- window
     love.graphics.pop() -- scale
+end
+
+function debugMapState.drawSwitch(switch)
+    love.graphics.push()
+    local xrudderScale = 1.0
+    local yrudderScale = 1.1
+    local xoff = 3 / xrudderScale
+    local yoff = 25 / yrudderScale
+    love.graphics.translate((1-xrudderScale)*rudder.screenPos.x+xoff,(1-yrudderScale)*rudder.screenPos.y + yoff)
+    love.graphics.scale(xrudderScale, yrudderScale)
+    love.graphics.setColor(0,0,0, 255 * shadowFactor)
+    switch:draw()
+    love.graphics.pop()
+    love.graphics.setColor(255,255,255)
+    switch:draw()
+    switch.label:draw()
+end
+
+function debugMapState.draw()
+    local bgBrightness = 128
+
+    love.graphics.setBlendMode("alpha")
+    radar:prerender()
+    love.graphics.setColor(255,255,255)
+
+
+    love.graphics.setCanvas(mainCanvas)
+    love.graphics.setShader(Rendering.kiviLightShader)
+    rendering.setBgColor({bgBrightness, bgBrightness, bgBrightness, 255})
+    Rendering.light(false)
+    love.graphics.clear(0,0,0,256)
+
+    debugMapState.drawScene()
 
 
     love.graphics.setCanvas()
+    love.graphics.clear()
+    love.graphics.setShader()
 
-    local brightness = 255
-    love.graphics.setColor(brightness,brightness,brightness)
+    love.graphics.setColor(255,255,255)
+    love.graphics.scale(1/Rendering.factor, 1/Rendering.factor)
     love.graphics.draw(mainCanvas)
 end
 
@@ -141,11 +205,13 @@ local draws = 0
 function debugMapState.update(self, dt)
     accumulator = accumulator + dt
 
-    radar:update(dt, ship)
+    Sounds.ui:update(dt)
+
+    radar:update(dt, ship, radarSoundsSwitch.enabled)
     rudder:update(dt)
     ship.turnspeed = ship.maxturnspeed * (rudder.angle / rudder.maxangle)
     ship:update(dt)
-    fuelLed.blinking = true
+    fuelLed.blinking = ship.fuel < 0.2
     fuelLed:update(dt)
 
     multiplier = 12
@@ -198,6 +264,20 @@ function debugMapState.update(self, dt)
         local c = {{255,0,255},{255,255,0}}
         compass.markers[1].color = c[checkpoints.counter % 2 + 1]
     end
+
+    if lightSwitch.enabled then
+        shadowFactor = 0.5
+    else
+        shadowFactor = 0.3
+    end
+
+
+    rollLed.blinking = rollGauge.val < 0.2 or rollGauge.val > 0.8
+    pitchLed.blinking = pitchGauge.val < 0.2 or pitchGauge.val > 0.8
+
+    rollLed:update(dt)
+    pitchLed:update(dt)
+
 end
 
 function debugMapState:mousereleased(x,y, mouse_btn)
@@ -212,9 +292,11 @@ function debugMapState:mousereleased(x,y, mouse_btn)
     end
     if mouse_btn == 1 then
         rudder:mouseReleased(x,y)
-        wiperswitch:mouseReleased(screen_to_console_space(x,y))
-        leftwiper:enable(wiperswitch.enabled)
-        rightwiper:enable(wiperswitch.enabled)
+        wiperSwitch:mouseReleased(screen_to_console_space(x,y))
+        radarSoundsSwitch:mouseReleased(screen_to_console_space(x,y))
+        lightSwitch:mouseReleased(screen_to_console_space(x,y))
+        leftwiper:enable(wiperSwitch.enabled)
+        rightwiper:enable(wiperSwitch.enabled)
     end
 end
 

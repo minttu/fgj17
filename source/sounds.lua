@@ -67,8 +67,8 @@ UIEffectsPlayer = Class{
     __includes = SoundPlayer,
     init = function(self, soundGroups)
         self.soundGroups = soundGroups
-        self.depthWarningGap = 0.5
-        self.depthWarningPossible = self.depthWarningGap
+        self.warningGap = 0.4
+        self.warningPossible = self.warningGap
 
         snds = {}
         for i, group in ipairs(soundGroups) do
@@ -95,19 +95,16 @@ UIEffectsPlayer = Class{
 
         return sound
     end,
-    depthWarning = function(self, depth)
-        if self.depthWarningPossible > 0 then
+    warning = function(self, depth)
+        if self.warningPossible > 0 then
             return
         end
 
-        if depth < 0.1 then
-            self:play("alarm")
-        end
-
-        self.depthWarningPossible = self.depthWarningGap
+        self:play("alarm")
+        self.warningPossible = self.warningGap
     end,
     update = function(self, dt)
-        self.depthWarningPossible = self.depthWarningPossible - dt
+        self.warningPossible = self.warningPossible - dt
     end,
     startRudderRotation = function(self)
         if self.rudderSound ~= nil then
@@ -148,7 +145,7 @@ return {
                  {name = "alarm_01.ogg", volume = 1}
             }},
             {name = "radar", sounds = {
-                 {name = "radar_01.ogg", volume = 1}
+                 {name = "radar_01.ogg", volume = 0.5}
             }},
             {name = "rudder", sounds = {
                  {name = "rudder_01.ogg", volume = 0.5},
