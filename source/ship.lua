@@ -124,6 +124,9 @@ function Ship:checkProblems()
     if self.fuel < 0 then
         gameover:noFuel()
     end
+    if self:getRoll() > math.pi/2 then
+        gameover:shipCapsized()
+    end
 end
 
 function Ship:update(dt)

@@ -14,6 +14,10 @@ function gameover:noFuel()
     self.message = "You shipped out of fuel"
     gamestate.switch(gameover)
 end
+function gameover:shipCapsized()
+    self.message = "You shipped upside down"
+    gamestate.switch(gameover)
+end
 
 function gameover:enter()
     love.graphics.setFont(fonts.menu)
