@@ -10,7 +10,7 @@ DepthMap.Sharpiness = 0.005
 DepthMap.SharpinessSmooth = 0.002
 
 -- What depth and below is considered as rock/land, in range [0,1]
-DepthMap.RockDepth = 0.03
+DepthMap.RockDepth = 0.1
 
 -- Returns depth from range [0, 1]
 function DepthMap:getDepth(x, y)
